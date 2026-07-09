@@ -36,11 +36,13 @@ def create_app(config=None) -> Flask:
     from app.routes.resume_routes import resume_bp
     from app.routes.user_routes   import user_bp
     from app.routes.admin_routes  import admin_bp
+    from app.routes.ml_routes     import ml_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(resume_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(ml_bp)
 
     # ── Landing page route
     @app.route('/')

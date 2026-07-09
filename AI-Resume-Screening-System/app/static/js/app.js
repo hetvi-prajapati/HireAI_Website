@@ -64,7 +64,7 @@ const Auth = {
         DB.currentUser = user;
         this.setupPortal(user);
         Router.go(user.role === 'hr' ? 'admin' : 'cand');
-        Toast.show(`Welcome back, ${user.name.split(' ')[0]}! 👋`, 'success');
+        Toast.show(`Welcome back, ${user.name.split(' ')[0]}! <i class="fa-solid fa-hand-sparkles" style="color: #34d399; margin-left: 4px;"></i>`, 'success');
 
         fetchJobsFromServer();
         fetchNotificationsFromServer(user.id);
@@ -105,7 +105,7 @@ const Auth = {
         DB.currentUser = user;
         this.setupPortal(user);
         Router.go(user.role === 'hr' ? 'admin' : 'cand');
-        Toast.show(`Account created! Welcome, ${fname}! 🎉`, 'success');
+        Toast.show(`Account created! Welcome, ${fname}! <i class="fa-solid fa-wand-magic-sparkles"></i>`, 'success');
 
         fetchJobsFromServer();
         fetchNotificationsFromServer(user.id);
@@ -133,7 +133,8 @@ const Auth = {
     fetch('/api/auth/logout', { method: 'POST' }).then(() => {
       DB.currentUser = null;
       Router.go('landing');
-      Toast.show('Logged out successfully.','info');
+      Toast.show('Logged out successfully! <i class="fa-solid fa-right-from-bracket" style="color: #34d399; margin-left: 4px;"></i>', 'success');
+      setTimeout(() => window.location.reload(), 1000);
     });
   },
 
@@ -189,7 +190,7 @@ const Auth = {
     if (portal === 'login') {
       const emailInput = document.getElementById('login-email');
       if (emailInput) {
-        emailInput.value = role === 'hr' ? 'priya@demo.com' : 'rahul@demo.com';
+        emailInput.value = role === 'hr' ? 'priya@demo.com' : 'hetsony143@gmail.com';
       }
     }
   },
@@ -280,6 +281,11 @@ function updateCandidateStatus(id, status) {
             candidate.status = status;
             UI.renderCandidatesTable();
             Toast.show(`${candidate.name} status updated to ${status}.`, 'success');
+            // Refresh tab counts live
+            setEl('tab-count-all',         DB.candidates.length);
+            setEl('tab-count-shortlisted', DB.candidates.filter(c=>c.status==='Shortlisted').length);
+            setEl('tab-count-reviewing',   DB.candidates.filter(c=>c.status==='Reviewing'||c.status==='Pending').length);
+            setEl('tab-count-rejected',    DB.candidates.filter(c=>c.status==='Rejected').length);
           }
       }
   });
@@ -347,8 +353,9 @@ const UI = {
         <td><span class="text-sm">${c.degree}</span></td>
         <td>${c.job}</td>
         <td>
-          <div style="display:flex;gap:4px;flex-wrap:wrap">
-            ${c.skills.map(s=>`<span class="badge badge-primary" style="font-size:11px">${s}</span>`).join('')}
+          <div style="display:flex;gap:4px;flex-wrap:wrap;max-width:220px">
+            ${c.skills.slice(0, 4).map(s=>`<span class="badge badge-primary" style="font-size:11px">${s}</span>`).join('')}
+            ${c.skills.length > 4 ? `<span class="badge badge-gray" style="font-size:11px">+${c.skills.length - 4} more</span>` : ''}
           </div>
         </td>
         <td><span class="badge ${this.atsBadge(c.ats)}">${c.ats}/100</span></td>
@@ -400,6 +407,15 @@ const UI = {
   renderNotifications(portal) {
     const c = document.getElementById(`${portal}-notif-list`);
     if (!c) return;
+    
+    if (!DB.notifications || DB.notifications.length === 0) {
+      c.innerHTML = `<div style="padding:40px 20px;text-align:center;color:var(--text-3);font-size:14px;">
+        <i class="fas fa-bell-slash" style="font-size:32px;opacity:0.3;margin-bottom:12px;display:block"></i>
+        You're all caught up! No notifications yet.
+      </div>`;
+      return;
+    }
+
     c.innerHTML = DB.notifications.map(n => `
       <div class="notif-item ${n.unread?'unread':''}">
         <div class="notif-icon" style="background:${n.iconBg}"><i class="fas ${n.icon}" style="color:${n.iconColor}"></i></div>
@@ -592,7 +608,7 @@ function postJob() {
       ['new-job-title','new-job-company','new-job-location','new-job-salary','new-job-skills','new-job-desc'].forEach(id=>{
         const el = document.getElementById(id); if(el) el.value='';
       });
-      Toast.show(`"${title}" posted successfully! 🎉`, 'success');
+      Toast.show(`"${title}" posted successfully! <i class="fa-solid fa-wand-magic-sparkles"></i>`, 'success');
       fetchJobsFromServer(); // Refresh live jobs
   });
 }
@@ -834,11 +850,11 @@ function viewMatchedJobs() {
   Router.inner('cand','jobs');
   Sidebar.setActive(document.querySelector('#sb-cand [data-section=jobs]'));
   
-  // Real logic: Filter the jobs rendered on the cand-jobs-grid to only show match >= 50
-  const matchedJobs = DB.jobs.filter(j => j.match >= 50);
+  // Real logic: The ML API already returns the Top 10 matched jobs. Show them all.
+  const matchedJobs = DB.jobs;
   UI.renderJobCards('cand-jobs-grid', matchedJobs, true);
   
-  Toast.show(`Showing ${matchedJobs.length} AI-matched jobs for your profile!`, 'info');
+  Toast.show(`Showing top ${matchedJobs.length} AI-matched jobs for your profile!`, 'info');
 }
 
 function triggerReupload() {
@@ -858,11 +874,16 @@ function resumeUpload(e) {
   if (!allowed.includes(file.type)) { Toast.show('Only PDF, DOC, DOCX files allowed.','error'); return; }
   if (file.size > 5*1024*1024) { Toast.show('File must be under 5MB.','error'); return; }
 
+  const isWord = file.name.toLowerCase().endsWith('.docx') || file.name.toLowerCase().endsWith('.doc');
+  const iconClass = isWord ? 'fas fa-file-word' : 'fas fa-file-pdf';
+  const iconColor = isWord ? '#2563eb' : '#dc2626'; // blue for Word, red for PDF
+  const iconBg = isWord ? '#dbeafe' : '#fee2e2';
+
   const list = document.getElementById('upload-list');
   const item = document.createElement('div');
   item.className = 'upload-item';
   item.innerHTML = `
-    <div class="upload-item-icon" style="background:#fee2e2"><i class="fas fa-file-pdf" style="color:#dc2626"></i></div>
+    <div class="upload-item-icon" style="background:${iconBg}"><i class="${iconClass}" style="color:${iconColor}"></i></div>
     <div class="upload-item-body">
       <div class="upload-item-name">${file.name}</div>
       <div class="upload-item-meta">${(file.size/1024).toFixed(0)} KB · Uploading...</div>
@@ -896,16 +917,18 @@ function resumeUpload(e) {
       bar.style.width = '100%';
       bar.style.background='#16a34a';
       badge.className='badge badge-success'; badge.innerHTML='<i class="fas fa-check"></i> Analyzed';
-      Toast.show(`Resume parsed! ATS Score: ${data.data.ats_score}/100 🎉`, 'success');
+      Toast.show(`Resume parsed! ATS Score: ${data.data.ats_score}/100 <i class="fa-solid fa-wand-magic-sparkles"></i>`, 'success');
       
-      // Update current user's ats_score in memory
+      // Update current user's data in memory so the ML pipeline works everywhere
       if(DB.currentUser) {
           DB.currentUser.ats_score = data.data.ats_score;
-          // Refresh live stats — this updates all cards + toggles banners
+          DB.currentUser.skills = data.data.skills.join(',');
           fetchCandidateStats(DB.currentUser.id);
       }
-      // Match jobs from extracted skills
-      fetchJobs(data.data.skills);
+      // Force-refresh ML job matches (invalidates cache since skills changed)
+      _mlJobsCache = null;
+      _mlJobsCacheKey = '';
+      fetchJobsFromServer(true);
   })
   .catch(err => {
       badge.className='badge badge-danger'; badge.innerHTML='<i class="fas fa-times"></i> Error';
@@ -969,39 +992,70 @@ const JOB_COLORS = [
   {color:'#ecfdf5',textColor:'#065f46'},{color:'#fffbeb',textColor:'#92400e'},
 ];
 
-function fetchJobsFromServer() {
+// ── ML Job Cache (avoids re-running expensive ML pipeline) ───
+let _mlJobsCache = null;
+let _mlJobsCacheKey = '';
+
+function fetchJobsFromServer(forceMLRefresh = false) {
+  // If the user is a candidate with parsed skills, use the REAL ML pipeline!
+  if (DB.currentUser && DB.currentUser.role !== 'hr' && DB.currentUser.skills) {
+    const userSkills = DB.currentUser.skills.split(',').map(s => s.trim()).filter(Boolean);
+    const cacheKey = userSkills.sort().join('|');
+
+    // Use cached ML results unless explicitly forced or skills changed
+    if (!forceMLRefresh && _mlJobsCache && _mlJobsCacheKey === cacheKey) {
+      DB.jobs = _mlJobsCache;
+      UI.renderJobCards('cand-jobs-grid', DB.jobs, true);
+      setEl('cand-jobs-count', `${DB.jobs.length} Matching Jobs Found`);
+      updateSidebarBadges();
+    } else {
+      fetch('/api/match_jobs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ skills: userSkills })
+      })
+      .then(r => r.json())
+      .then(data => {
+          if (data.success && data.jobs) {
+              DB.jobs = data.jobs.map((j, i) => ({
+                  id: j.id, title: j.title, company: j.company, location: j.location || 'Remote/Office',
+                  type: j.type || 'Full-time', salary: j.salary || 'To be discussed',
+                  skills: j.skills ? j.skills.split(',').map(s=>s.trim()) : [],
+                  description: j.description, status: j.status || 'Active',
+                  applicants: 0, match: j.match_percentage,
+                  ...JOB_COLORS[i % JOB_COLORS.length],
+                  logo: (j.company||'??').substring(0,2).toUpperCase()
+              }));
+              DB.jobs.sort((a, b) => b.match - a.match);
+              _mlJobsCache = DB.jobs;
+              _mlJobsCacheKey = cacheKey;
+              UI.renderJobCards('cand-jobs-grid', DB.jobs, true);
+              setEl('cand-jobs-count', `${DB.jobs.length} Matching Jobs Found`);
+              updateSidebarBadges();
+          }
+      }).catch(err => console.error("Error fetching ML job matches:", err));
+    }
+  }
+
+  // Fetch all jobs for the Admin view (lightweight, no ML)
   fetch('/api/admin/jobs').then(r=>r.json()).then(data=>{
-    // Compute real match scores if user is logged in with skills
-    const userSkills = DB.currentUser?.skills
-      ? DB.currentUser.skills.split(',').map(s => s.trim().toLowerCase()).filter(Boolean)
-      : [];
-    
-    DB.jobs = data.map((j,i) => {
+    const adminJobs = data.map((j,i) => {
       const jobSkills = j.skills ? j.skills.split(',').map(s=>s.trim()) : [];
-      
-      // Real skill overlap match score
-      let match = 50; // default
-      if (userSkills.length > 0 && jobSkills.length > 0) {
-        const jobLower = jobSkills.map(s => s.toLowerCase());
-        const matched  = userSkills.filter(s => jobLower.includes(s)).length;
-        match = Math.round((matched / jobSkills.length) * 100);
-        match = Math.max(Math.min(match + 10, 100), 5); // small boost + clamp
-      }
-      
       return {
         id: j.id, title: j.title, company: j.company, location: j.location,
         type: j.type || 'Full-time', salary: j.salary,
-        skills: jobSkills,
-        description: j.description, status: j.status || 'Active',
-        applicants: 0, match: match,
+        skills: jobSkills, description: j.description, status: j.status || 'Active',
+        applicants: 0, match: 50,
         ...JOB_COLORS[i % JOB_COLORS.length],
         logo: (j.company||'??').substring(0,2).toUpperCase()
       };
     });
-    UI.renderJobCards('cand-jobs-grid', DB.jobs, true);
-    UI.renderJobCards('admin-jobs-grid', DB.jobs, false);
-    // Update job count header in candidate jobs page
-    setEl('cand-jobs-count', `${DB.jobs.length} Matching Jobs Found`);
+    if (!DB.currentUser || DB.currentUser.role === 'hr' || !DB.currentUser.skills) {
+       DB.jobs = adminJobs;
+       UI.renderJobCards('cand-jobs-grid', DB.jobs, true);
+       setEl('cand-jobs-count', `${DB.jobs.length} Matching Jobs Found`);
+    }
+    UI.renderJobCards('admin-jobs-grid', adminJobs, false);
     updateSidebarBadges();
   });
 }
@@ -1019,6 +1073,18 @@ function fetchCandidatesFromServer() {
     }));
     UI.renderCandidatesTable();
     UI.renderRankingsTable();
+
+    // ── Update HR filter tab counts with real numbers ──
+    const all         = DB.candidates.length;
+    const shortlisted = DB.candidates.filter(c => c.status === 'Shortlisted').length;
+    const reviewing   = DB.candidates.filter(c => c.status === 'Reviewing').length;
+    const pending     = DB.candidates.filter(c => c.status === 'Pending').length;
+    const rejected    = DB.candidates.filter(c => c.status === 'Rejected').length;
+    setEl('tab-count-all',         all);
+    setEl('tab-count-shortlisted', shortlisted);
+    setEl('tab-count-reviewing',   reviewing + pending);   // Reviewing + Pending combined
+    setEl('tab-count-rejected',    rejected);
+
     updateSidebarBadges();
     
     // Populate recent applications on HR Dashboard (top 5 by ID desc as proxy for recent)
@@ -1059,19 +1125,15 @@ function fetchNotificationsFromServer(userId) {
 // Pull ALL live stats and update admin dashboard numbers
 function fetchAdminStats() {
   fetch('/api/admin/stats').then(r=>r.json()).then(d=>{
-    // Stat cards
+    // Stat cards (dashboard KPIs)
     setEl('stat-total-applicants', d.total_applicants);
     setEl('stat-resumes-analyzed', d.resumes_analyzed);
     setEl('stat-shortlisted',      d.shortlisted);
     setEl('stat-active-jobs',      d.active_jobs);
     setEl('stat-avg-ats',          d.avg_ats_score);
     setEl('stat-reviewing',        d.reviewing);
-    
-    // Update Tabs
-    setEl('tab-count-all',         d.total_applicants);
-    setEl('tab-count-shortlisted', d.shortlisted);
-    setEl('tab-count-reviewing',   d.reviewing);
-    setEl('tab-count-rejected',    d.rejected);
+    // NOTE: tab counts (All/Shortlisted/Reviewing/Rejected) are set by
+    // fetchCandidatesFromServer() which uses the real joined candidate list.
 
     // Charts with real data
     const skillLabels = d.top_skills.map(x=>x.skill);
@@ -1188,7 +1250,9 @@ function fetchCandidateStats(userId) {
     // Stat cards
     setEl('cand-stat-ats',          score);
     setEl('cand-stat-skills',       d.skills_count || 0);
-    setEl('cand-stat-matches',      d.job_matches  || 0);
+    // Real ML matched jobs count — use cached result count if available, else DB total
+    const realMatchedCount = (_mlJobsCache && _mlJobsCache.length > 0) ? _mlJobsCache.length : (d.job_matches || 0);
+    setEl('cand-stat-matches',      realMatchedCount);
     setEl('cand-stat-apps',         d.applications || 0);
     setEl('cand-analytics-stat-ats', score);
     // ATS display in welcome banner + mini donut + dashboard ATS
@@ -1199,13 +1263,15 @@ function fetchCandidateStats(userId) {
     if(svg) svg.setAttribute('data-score', score);
     
 
-    // Profile Views
-    setEl('cand-stat-views', d.profile_views || '--');
-    setEl('cand-stat-views-weekly', `+${d.profile_views_weekly || 0}`);
-    setEl('cand-analytics-views', d.profile_views || '--');
-    setEl('cand-analytics-views-weekly', `+${d.profile_views_weekly || 0}`);
-    setEl('cand-analytics-apps', d.applications || '--');
-    setEl('cand-analytics-matches', d.job_matches || '--');
+    // Profile Views — real from DB (0 means no HR has viewed your profile yet)
+    const realViews = d.profile_views !== undefined ? d.profile_views : 0;
+    const realWeekly = d.profile_views_weekly !== undefined ? d.profile_views_weekly : 0;
+    setEl('cand-stat-views', realViews);
+    setEl('cand-stat-views-weekly', realWeekly > 0 ? `+${realWeekly} this week` : 'No views yet');
+    setEl('cand-analytics-views', realViews);
+    setEl('cand-analytics-views-weekly', realWeekly > 0 ? `+${realWeekly}` : '0');
+    setEl('cand-analytics-apps', d.applications || 0);
+    setEl('cand-analytics-matches', realMatchedCount);
 
     // Matched keywords
     const atsMatchedContainer = document.getElementById('ats-matched-keywords');
@@ -1391,8 +1457,8 @@ function renderATSPage(score, skills, missingSkills, skillCount) {
   
   if (atsHeading) {
     const grade = score >= 80 ? 'Excellent' : score >= 65 ? 'Good' : score >= 50 ? 'Fair' : 'Needs Work';
-    const emoji = score >= 80 ? '🏆' : score >= 65 ? '🎉' : score >= 50 ? '👍' : '💪';
-    atsHeading.textContent = `${grade} ATS Score ${emoji}`;
+    const emoji = score >= 80 ? '<i class="fa-solid fa-trophy"></i>' : score >= 65 ? '<i class="fa-solid fa-wand-magic-sparkles"></i>' : score >= 50 ? '<i class="fa-solid fa-thumbs-up"></i>' : '<i class="fa-solid fa-dumbbell"></i>';
+    atsHeading.innerHTML = `${grade} ATS Score <span style="margin-left: 8px;">${emoji}</span>`;
   }
   if (atsSubtext) {
     atsSubtext.textContent = score >= 65
@@ -1456,6 +1522,75 @@ function renderUploadHistory(user) {
 
 
 
+// ── ML Pipeline Status ──────────────────────────────────
+function loadMLPipelineStatus() {
+  const btn = document.getElementById('pipeline-refresh-btn');
+  if(btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...'; }
+
+  fetch('/api/ml/status')
+    .then(r => r.json())
+    .then(data => {
+      // Pipeline Status
+      const isReady = data.status === 'ready';
+      setEl('ml-pipeline-status', isReady ? '● Online' : '○ Not Trained');
+      const statusEl = document.getElementById('ml-pipeline-status');
+      if(statusEl) statusEl.style.color = isReady ? '#16a34a' : '#dc2626';
+      setEl('ml-pipeline-status-sub', isReady ? 'All models loaded & operational' : 'Run training to activate');
+
+      // TF-IDF Model
+      const tfidf = data.models?.tfidf_recommender || {};
+      setEl('ml-vocab-size', tfidf.vocab_size ? tfidf.vocab_size.toLocaleString() : '--');
+      setEl('ml-tfidf-vocab', tfidf.vocab_size ? `${tfidf.vocab_size.toLocaleString()} terms` : '--');
+      setEl('ml-corpus-size', tfidf.corpus_size || '--');
+      setEl('ml-corpus-detail', `${tfidf.corpus_size || '800'} documents trained on`);
+      setEl('ml-tfidf-corpus', `${tfidf.corpus_size || '--'} docs (resumes + job descriptions)`);
+
+      const tfidfBadge = document.getElementById('ml-tfidf-badge');
+      if(tfidfBadge) {
+        tfidfBadge.className = tfidf.trained ? 'badge badge-success' : 'badge badge-danger';
+        tfidfBadge.textContent = tfidf.trained ? '✓ Trained' : '✗ Not Trained';
+      }
+
+      // Hit rates
+      const hr = tfidf.hit_rate || {};
+      setEl('ml-tfidf-hit1', hr.hit_rate_top1 != null ? `${(hr.hit_rate_top1 * 100).toFixed(0)}%` : '--');
+      setEl('ml-tfidf-hit3', hr.hit_rate_top3 != null ? `${(hr.hit_rate_top3 * 100).toFixed(0)}%` : '--');
+      setEl('ml-tfidf-hit5', hr.hit_rate_top5 != null ? `${(hr.hit_rate_top5 * 100).toFixed(0)}%` : '--');
+      setEl('ml-hit-rate', hr.hit_rate_top5 != null ? `${(hr.hit_rate_top5 * 100).toFixed(0)}%` : '--');
+
+      // spaCy NER Model
+      const ner = data.models?.spacy_ner || {};
+      const nerBadge = document.getElementById('ml-ner-badge');
+      if(nerBadge) {
+        nerBadge.className = ner.trained ? 'badge badge-success' : 'badge badge-danger';
+        nerBadge.textContent = ner.trained ? '✓ Trained' : '✗ Not Trained';
+      }
+      setEl('ml-ner-f1', ner.best_f1 != null ? `${(ner.best_f1 * 100).toFixed(1)}%` : '--');
+      setEl('ml-ner-epochs', ner.epochs || '--');
+      setEl('ml-ner-method', data.extraction_method || 'spaCy NER + Regex');
+      setEl('ml-extraction-method', data.extraction_method || 'spaCy NER + Regex');
+
+      // Dataset info
+      const ds = data.dataset || {};
+      setEl('ml-dataset-resumes', ds.num_resumes || '600');
+      setEl('ml-dataset-jobs', ds.num_jobs || '200');
+      setEl('ml-dataset-ner', ds.num_ner_samples || '~4,800');
+
+      // Live jobs count from DB
+      fetch('/api/admin/jobs').then(r=>r.json()).then(jobs => {
+        setEl('ml-live-jobs', jobs.length || '--');
+      });
+
+      if(btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status'; }
+    })
+    .catch(err => {
+      console.error('ML Pipeline status error:', err);
+      setEl('ml-pipeline-status', '● Error');
+      if(btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status'; }
+    });
+}
+
+
 function fetchCandidateProfile(userId) {
   fetch(`/api/users/${userId}/profile`).then(r=>r.json()).then(d=>{
     setEl('profile-name', d.name || '-');
@@ -1498,13 +1633,13 @@ function updateSidebarBadges() {
   // Candidate Badges
   const score = DB.currentUser ? (DB.currentUser.ats_score || 0) : 0;
   upd('badge-cand-upload', score > 0 ? 0 : 1);
-  const matchedJobs = DB.jobs ? DB.jobs.filter(j=>j.match >= 50).length : 0;
-  upd('badge-cand-jobs', matchedJobs);
+  const totalJobs = DB.jobs ? DB.jobs.length : 0;
+  upd('badge-cand-jobs', totalJobs);
   upd('badge-cand-notifs', cNotifs);
 
   // Buttons Logic
   const btnJobs = document.getElementById('ats-btn-jobs');
-  if(btnJobs) { btnJobs.innerHTML = `<i class="fas fa-briefcase"></i> View Job Matches (${matchedJobs})`; }
+  if(btnJobs) { btnJobs.innerHTML = `<i class="fas fa-briefcase"></i> View Job Matches (${totalJobs})`; }
   
   const notifDots = document.querySelectorAll('.notif-dot');
   notifDots.forEach(dot => { dot.style.display = cNotifs > 0 ? 'block' : 'none'; });
@@ -1526,12 +1661,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (jEl) jEl.textContent = d.jobs_matched > 0 ? d.jobs_matched + '+' : '10+';
   }).catch(() => {});
   
-  // Auto-refresh every 30s
+  // Lightweight auto-refresh every 2 min (only stats, NOT the heavy ML pipeline)
   setInterval(() => {
-    fetchAdminStats();
-    fetchCandidatesFromServer();
-    fetchJobsFromServer();
-  }, 30000);
+    if (document.hidden) return;  // Don't poll when tab is in background
+    if (DB.currentUser?.role === 'hr') {
+      fetchAdminStats();
+      fetchCandidatesFromServer();
+    }
+  }, 120000);
 
   // Bind settings toggles
   ['email','sms','jobs','profile'].forEach(key => {

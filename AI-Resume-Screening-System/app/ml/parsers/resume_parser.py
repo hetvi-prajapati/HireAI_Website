@@ -56,6 +56,9 @@ def parse_resume(file, filename: str) -> dict:
     # ── Step 1: Extract raw text
     if ext == 'pdf':
         raw_text = extract_text_from_pdf(file)
+    elif ext == 'docx':
+        from app.ml.parsers.docx_parser import extract_text_from_docx
+        raw_text = extract_text_from_docx(file)
     else:
         logger.warning(f"Unsupported file type: {ext}. Returning empty parse.")
         return _empty_result()

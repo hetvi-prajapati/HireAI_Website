@@ -1,0 +1,22 @@
+{
+  "model": "tfidf_recommender",
+  "vocab_size": 4206,
+  "max_features": 8000,
+  "ngram_range": [
+    1,
+    2
+  ],
+  "min_df": 2,
+  "max_df": 0.9,
+  "sublinear_tf": true,
+  "corpus_size": 800,
+  "resume_count": 600,
+  "job_count": 200,
+  "train_time_s": 0.44,
+  "evaluation": {
+    "hit_rate_top1": 1.0,
+    "hit_rate_top3": 1.0,
+    "hit_rate_top5": 1.0,
+    "sample_size": 100
+  }
+}
