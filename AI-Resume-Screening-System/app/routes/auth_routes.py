@@ -113,3 +113,38 @@ def landing_stats():
         'applications':     total_apps,
         'avg_ats':          int(avg_ats)
     })
+
+
+@auth_bp.route('/forgot_password', methods=['POST'])
+def forgot_password():
+    """
+    POST /api/auth/forgot_password  →  { email }
+
+    Checks if the email exists in the database.
+    In production, this would trigger an email send.
+    For now, it validates the email and simulates the send.
+    """
+    data  = request.get_json(force=True) or {}
+    email = data.get('email', '').strip().lower()
+
+    if not email:
+        return jsonify({'success': False, 'message': 'Email address is required.'}), 400
+
+    with get_db() as conn:
+        user = conn.execute(
+            "SELECT id, name FROM users WHERE email=?", (email,)
+        ).fetchone()
+
+    if not user:
+        return jsonify({
+            'success': False,
+            'message': 'No account found with that email address. Please check and try again.'
+        }), 404
+
+    # In production: send a real password reset email here via SMTP / SendGrid etc.
+    # For now we simulate the send and return success.
+    return jsonify({
+        'success': True,
+        'message': f'A password reset link has been sent to {email}. Please check your inbox.'
+    })
+

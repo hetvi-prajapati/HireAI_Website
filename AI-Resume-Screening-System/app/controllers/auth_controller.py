@@ -27,7 +27,7 @@ def login_user(email: str, password: str) -> dict:
     if not user:
         return {
             'success': False,
-            'message': 'Invalid email or password. Demo: rahul@demo.com / priya@demo.com (pass: demo123)'
+            'message': 'No account found with that email. Demo: hetsony143@gmail.com / priya@demo.com (pass: demo123)'
         }
 
     # Support backward compatibility with plain text demo passwords
@@ -40,7 +40,7 @@ def login_user(email: str, password: str) -> dict:
     if not is_valid:
         return {
             'success': False,
-            'message': 'Invalid email or password. Demo: rahul@demo.com / priya@demo.com (pass: demo123)'
+            'message': 'Incorrect password. Demo: hetsony143@gmail.com / priya@demo.com (pass: demo123)'
         }
 
     logger.info(f"Login successful: {email}")

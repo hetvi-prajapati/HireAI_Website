@@ -480,32 +480,49 @@
      PAGE 4 — FORGOT PASSWORD
 ═══════════════════════════════════════════════════════════ -->
 <div id="page-forgot" class="page auth-page">
-  <div class="auth-card">
-    <div class="auth-logo">
-      <div class="logo-mark">🤖</div>
-      <div class="logo-name">Talent<span>Sync</span></div>
+  <div class="auth-left">
+    <div class="auth-quote">
+      <h2>Don't worry, it happens to everyone.</h2>
+      <p>Enter your registered email address and we'll send you a secure link to reset your password and get back in.</p>
     </div>
-    <div class="auth-title">Reset Password</div>
-    <div class="auth-sub">Enter your email and we'll send a reset link</div>
-
-    <div class="form-group" style="margin-top:8px">
-      <label class="form-label">Email Address</label>
-      <div class="input-icon-wrap">
-        <i class="input-icon fas fa-envelope"></i>
-        <input id="forgot-email" class="form-control" type="email" placeholder="you@example.com">
+  </div>
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-mark"><i class="fas fa-robot"></i></div>
+        <div class="logo-name">Talent<span>Sync</span></div>
       </div>
-    </div>
+      <div class="auth-title">Reset Password</div>
+      <div class="auth-sub">Enter your email and we'll send you a secure reset link.</div>
 
-    <div id="forgot-success" class="alert alert-success hidden">
-      <i class="fas fa-check-circle"></i>
-      <div>Password reset link sent! Check your email inbox.</div>
-    </div>
+      <div class="form-group" style="margin-top:8px">
+        <label class="form-label">REGISTERED EMAIL</label>
+        <div class="input-icon-wrap">
+          <i class="input-icon fas fa-envelope"></i>
+          <input id="forgot-email" class="form-control" type="email" placeholder="you@example.com">
+        </div>
+      </div>
 
-    <button class="btn btn-primary btn-full btn-lg" onclick="Auth.forgotPwd()">
-      <i class="fas fa-paper-plane"></i> Send Reset Link
-    </button>
-    <div class="auth-back" style="margin-top:14px" onclick="Router.go('login')">
-      <i class="fas fa-arrow-left"></i> Back to Sign In
+      <div id="forgot-success" class="alert alert-info hidden" style="margin-bottom:16px">
+        <i class="fas fa-check-circle" style="color:#10b981;margin-right:8px;"></i>
+        Password reset link sent! Check your email inbox.
+      </div>
+
+      <div id="forgot-error" class="alert hidden" style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:16px">
+        <i class="fas fa-exclamation-circle" style="margin-right:8px;"></i>
+        <span id="forgot-error-msg">Email not found in our system.</span>
+      </div>
+
+      <button class="btn btn-primary btn-full btn-lg" style="width:100%;justify-content:center;" onclick="Auth.forgotPwd()">
+        <i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send Reset Link
+      </button>
+
+      <div class="auth-footer">
+        Remember your password? <a onclick="Router.go('login')">Sign in</a>
+      </div>
+      <div class="auth-back" onclick="Router.go('login')">
+        <i class="fas fa-arrow-left"></i> BACK TO SIGN IN
+      </div>
     </div>
   </div>
 </div>

@@ -124,9 +124,37 @@ const Auth = {
 
   forgotPwd() {
     const email = document.getElementById('forgot-email').value.trim();
-    if (!email) { Toast.show('Please enter your email address.','warning'); return; }
-    document.getElementById('forgot-success').classList.remove('hidden');
-    Toast.show('Reset link sent to ' + email,'success');
+    if (!email) { Toast.show('Please enter your email address.', 'warning'); return; }
+
+    const btn = document.querySelector('#page-forgot .btn-primary');
+    const successEl = document.getElementById('forgot-success');
+    const errorEl   = document.getElementById('forgot-error');
+    const errorMsg  = document.getElementById('forgot-error-msg');
+
+    // Reset state
+    successEl.classList.add('hidden');
+    errorEl.classList.add('hidden');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...'; }
+
+    fetch('/api/auth/forgot_password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    }).then(r => r.json()).then(data => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send Reset Link'; }
+      if (data.success) {
+        successEl.classList.remove('hidden');
+        Toast.show('Reset link sent to ' + email, 'success');
+        document.getElementById('forgot-email').value = '';
+      } else {
+        if (errorMsg) errorMsg.textContent = data.message || 'Email not found in our system.';
+        errorEl.classList.remove('hidden');
+        Toast.show(data.message || 'Email not found.', 'error');
+      }
+    }).catch(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send Reset Link'; }
+      Toast.show('Server error — please try again.', 'error');
+    });
   },
 
   logout() {
