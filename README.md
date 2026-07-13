@@ -1,162 +1,94 @@
 <div align="center">
 
-<!-- Animated Banner -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a6b4a,100:00c896&height=200&section=header&text=TalentSync%20%E2%80%94%20HireAI&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=AI-Powered%20Resume%20Screening%20%26%20Smart%20Hiring%20Platform&descAlignY=58&descSize=18&animation=fadeIn"/>
+<!-- Beast Mode Banner -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:0a2e22,100:00ff88&height=250&section=header&text=TALENTSYNC&fontSize=70&fontColor=ffffff&fontAlignY=35&desc=THE%20ULTIMATE%20AI%20RECRUITMENT%20ENGINE&descAlignY=55&descSize=20&animation=twinkling"/>
 
-<!-- Typing animation -->
+<!-- Aggressive Typing Animation -->
 <a href="https://github.com/hetvi-prajapati/HireAI_Website">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1000&color=00C896&center=true&vCenter=true&width=600&lines=AI+Resume+Screening+System;Smart+ATS+Scoring+Engine;Real-time+Candidate+Matching;Built+with+Flask+%2B+spaCy+%2B+ML" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=800&size=24&pause=1000&color=00FF88&center=true&vCenter=true&width=800&lines=NEXT-GEN+AI+RESUME+SCREENING;POWERED+BY+SPACY+NLP;HYPER-OPTIMIZED+ATS+ALGORITHM;REAL-TIME+TF-IDF+MATCHING" alt="Typing SVG" />
 </a>
 
 <br/><br/>
 
-<!-- Badges -->
-[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Flask](https://img.shields.io/badge/Flask-2.x-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
-[![HTML5](https://img.shields.io/badge/HTML5-45.8%25-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
-[![JavaScript](https://img.shields.io/badge/JavaScript-17.4%25-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![CSS3](https://img.shields.io/badge/CSS3-12.8%25-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-[![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org)
+<!-- Premium Dark Badges -->
+[![Python](https://img.shields.io/badge/Python_3.11-000000?style=for-the-badge&logo=python&logoColor=00FF88)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask_Core-000000?style=for-the-badge&logo=flask&logoColor=00FF88)](https://flask.palletsprojects.com)
+[![spaCy](https://img.shields.io/badge/spaCy_NLP-000000?style=for-the-badge&logo=spacy&logoColor=00FF88)](https://spacy.io/)
+[![SQLite](https://img.shields.io/badge/SQLite_DB-000000?style=for-the-badge&logo=sqlite&logoColor=00FF88)](https://sqlite.org)
+[![JavaScript](https://img.shields.io/badge/Vanilla_JS-000000?style=for-the-badge&logo=javascript&logoColor=00FF88)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Security](https://img.shields.io/badge/OWASP_Secured-000000?style=for-the-badge&logo=owasp&logoColor=00FF88)](https://owasp.org/)
 
 <br/>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/hetvi-prajapati/HireAI_Website?style=flat-square&color=gold)](https://github.com/hetvi-prajapati/HireAI_Website/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/hetvi-prajapati/HireAI_Website?style=flat-square&color=blue)](https://github.com/hetvi-prajapati/HireAI_Website/network)
-![Maintained](https://img.shields.io/badge/Maintained-Yes-brightgreen?style=flat-square)
-![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-ff69b4?style=flat-square)
+[![License](https://img.shields.io/badge/LICENSE-MIT-00FF88?style=for-the-badge&labelColor=000000)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/hetvi-prajapati/HireAI_Website?style=for-the-badge&color=00FF88&labelColor=000000)](https://github.com/hetvi-prajapati/HireAI_Website/stargazers)
+[![Status](https://img.shields.io/badge/STATUS-ACTIVE-00FF88?style=for-the-badge&labelColor=000000)](#)
 
 </div>
 
----
+<br/>
 
-## 🧠 What is TalentSync?
-
-> **TalentSync** is a full-stack AI-powered hiring platform that automates resume screening, scores candidates using ATS algorithms, extracts skills via NLP (spaCy), and matches candidates to job descriptions using TF-IDF and ML models — all wrapped in a beautiful, responsive single-page web app.
-
-No more manual resume filtering. No more guesswork. **Let AI do the heavy lifting.**
+> **TalentSync** isn't just an ATS. It's a highly aggressive, precision-engineered AI recruitment engine. It rips through resumes, extracts raw skills using custom NLP models, calculates brutal ATS scores, and executes hyper-accurate candidate-to-job matching using Machine Learning. Built for speed, accuracy, and dominance.
 
 ---
 
-## ✨ Key Features
+## 🔥 ARCHITECTURE & PIPELINE
 
-<table>
-<tr>
-<td width="50%">
-
-### 🤖 AI Resume Screening
-- **spaCy NER** model extracts real skills from uploaded resumes (PDF / DOCX)
-- Context-aware extraction — filters noise and irrelevant tokens
-- Supports 500+ technical and soft skills
-
-### 📊 ATS Scoring Engine
-- Scores every resume **out of 100**
-- Matches candidate skills vs. job requirements
-- Instant feedback with grade labels (Excellent / Good / Average)
-
-### 🎯 Smart Job Matching
-- TF-IDF vectorizer + sklearn cosine similarity
-- Matches candidates to **109+ real job listings**
-- Ranked recommendations with match % score
-
-</td>
-<td width="50%">
-
-### 👤 Candidate Dashboard
-- Upload resume → instant skill extraction
-- See ATS score, matched skills, job recommendations
-- Real-time notifications
-
-### 🏢 HR / Admin Panel
-- View all candidates with scores and status
-- Shortlist ✅ or Reject ❌ candidates
-- Manage job listings (add / edit / delete)
-- Dashboard with hiring pipeline stats
-
-### 🔐 Security Hardened
-- bcrypt password hashing
-- Rate limiting (10 req/min per IP)
-- SQL injection protected (parameterized queries)
-- CSRF & XSS mitigations
-- Session cookie hardening (HTTPOnly, SameSite)
-
-</td>
-</tr>
-</table>
+```mermaid
+graph TD
+    classDef black fill:#000000,stroke:#00FF88,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef green fill:#00FF88,stroke:#000000,stroke-width:2px,color:#000000,font-weight:bold;
+    
+    A[Raw Resume Upload PDF/DOCX]:::black --> B(PyMuPDF / docx Parser):::black
+    B --> C{spaCy NER Engine}:::green
+    C -->|Extracts 500+ Skills| D[Noise Filter & Normalizer]:::black
+    D --> E((ATS Scoring Engine)):::green
+    E -->|Calculates /100| F[Candidate Profile Built]:::black
+    
+    F --> G{TF-IDF Vectorizer}:::green
+    H[(109+ Job Listings)]:::black --> G
+    G -->|Cosine Similarity| I[Ranked Job Matches]:::green
+```
 
 ---
 
-## 🏗️ Tech Stack
+## ⚡ LETHAL FEATURES
+
+### 🧠 Custom NLP Skill Extraction
+- Driven by a custom-trained **spaCy Named Entity Recognition (NER)** model.
+- Aggressive noise-filtering context engine ensures fake/fluff words are ignored.
+- Parses deeply nested structures inside PDFs and Word documents instantaneously.
+
+### 💀 Ruthless ATS Scoring
+- Every candidate is subjected to a strict algorithm evaluating experience, keyword density, and formatting.
+- Instant, unforgiving grade labels: **Excellent**, **Good**, or **Average**.
+
+### 🎯 Hyper-Accurate Job Matching
+- Machine Learning powered by **scikit-learn** TF-IDF vectorization.
+- Computes multi-dimensional cosine similarity across 109+ real-world tech jobs in milliseconds.
+- Outputs ranked arrays of exact match percentages.
+
+### 🛡️ Iron-Clad Security
+- **Bcrypt** cryptographic password hashing.
+- Brutal rate-limiting (10 strikes/min ban).
+- Zero-tolerance parameterized SQL queries.
+- Hardened OWASP session cookies (HTTPOnly, SameSite).
+
+---
+
+## 💻 BEAST MODE DASHBOARDS
 
 <div align="center">
-
-| Layer | Technology |
-|-------|-----------|
-| **Backend** | Python 3.11, Flask 2.x |
-| **NLP / ML** | spaCy (NER), scikit-learn (TF-IDF), NLTK |
-| **Frontend** | Vanilla HTML5, CSS3, JavaScript (SPA) |
-| **Database** | SQLite3 (upgradeable to PostgreSQL) |
-| **Auth** | Flask Sessions + Werkzeug bcrypt |
-| **Resume Parsing** | PyMuPDF (PDF), python-docx (DOCX) |
-| **Security** | Flask-Limiter, OWASP hardening |
-
+  <img src="https://raw.githubusercontent.com/hetvi-prajapati/HireAI_Website/main/AI-Resume-Screening-System/app/static/img/hero_img.png" width="800" style="border: 2px solid #00FF88; border-radius: 0px; box-shadow: 0px 0px 20px rgba(0, 255, 136, 0.2);"/>
+  <br/><br/>
+  <i>The uncompromising split-screen SPA interface. Zero bloat. Pure performance.</i>
 </div>
 
 ---
 
-## 📁 Project Structure
+## 🛠️ DEPLOYMENT INSTRUCTIONS
 
-```
-HireAI_Website/
-├── AI-Resume-Screening-System/
-│   ├── app/
-│   │   ├── __init__.py              # App factory
-│   │   ├── config/
-│   │   │   └── settings.py          # Environment config
-│   │   ├── routes/
-│   │   │   ├── admin_routes.py      # HR/Admin API
-│   │   │   ├── user_routes.py       # Candidate API
-│   │   │   └── auth_routes.py       # Auth (login/register/logout)
-│   │   ├── controllers/
-│   │   │   ├── auth_controller.py
-│   │   │   └── resume_controller.py
-│   │   ├── ml/
-│   │   │   ├── skill_extraction/
-│   │   │   │   └── extract_skills.py   # spaCy NER skill extractor
-│   │   │   ├── ats/
-│   │   │   │   └── ats_checker.py      # ATS scoring engine
-│   │   │   ├── parsers/
-│   │   │   │   ├── pdf_parser.py
-│   │   │   │   └── resume_parser.py
-│   │   │   └── recommendation/
-│   │   │       └── recommend_jobs.py   # TF-IDF job matcher
-│   │   ├── models/
-│   │   │   └── database.py
-│   │   ├── static/
-│   │   │   ├── css/style.css
-│   │   │   ├── js/app.js            # SPA router + all UI logic
-│   │   │   └── img/
-│   │   └── templates/
-│   │       └── index.html           # Single Page Application
-│   ├── trained_models/
-│   │   ├── spacy_skill_ner/         # Custom trained spaCy NER
-│   │   └── tfidf_recommender/       # TF-IDF vectorizer + model
-│   └── run.py                       # Entry point
-└── README.md
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-```bash
-Python 3.11+
-pip
-```
-
-### Installation
+Execute the following commands to initialize the engine on your local machine.
 
 ```bash
 # 1. Clone the repository
@@ -166,110 +98,33 @@ cd HireAI_Website/AI-Resume-Screening-System
 # 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Download spaCy model
+# 3. Download base spaCy models
 python -m spacy download en_core_web_sm
 
-# 4. Run the app
+# 4. Ignite the server
 python run.py
 ```
 
-### 5. Open your browser
-
-```
-http://127.0.0.1:5000
-```
+Access the terminal at `http://127.0.0.1:5000`
 
 ---
 
-## 🔑 Default Accounts
+## 🔑 SYSTEM ACCESS
 
-| Role | Email | Password |
-|------|-------|----------|
-| **HR / Admin** | admin@talentsync.com | admin123 |
-| **Candidate** | Register a new account | — |
-
-> ⚠️ Change admin credentials before deploying to production.
-
----
-
-## 🖼️ Screenshots
-
-<div align="center">
-
-| Landing Page | Candidate Dashboard |
-|:---:|:---:|
-| <img src="AI-Resume-Screening-System/app/static/img/hero_img.png" width="400" alt="Landing Page"/> | _Upload resume to see AI analysis_ |
-
-| Admin Panel | Candidate Profile Modal |
-|:---:|:---:|
-| _HR view with all candidates_ | _ATS score, skills, shortlist/reject_ |
-
-</div>
-
----
-
-## 🧬 How the AI Works
-
-```
-📄 Resume Upload (PDF/DOCX)
-         │
-         ▼
-🔍 Text Extraction  ──────────────── PyMuPDF / python-docx
-         │
-         ▼
-🧠 Skill NER Model  ──────────────── spaCy custom NER (500+ skills)
-         │
-         ▼
-📊 ATS Scoring      ──────────────── Skill-to-JD matching algorithm
-         │
-         ▼
-🎯 Job Matching     ──────────────── TF-IDF cosine similarity (109 jobs)
-         │
-         ▼
-✅ Ranked Results   ──────────────── Top matches with % score
-```
-
----
-
-## 🛡️ Security
-
-- ✅ **Bcrypt** password hashing (no plain-text passwords ever)
-- ✅ **Parameterized SQL** queries (zero SQL injection risk)
-- ✅ **Rate limiting** — 10 login attempts/min per IP
-- ✅ **HTTPOnly + SameSite** session cookies
-- ✅ **IDOR protection** — users can only access their own data
-- ✅ **File upload validation** — PDF/DOCX only, 5MB limit
-- ✅ **No hardcoded secrets** — environment variable driven
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
-
-1. 🍴 Fork the repository
-2. 🌿 Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. 💾 Commit your changes (`git commit -m 'Add amazing feature'`)
-4. 📤 Push to the branch (`git push origin feature/amazing-feature`)
-5. 🔁 Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+| Authority Level | Email | Password |
+|:---|:---|:---|
+| **COMMAND (HR/Admin)** | `admin@talentsync.com` | `admin123` |
+| **OPERATIVE (Candidate)** | Register a new identity | — |
 
 ---
 
 <div align="center">
 
-<!-- Footer wave -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:00c896,50:1a6b4a,100:0d1117&height=120&section=footer"/>
+<!-- Beast Mode Footer Wave -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:00ff88,50:0a2e22,100:000000&height=120&section=footer"/>
 
-**Made with ❤️ by [Hetvi Prajapati](https://github.com/hetvi-prajapati)**
+**BUILT WITH PURE CODE & MACHINE LEARNING BY [HETVI PRAJAPATI](https://github.com/hetvi-prajapati)**
 
-⭐ **Star this repo if you found it helpful!** ⭐
-
-[![GitHub](https://img.shields.io/badge/GitHub-hetvi--prajapati-181717?style=for-the-badge&logo=github)](https://github.com/hetvi-prajapati)
+[![GitHub](https://img.shields.io/badge/GITHUB-HETVI_PRAJAPATI-000000?style=for-the-badge&logo=github&logoColor=00FF88)](https://github.com/hetvi-prajapati)
 
 </div>
