@@ -12,6 +12,9 @@ from app.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+# Allowed roles on registration
+ALLOWED_ROLES = {'candidate', 'hr'}
+
 
 def login_user(email: str, password: str) -> dict:
     """Authenticate a user. Returns user dict on success."""
@@ -24,27 +27,31 @@ def login_user(email: str, password: str) -> dict:
             (email.strip().lower(),)
         ).fetchone()
 
+    # Generic message — do not reveal whether the email exists
     if not user:
         return {
             'success': False,
-            'message': 'No account found with that email. Demo: hetsony143@gmail.com / priya@demo.com (pass: demo123)'
+            'message': 'Invalid email or password.'
         }
 
-    # Support backward compatibility with plain text demo passwords
-    is_valid = False
-    if user['password'] == password:
-        is_valid = True
-    elif check_password_hash(user['password'], password):
-        is_valid = True
+    # Always use hashed comparison — plain-text passwords are no longer supported
+    try:
+        is_valid = check_password_hash(user['password'], password)
+    except Exception:
+        is_valid = False
 
     if not is_valid:
         return {
             'success': False,
-            'message': 'Incorrect password. Demo: hetsony143@gmail.com / priya@demo.com (pass: demo123)'
+            'message': 'Invalid email or password.'
         }
 
     logger.info(f"Login successful: {email}")
-    return {'success': True, 'user': dict(user)}
+
+    u_dict = dict(user)
+    # Never return the password hash to the caller
+    u_dict.pop('password', None)
+    return {'success': True, 'user': u_dict}
 
 
 def register_user(name: str, email: str, password: str, role: str) -> dict:
@@ -63,13 +70,17 @@ def register_user(name: str, email: str, password: str, role: str) -> dict:
     if not ok:
         return {'success': False, 'message': err}
 
+    # Whitelist roles — prevent privilege escalation via self-assigned role
+    if role not in ALLOWED_ROLES:
+        return {'success': False, 'message': "Invalid role. Must be 'candidate' or 'hr'."}
+
     hashed_password = generate_password_hash(password)
 
     try:
         with get_db() as conn:
             cur = conn.execute(
                 "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-                (name, email.strip().lower(), hashed_password, role)
+                (name.strip(), email.strip().lower(), hashed_password, role)
             )
             user_id = cur.lastrowid
 
@@ -89,4 +100,3 @@ def register_user(name: str, email: str, password: str, role: str) -> dict:
         }
     except sqlite3.IntegrityError:
         return {'success': False, 'message': 'Email already registered.'}
-

@@ -59,21 +59,94 @@ def _load_ner_model():
 
 
 
-# ── Regex Fallback Extractor ──────────────────────────────────
+
+# ── Skills Section Extractor ──────────────────────────────
+# These headings signal the start of a dedicated skills section
+_SKILLS_SECTION_HEADERS = re.compile(
+    r'(?:^|\n)\s*(?:technical\s+)?skills?'
+    r'(?:\s+(?:summary|set|profile|&\s+abilities|and\s+abilities|/\s*competencies))?'
+    r'\s*[:\-]?\s*\n',
+    re.IGNORECASE
+)
+
+# These headings signal the END of the skills section (start of a new section)
+_NEXT_SECTION_HEADER = re.compile(
+    r'\n\s*(?:experience|education|projects?|work\s+history|employment|'
+    r'certifications?|awards?|achievements?|languages?|interests?|'
+    r'references?|hobbies?|publications?|summary|objective|profile)\s*[:\-]?\s*\n',
+    re.IGNORECASE
+)
+
+
+def _extract_skills_section(text: str) -> str:
+    """
+    Try to isolate just the Skills section of a resume.
+    Returns the skills section text, or empty string if not found.
+    """
+    match = _SKILLS_SECTION_HEADERS.search(text)
+    if not match:
+        return ''
+    start = match.end()
+    # Find the next section header after the skills section
+    end_match = _NEXT_SECTION_HEADER.search(text, start)
+    end = end_match.start() if end_match else min(start + 800, len(text))
+    return text[start:end]
+
+
+# ── Regex Fallback Extractor ──────────────────────────────
 def _regex_extract(text: str) -> list:
     """
-    Legacy regex-boundary skill extractor.
-    Used as fallback when the NER model is not yet trained.
+    Context-aware skill extractor.
+
+    Strategy:
+      1. Try to find a dedicated 'Skills' section and only scan that.
+      2. If no skills section found, fall back to full-text scan BUT
+         require the skill to appear at least twice OR appear as a
+         standalone word (not buried inside a sentence > 10 words).
+    This avoids picking up skills mentioned in project descriptions.
     """
     if not text:
         return []
+
+    # ── Try skills section first (highest precision)
+    skills_section = _extract_skills_section(text)
+    if skills_section.strip():
+        text_lower = skills_section.lower()
+        found = set()
+        for skill in ALL_SKILLS:
+            pattern = r'\b' + re.escape(skill) + r'\b'
+            if re.search(pattern, text_lower):
+                found.add(skill.title())
+        return sorted(found)
+
+    # ── Fallback: full-text scan with frequency filter
     text_lower = text.lower()
     found = set()
     for skill in ALL_SKILLS:
         pattern = r'\b' + re.escape(skill) + r'\b'
-        if re.search(pattern, text_lower):
+        matches = list(re.finditer(pattern, text_lower))
+        if not matches:
+            continue
+
+        # Accept if skill appears 2+ times in the document
+        if len(matches) >= 2:
             found.add(skill.title())
+            continue
+
+        # Accept if it appears in a short line (≤ 8 words) — likely a skill list
+        for m in matches:
+            # Find the line containing this match
+            line_start = text_lower.rfind('\n', 0, m.start()) + 1
+            line_end = text_lower.find('\n', m.end())
+            if line_end == -1:
+                line_end = len(text_lower)
+            line = text_lower[line_start:line_end].strip()
+            if len(line.split()) <= 8:
+                found.add(skill.title())
+                break
+
     return sorted(found)
+
 
 
 # ── NER Extractor ─────────────────────────────────────────────

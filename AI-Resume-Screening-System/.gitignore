@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# ── TalentSync secrets (NEVER commit these)
+.env
+ssl/
+*.key
+*.crt
+
 # C extensions
 *.so
 

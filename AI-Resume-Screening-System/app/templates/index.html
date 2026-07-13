@@ -34,7 +34,7 @@
       <li><a onclick="document.getElementById('features-sec').scrollIntoView({behavior:'smooth'})">Features</a></li>
       <li><a onclick="document.getElementById('how-sec').scrollIntoView({behavior:'smooth'})">How It Works</a></li>
       <li><a onclick="document.getElementById('testimonials-sec').scrollIntoView({behavior:'smooth'})">Reviews</a></li>
-      <li><a onclick="document.getElementById('pricing-sec').scrollIntoView({behavior:'smooth'})">Pricing</a></li>
+
       <li><a onclick="Router.go('about')" style="cursor:pointer">About Us</a></li>
       <li><a onclick="Router.go('blog')" style="cursor:pointer">Blog</a></li>
       <li><a onclick="Router.go('careers')" style="cursor:pointer">Careers</a></li>
@@ -54,7 +54,7 @@
     <a onclick="closeMobileMenuAndScroll('features-sec')">Features</a>
     <a onclick="closeMobileMenuAndScroll('how-sec')">How It Works</a>
     <a onclick="closeMobileMenuAndScroll('testimonials-sec')">Reviews</a>
-    <a onclick="closeMobileMenuAndScroll('pricing-sec')">Pricing</a>
+
     <a onclick="toggleMobileMenu();Router.go('about')" style="cursor:pointer">About Us</a>
     <a onclick="toggleMobileMenu();Router.go('blog')" style="cursor:pointer">Blog</a>
     <a onclick="toggleMobileMenu();Router.go('careers')" style="cursor:pointer">Careers</a>
@@ -63,204 +63,175 @@
   </div>
 
   <!-- Hero -->
-  <section class="hero">
-    <div class="hero-glow hero-glow-1"></div>
-    <div class="hero-glow hero-glow-2"></div>
-    <div class="hero-glow hero-glow-3"></div>
-
-    <div class="hero-badge">
-      <div class="hero-badge-dot"></div>
-      AI-Powered Recruitment Platform — v2.0
-    </div>
-    <h1>Hire Smarter with<br><span class="grad">AI Resume Screening</span></h1>
-    <p>Automate your hiring pipeline — parse resumes with NLP, get ATS scores, match candidates to jobs, and rank applicants instantly.</p>
-    <div class="hero-btns">
-      <button class="btn btn-teal btn-xl" onclick="Router.go('register')">
-        <i class="fas fa-rocket"></i> Start Free — No Credit Card
-      </button>
-      <button class="btn-glass btn btn-xl" onclick="Router.go('login')">
-        <i class="fas fa-play-circle"></i> Live Preview
-      </button>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><div class="num">95%</div><div class="lbl">Screening Accuracy</div></div>
-      <div class="hero-stat"><div class="num">10x</div><div class="lbl">Faster Hiring</div></div>
-      <div class="hero-stat"><div class="num">500+</div><div class="lbl">Skills Recognized</div></div>
-      <div class="hero-stat"><div class="num" id="hero-stat-resumes">—</div><div class="lbl">Resumes Analyzed</div></div>
-      <div class="hero-stat"><div class="num" id="hero-stat-jobs">—</div><div class="lbl">Jobs Available</div></div>
+  <section class="hero-light">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1 class="hero-h1">
+          <span class="hero-h1-line1">Hire Smarter.</span>
+          <span class="hero-h1-line2">Screen Faster.</span>
+          <span class="hero-h1-accent">With AI.</span>
+        </h1>
+        <p class="hero-subtext">Automate your hiring pipeline — parse resumes with NLP, get ATS scores, match candidates to jobs, and rank applicants instantly.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary btn-xl" onclick="Router.go('register')">
+            <i class="fas fa-rocket"></i> Start Free — No Credit Card
+          </button>
+          <button class="btn btn-outline btn-xl" onclick="Router.go('login')" style="border: 2px solid var(--border-2); color: var(--text);">
+            <i class="fas fa-play-circle"></i> Live Preview
+          </button>
+        </div>
+        <div class="hero-stats-light">
+          <div class="hero-stat"><div class="num">95%</div><div class="lbl">Screening Accuracy</div></div>
+          <div class="hero-stat"><div class="num">10x</div><div class="lbl">Faster Hiring</div></div>
+          <div class="hero-stat"><div class="num" id="hero-stat-resumes">—</div><div class="lbl">Resumes Analyzed</div></div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="static/img/hero_img.png" alt="AI Recruitment Dashboard">
+      </div>
     </div>
   </section>
 
-  <!-- Features -->
-  <section class="features-section" id="features-sec">
-    <div class="section-header">
-      <div class="section-eyebrow">Core Features</div>
+  <!-- Features Bento Box -->
+  <section class="bento-section" id="features-sec">
+    <div class="section-header center">
+
       <div class="section-title">Everything to Hire Smarter</div>
-      <div class="section-sub">From intelligent parsing to AI-powered matching — complete hiring automation in one platform.</div>
+      <div class="section-sub">A powerful suite of AI tools designed to automate your entire hiring pipeline.</div>
     </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#eff6ff">🔍</div>
-        <h3>NLP Resume Parsing</h3>
-        <p>Automatically extract name, skills, education, experience, and contact details using spaCy, NLTK, and custom ML models.</p>
+    
+    <div class="bento-grid">
+      <div class="bento-item bento-large">
+        <div class="bento-content">
+          <div class="feature-icon" style="background:#eff6ff; color:#2563eb"><i class="fas fa-search"></i></div>
+          <h3>NLP Resume Parsing</h3>
+          <p>Instantly extract name, skills, education, experience, and contact details from any PDF or DOCX using spaCy and custom ML models.</p>
+        </div>
+        <img src="static/img/feature_parsing.png" class="bento-img" alt="Resume Parsing">
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#f0fdf4">🎯</div>
+      <div class="bento-item">
+        <div class="feature-icon" style="background:#f0fdf4; color:#16a34a"><i class="fas fa-bullseye"></i></div>
         <h3>ATS Score Analysis</h3>
-        <p>Get detailed ATS compatibility scores — keyword matching, formatting analysis, section completeness, and improvement tips.</p>
+        <p>Get detailed ATS compatibility scores, keyword matching, and section completeness checks.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#fff7ed">💼</div>
-        <h3>AI Job Matching</h3>
-        <p>TF-IDF vectorization and cosine similarity find the best-fit job recommendations ranked by match percentage.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#fdf4ff">📊</div>
-        <h3>Candidate Ranking</h3>
-        <p>Auto-rank all applicants by combined ATS score, skill alignment, experience, and semantic similarity to shortlist top talent.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#f0fdf4">📈</div>
+      <div class="bento-item">
+        <div class="feature-icon" style="background:#f5f3ff; color:#7c3aed"><i class="fas fa-chart-bar"></i></div>
         <h3>HR Analytics Dashboard</h3>
-        <p>Real-time charts for application trends, skill distribution, ATS score distribution, and hiring funnel metrics.</p>
+        <p>Real-time charts for application trends, skill distribution, and hiring funnels.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#fef9c3">🔐</div>
-        <h3>Dual Role Portals</h3>
-        <p>Separate, secure portals for Candidates and HR Admins with role-based access control and JWT authentication.</p>
+      <div class="bento-item">
+        <div class="feature-icon" style="background:#fef9c3; color:#ca8a04"><i class="fas fa-chart-line"></i></div>
+        <h3>Candidate Ranking</h3>
+        <p>Auto-rank all applicants by combined ATS score, skill alignment, and semantic similarity.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#ffe4e6">📧</div>
-        <h3>Email Notifications</h3>
-        <p>Automated email alerts for new job matches, application updates, shortlisting decisions, and interview invitations.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#e0f2fe">📄</div>
-        <h3>Multi-Format Upload</h3>
-        <p>Upload PDF, DOCX, DOC resumes with drag-and-drop. Parse multiple resumes in bulk with batch processing.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#f5f3ff">🤖</div>
-        <h3>Skill Gap Analysis</h3>
-        <p>Identify missing skills for your target job roles with actionable recommendations to improve your profile score.</p>
+      <div class="bento-item bento-large reverse">
+        <div class="bento-content">
+          <div class="feature-icon" style="background:#fff7ed; color:#ea580c"><i class="fas fa-robot"></i></div>
+          <h3>AI Job Matching & Ranking</h3>
+          <p>TF-IDF vectorization and cosine similarity automatically rank candidates against your job descriptions to find the absolute best fit.</p>
+        </div>
+        <img src="static/img/feature_matching.png" class="bento-img" alt="Job Matching">
       </div>
     </div>
   </section>
 
-  <!-- How It Works -->
-  <section class="how-section" id="how-sec">
+  <!-- How It Works Timeline -->
+  <section class="timeline-section" id="how-sec">
     <div class="section-header center">
-      <div class="section-eyebrow">Workflow</div>
-      <div class="section-title">How TalentSync Works</div>
-      <div class="section-sub">From upload to hire in 5 smart steps — powered by AI at every stage.</div>
-    </div>
-    <div class="steps-container">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h4>Upload Resume</h4>
-        <p>Drag & drop PDF or DOCX resume into the platform</p>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h4>NLP Parsing</h4>
-        <p>AI extracts skills, experience, education, and contact info automatically</p>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h4>ATS Scoring</h4>
-        <p>Get real-time ATS compatibility score with keyword analysis</p>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <h4>AI Matching</h4>
-        <p>TF-IDF cosine similarity ranks jobs or candidates by fit</p>
-      </div>
-      <div class="step">
-        <div class="step-num">5</div>
-        <h4>Hire & Analyze</h4>
-        <p>HR shortlists top-ranked candidates and tracks analytics</p>
-      </div>
-    </div>
-  </section>
 
-  <!-- Testimonials -->
-  <section class="testimonials-section" id="testimonials-sec">
-    <div class="section-header center">
-      <div class="section-eyebrow">Testimonials</div>
-      <div class="section-title">Loved by Recruiters & Candidates</div>
+      <div class="section-title">From Upload to Hire in Seconds</div>
     </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <div class="testimonial-text">"TalentSync cut our time-to-hire by 70%. The AI ranking saved us from reviewing 200+ resumes manually. Absolutely game-changing for our HR team."</div>
-        <div class="testimonial-author">
-          <div class="avatar avatar-md" style="background:#1260cc;color:#fff">PM</div>
-          <div class="testimonial-info"><div class="name">Priya Mehta</div><div class="role">HR Head, TechCorp India</div></div>
+    
+    <div class="timeline-container">
+      <div class="timeline-item">
+        <div class="timeline-node">1</div>
+        <div class="timeline-content">
+          <h4>Upload & Parse</h4>
+          <p>Drag & drop resumes in bulk. AI extracts structured data instantly.</p>
         </div>
       </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <div class="testimonial-text">"The ATS score and skill gap analysis showed me exactly what to add to my resume. Got shortlisted for 3 jobs in my first week!"</div>
-        <div class="testimonial-author">
-          <div class="avatar avatar-md" style="background:#00c9a7;color:#04142b">RS</div>
-          <div class="testimonial-info"><div class="name">Rahul Sharma</div><div class="role">Data Science Candidate</div></div>
+      <div class="timeline-item">
+        <div class="timeline-node">2</div>
+        <div class="timeline-content">
+          <h4>Analyze & Score</h4>
+          <p>Every candidate gets an ATS score and skill gap analysis.</p>
         </div>
       </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <div class="testimonial-text">"The analytics dashboard gives us insights we never had before — skill distribution, score trends, acceptance rates. Our hiring decisions are now data-driven."</div>
-        <div class="testimonial-author">
-          <div class="avatar avatar-md" style="background:#7c3aed;color:#fff">AK</div>
-          <div class="testimonial-info"><div class="name">Amit Kumar</div><div class="role">Talent Acquisition, FinPulse</div></div>
+      <div class="timeline-item">
+        <div class="timeline-node">3</div>
+        <div class="timeline-content">
+          <h4>Match & Rank</h4>
+          <p>Cosine similarity ranks applicants against your specific job requirements.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-node">4</div>
+        <div class="timeline-content">
+          <h4>Shortlist & Hire</h4>
+          <p>Review the top 5% of talent on a sleek dashboard and make offers.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Pricing -->
-  <section class="features-section" id="pricing-sec" style="background:var(--bg)">
+  <!-- Testimonials Marquee -->
+  <section class="marquee-section" id="testimonials-sec">
     <div class="section-header center">
-      <div class="section-eyebrow">Pricing</div>
-      <div class="section-title">Simple, Transparent Pricing</div>
+      <div class="section-title">Trusted by Top Recruiters</div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;max-width:900px;margin:0 auto">
-      <div class="card" style="padding:36px;text-align:center">
-        <div style="font-size:13px;font-weight:700;color:var(--text-2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Free</div>
-        <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;margin-bottom:6px">₹0</div>
-        <div style="color:var(--text-3);font-size:14px;margin-bottom:24px">For students & individuals</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;text-align:left;margin-bottom:28px">
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>3 Resume Uploads/month</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>ATS Score Analysis</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>Top 10 Job Matches</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-times" style="color:var(--text-3)"></i>HR Dashboard</li>
-        </ul>
-        <button class="btn btn-outline btn-full" onclick="Router.go('register')">Get Started Free</button>
-      </div>
-      <div class="card" style="padding:36px;text-align:center;border:2px solid var(--primary);position:relative">
-        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;padding:3px 16px;border-radius:50px;font-size:12px;font-weight:700">MOST POPULAR</div>
-        <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Pro</div>
-        <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;margin-bottom:6px">₹499<span style="font-size:18px;font-weight:400">/mo</span></div>
-        <div style="color:var(--text-3);font-size:14px;margin-bottom:24px">For job seekers & small HR teams</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;text-align:left;margin-bottom:28px">
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>Unlimited Resume Uploads</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>Full ATS + Skill Gap Analysis</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>Unlimited Job Matches</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>HR Dashboard + Analytics</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>CSV Export</li>
-        </ul>
-        <button class="btn btn-primary btn-full" onclick="Router.go('register')">Start Pro Trial</button>
-      </div>
-      <div class="card" style="padding:36px;text-align:center;background:var(--navy);color:#fff">
-        <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Enterprise</div>
-        <div style="font-family:'Syne',sans-serif;font-size:34px;font-weight:800;margin-bottom:6px">Custom</div>
-        <div style="color:rgba(255,255,255,.6);font-size:14px;margin-bottom:24px">For large HR teams</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;text-align:left;margin-bottom:28px">
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>Everything in Pro</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>Bulk Resume Processing</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>API Access</li>
-          <li style="font-size:14px;display:flex;gap:8px"><i class="fas fa-check" style="color:var(--teal)"></i>Priority Support & SLA</li>
-        </ul>
-        <button class="btn btn-teal btn-full">Contact Sales</button>
+    
+    <div class="marquee-container">
+      <div class="marquee-track">
+        <!-- Original Cards -->
+        <div class="marquee-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"TalentSync cut our time-to-hire by 70%. The AI ranking saved us from reviewing 200+ resumes manually. Game-changing."</div>
+          <div class="testimonial-author">
+            <div class="avatar avatar-md" style="background:#1260cc;color:#fff">PM</div>
+            <div class="testimonial-info"><div class="name">Priya Mehta</div><div class="role">HR Head, TechCorp</div></div>
+          </div>
+        </div>
+        <div class="marquee-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"The ATS score and skill gap analysis showed me exactly what to add to my resume. Got shortlisted for 3 jobs!"</div>
+          <div class="testimonial-author">
+            <div class="avatar avatar-md" style="background:#00c9a7;color:#04142b">RS</div>
+            <div class="testimonial-info"><div class="name">Rahul Sharma</div><div class="role">Candidate</div></div>
+          </div>
+        </div>
+        <div class="marquee-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"The analytics dashboard gives us insights we never had before. Our hiring decisions are now completely data-driven."</div>
+          <div class="testimonial-author">
+            <div class="avatar avatar-md" style="background:#7c3aed;color:#fff">AK</div>
+            <div class="testimonial-info"><div class="name">Amit Kumar</div><div class="role">Talent Acquisition</div></div>
+          </div>
+        </div>
+        <!-- Duplicated Cards for Infinite Loop -->
+        <div class="marquee-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"TalentSync cut our time-to-hire by 70%. The AI ranking saved us from reviewing 200+ resumes manually. Game-changing."</div>
+          <div class="testimonial-author">
+            <div class="avatar avatar-md" style="background:#1260cc;color:#fff">PM</div>
+            <div class="testimonial-info"><div class="name">Priya Mehta</div><div class="role">HR Head, TechCorp</div></div>
+          </div>
+        </div>
+        <div class="marquee-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"The ATS score and skill gap analysis showed me exactly what to add to my resume. Got shortlisted for 3 jobs!"</div>
+          <div class="testimonial-author">
+            <div class="avatar avatar-md" style="background:#00c9a7;color:#04142b">RS</div>
+            <div class="testimonial-info"><div class="name">Rahul Sharma</div><div class="role">Candidate</div></div>
+          </div>
+        </div>
+        <div class="marquee-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"The analytics dashboard gives us insights we never had before. Our hiring decisions are now completely data-driven."</div>
+          <div class="testimonial-author">
+            <div class="avatar avatar-md" style="background:#7c3aed;color:#fff">AK</div>
+            <div class="testimonial-info"><div class="name">Amit Kumar</div><div class="role">Talent Acquisition</div></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -270,8 +241,8 @@
     <h2>Ready to Transform Your Hiring?</h2>
     <p>Join thousands of teams using AI to screen smarter and hire faster.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative">
-      <button class="btn btn-teal btn-xl" onclick="Router.go('register')"><i class="fas fa-user-plus"></i> Create Free Account</button>
-      <button class="btn-glass btn btn-xl" onclick="Router.go('login')"><i class="fas fa-eye"></i> View HR Dashboard</button>
+      <button class="btn btn-primary btn-xl" onclick="Router.go('register')"><i class="fas fa-user-plus"></i> Create Free Account</button>
+      <button class="btn btn-outline btn-xl" onclick="Router.go('login')" style="border: 2px solid var(--border-2); color: var(--text);"><i class="fas fa-eye"></i> View HR Dashboard</button>
     </div>
   </section>
 
@@ -281,7 +252,7 @@
       <div class="footer-col">
         <div class="logo" style="margin-bottom:16px">
           <div class="logo-mark" style="width:32px;height:32px;font-size:15px">🤖</div>
-          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Hire<span style="color:var(--teal)">AI</span></div>
+          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Talent<span style="color:var(--teal)">Sync</span></div>
         </div>
         <p style="font-size:13px;line-height:1.7;max-width:240px">AI-powered resume screening and job matching platform built for modern HR teams and job seekers.</p>
         <div style="display:flex;gap:12px;margin-top:16px">
@@ -293,7 +264,7 @@
       <div class="footer-col">
         <h5>Product</h5>
         <div class="footer-links">
-          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('pricing-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Pricing</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
+          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
         </div>
       </div>
       <div class="footer-col">
@@ -343,23 +314,18 @@
         </div>
       </div>
 
-      <div class="alert alert-info" style="margin-bottom:16px">
-        <i class="fas fa-info-circle"></i>
-        <div><strong>Demo:</strong> hetsony143@gmail.com / demo123 (Candidate) · priya@demo.com / demo123 (HR)</div>
-      </div>
-
       <div class="form-group">
         <label class="form-label">REGISTERED EMAIL</label>
         <div class="input-icon-wrap">
           <i class="input-icon fas fa-envelope"></i>
-          <input id="login-email" class="form-control" type="email" placeholder="you@example.com" value="hetsony143@gmail.com">
+          <input id="login-email" class="form-control" type="email" placeholder="Enter your email" autocomplete="email" value="">
         </div>
       </div>
       <div class="form-group">
         <label class="form-label">SECURE PASSWORD</label>
         <div class="input-icon-wrap">
           <i class="input-icon fas fa-lock"></i>
-          <input id="login-password" class="form-control" type="password" placeholder="••••••••" value="demo123">
+          <input id="login-password" class="form-control" type="password" placeholder="Enter your password" autocomplete="current-password" value="">
         </div>
       </div>
       
@@ -421,11 +387,11 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">FIRST NAME</label>
-          <input id="reg-fname" class="form-control" placeholder="Rahul">
+          <input id="reg-fname" class="form-control" placeholder="First Name" autocomplete="given-name">
         </div>
         <div class="form-group">
           <label class="form-label">LAST NAME</label>
-          <input id="reg-lname" class="form-control" placeholder="Sharma">
+          <input id="reg-lname" class="form-control" placeholder="Last Name" autocomplete="family-name">
         </div>
       </div>
       <div class="form-group">
@@ -440,14 +406,14 @@
           <label class="form-label">SECURE PASSWORD</label>
           <div class="input-icon-wrap">
             <i class="input-icon fas fa-lock"></i>
-            <input id="reg-pass" class="form-control" type="password" placeholder="Min 6 chars">
+            <input id="reg-pass" class="form-control" type="password" placeholder="Enter password" autocomplete="new-password">
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">CONFIRM PASSWORD</label>
           <div class="input-icon-wrap">
             <i class="input-icon fas fa-lock"></i>
-            <input id="reg-cpass" class="form-control" type="password" placeholder="Repeat">
+            <input id="reg-cpass" class="form-control" type="password" placeholder="Confirm password" autocomplete="new-password">
           </div>
         </div>
       </div>
@@ -1879,7 +1845,7 @@
       <div class="footer-col">
         <div class="logo" style="margin-bottom:16px">
           <div class="logo-mark" style="width:32px;height:32px;font-size:15px">🤖</div>
-          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Hire<span style="color:var(--teal)">AI</span></div>
+          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Talent<span style="color:var(--teal)">Sync</span></div>
         </div>
         <p style="font-size:13px;line-height:1.7;max-width:240px">AI-powered resume screening and job matching platform built for modern HR teams and job seekers.</p>
         <div style="display:flex;gap:12px;margin-top:16px">
@@ -1891,7 +1857,7 @@
       <div class="footer-col">
         <h5>Product</h5>
         <div class="footer-links">
-          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('pricing-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Pricing</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
+          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
         </div>
       </div>
       <div class="footer-col">
@@ -2058,7 +2024,7 @@
       <div class="footer-col">
         <div class="logo" style="margin-bottom:16px">
           <div class="logo-mark" style="width:32px;height:32px;font-size:15px">🤖</div>
-          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Hire<span style="color:var(--teal)">AI</span></div>
+          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Talent<span style="color:var(--teal)">Sync</span></div>
         </div>
         <p style="font-size:13px;line-height:1.7;max-width:240px">AI-powered resume screening and job matching platform built for modern HR teams and job seekers.</p>
         <div style="display:flex;gap:12px;margin-top:16px">
@@ -2070,7 +2036,7 @@
       <div class="footer-col">
         <h5>Product</h5>
         <div class="footer-links">
-          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('pricing-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Pricing</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
+          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
         </div>
       </div>
       <div class="footer-col">
@@ -2233,7 +2199,7 @@
       <div class="footer-col">
         <div class="logo" style="margin-bottom:16px">
           <div class="logo-mark" style="width:32px;height:32px;font-size:15px">🤖</div>
-          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Hire<span style="color:var(--teal)">AI</span></div>
+          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Talent<span style="color:var(--teal)">Sync</span></div>
         </div>
         <p style="font-size:13px;line-height:1.7;max-width:240px">AI-powered resume screening and job matching platform built for modern HR teams and job seekers.</p>
         <div style="display:flex;gap:12px;margin-top:16px">
@@ -2245,7 +2211,7 @@
       <div class="footer-col">
         <h5>Product</h5>
         <div class="footer-links">
-          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('pricing-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Pricing</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
+          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
         </div>
       </div>
       <div class="footer-col">
@@ -2401,7 +2367,7 @@
       <div class="footer-col">
         <div class="logo" style="margin-bottom:16px">
           <div class="logo-mark" style="width:32px;height:32px;font-size:15px">🤖</div>
-          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Hire<span style="color:var(--teal)">AI</span></div>
+          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Talent<span style="color:var(--teal)">Sync</span></div>
         </div>
         <p style="font-size:13px;line-height:1.7;max-width:240px">AI-powered resume screening and job matching platform built for modern HR teams and job seekers.</p>
         <div style="display:flex;gap:12px;margin-top:16px">
@@ -2413,7 +2379,7 @@
       <div class="footer-col">
         <h5>Product</h5>
         <div class="footer-links">
-          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('pricing-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Pricing</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
+          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
         </div>
       </div>
       <div class="footer-col">
@@ -2556,7 +2522,7 @@
       <div class="footer-col">
         <div class="logo" style="margin-bottom:16px">
           <div class="logo-mark" style="width:32px;height:32px;font-size:15px">🤖</div>
-          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Hire<span style="color:var(--teal)">AI</span></div>
+          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Talent<span style="color:var(--teal)">Sync</span></div>
         </div>
         <p style="font-size:13px;line-height:1.7;max-width:240px">AI-powered resume screening and job matching platform built for modern HR teams and job seekers.</p>
         <div style="display:flex;gap:12px;margin-top:16px">
@@ -2568,7 +2534,7 @@
       <div class="footer-col">
         <h5>Product</h5>
         <div class="footer-links">
-          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('pricing-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Pricing</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
+          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
         </div>
       </div>
       <div class="footer-col">
@@ -2706,7 +2672,7 @@
       <div class="footer-col">
         <div class="logo" style="margin-bottom:16px">
           <div class="logo-mark" style="width:32px;height:32px;font-size:15px">🤖</div>
-          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Hire<span style="color:var(--teal)">AI</span></div>
+          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Talent<span style="color:var(--teal)">Sync</span></div>
         </div>
         <p style="font-size:13px;line-height:1.7;max-width:240px">AI-powered resume screening and job matching platform built for modern HR teams and job seekers.</p>
         <div style="display:flex;gap:12px;margin-top:16px">
@@ -2718,7 +2684,7 @@
       <div class="footer-col">
         <h5>Product</h5>
         <div class="footer-links">
-          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('pricing-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Pricing</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
+          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
         </div>
       </div>
       <div class="footer-col">
@@ -2825,7 +2791,7 @@
       <div class="footer-col">
         <div class="logo" style="margin-bottom:16px">
           <div class="logo-mark" style="width:32px;height:32px;font-size:15px">🤖</div>
-          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Hire<span style="color:var(--teal)">AI</span></div>
+          <div class="logo-name" style="font-size:18px;color:rgba(255,255,255,.75)">Talent<span style="color:var(--teal)">Sync</span></div>
         </div>
         <p style="font-size:13px;line-height:1.7;max-width:240px">AI-powered resume screening and job matching platform built for modern HR teams and job seekers.</p>
         <div style="display:flex;gap:12px;margin-top:16px">
@@ -2837,7 +2803,7 @@
       <div class="footer-col">
         <h5>Product</h5>
         <div class="footer-links">
-          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('pricing-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Pricing</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
+          <a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('features-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">Features</a><a onclick="Router.go('landing'); setTimeout(()=>document.getElementById('how-sec').scrollIntoView({behavior:'smooth'}), 100);" style="cursor:pointer">How It Works</a><a onclick="Router.go('product')" style="cursor:pointer">Changelog</a><a onclick="Router.go('product')" style="cursor:pointer">Roadmap</a>
         </div>
       </div>
       <div class="footer-col">

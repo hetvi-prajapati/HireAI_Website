@@ -1,25 +1,42 @@
 # ============================================================
 #  TalentSync — User Routes  (Blueprint: /api)
-#  All data is 100% REAL from the database — no simulated numbers.
+#  All endpoints are protected with @login_required.
+#  Ownership is enforced: users can only access their own data.
 # ============================================================
 
 import datetime
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from app.database.connection import get_db
+from app.utils.security import login_required
+from app.utils.validators import sanitize_text
 
 user_bp = Blueprint('user', __name__, url_prefix='/api')
 
 
+def _owns_or_403(requested_user_id: int):
+    """
+    Returns None if the session user matches requested_user_id,
+    otherwise returns a 403 JSON response tuple.
+    """
+    if session.get('user_id') != requested_user_id:
+        return jsonify({'success': False, 'message': 'Access denied.'}), 403
+    return None
+
+
 @user_bp.route('/candidate/stats/<int:user_id>')
+@login_required
 def candidate_stats(user_id):
-    """GET /api/candidate/stats/<user_id> — 100% real data, no simulated numbers."""
+    """GET /api/candidate/stats/<user_id> — only accessible by the owner."""
+    denied = _owns_or_403(user_id)
+    if denied:
+        return denied
+
     with get_db() as conn:
         user = conn.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
         if not user:
             return jsonify({'error': 'User not found'}), 404
         u = dict(user)
 
-        # ── Real application stats ──────────────────────────────
         apps = conn.execute(
             "SELECT COUNT(*) FROM applications WHERE user_id=?", (user_id,)
         ).fetchone()[0]
@@ -28,40 +45,29 @@ def candidate_stats(user_id):
             "SELECT COUNT(*) FROM applications WHERE user_id=? AND status='Shortlisted'", (user_id,)
         ).fetchone()[0]
 
-        # ── Real job count from DB ──────────────────────────────
         total_jobs = conn.execute("SELECT COUNT(*) FROM jobs").fetchone()[0]
 
-        # ── Real profile views from notifications table ─────────
-        # Count how many times an HR admin opened this candidate's profile
         profile_views = conn.execute(
             "SELECT COUNT(*) FROM notifications WHERE user_id=? AND type='profile_view'", (user_id,)
         ).fetchone()[0]
 
-        # Weekly profile views: notifications in the last 7 days
         week_ago = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime('%Y-%m-%d')
         profile_views_weekly = conn.execute(
             "SELECT COUNT(*) FROM notifications WHERE user_id=? AND type='profile_view' AND created_at >= ?",
             (user_id, week_ago)
         ).fetchone()[0]
 
-        # ── Real skills from the user record ───────────────────
         skills = [s.strip() for s in (u.get('skills') or '').split(',') if s.strip()]
         base_score = u.get('ats_score') or 0
 
-        # ── Radar chart: real skills with real ATS-based levels ─
-        # Use top 6 skills from the user's actual extracted skills.
-        # Level = ATS score (reflects real parsing quality).
-        # Required = industry standard (75 for tech skills).
         radar_skills = skills[:6]
         if len(radar_skills) < 6:
-            # Pad with generic soft skills only if user has fewer than 6 skills
             radar_skills += ['Communication', 'Teamwork', 'Problem Solving',
                              'Adaptability', 'Leadership', 'Agile'][:6 - len(radar_skills)]
 
-        radar_levels = [base_score] * len(radar_skills)   # Real: based on actual ATS score
-        radar_required = [75] * len(radar_skills)          # Real: industry standard benchmark
+        radar_levels   = [base_score] * len(radar_skills)
+        radar_required = [75] * len(radar_skills)
 
-        # ── Real ATS score distribution across all candidates ──
         ats_ranges = {'0-20': 0, '21-40': 0, '41-60': 0, '61-70': 0, '71-80': 0, '81-90': 0, '91-100': 0}
         all_ats = conn.execute("SELECT ats_score FROM users WHERE role='candidate'").fetchall()
         for row in all_ats:
@@ -74,7 +80,6 @@ def candidate_stats(user_id):
             elif s_val <= 90: ats_ranges['81-90'] += 1
             else:             ats_ranges['91-100'] += 1
 
-        # ── Real top skills from all candidates in the DB ──────
         skills_raw = conn.execute(
             "SELECT skills FROM users WHERE role='candidate' AND skills != ''"
         ).fetchall()
@@ -86,16 +91,14 @@ def candidate_stats(user_id):
                     skill_counts[s_val] = skill_counts.get(s_val, 0) + 1
         top_skills = sorted(skill_counts.items(), key=lambda x: x[1], reverse=True)[:8]
 
-        # ── Real applications by month (this user only) ────────
-        now = datetime.datetime.now()
+        now    = datetime.datetime.now()
         months = [(now.month - i - 1) % 12 + 1 for i in range(5, -1, -1)]
-        month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        app_time_labels = [month_names[m - 1] for m in months]
-        app_time_total = [0] * 6
+        month_names    = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        app_time_labels      = [month_names[m - 1] for m in months]
+        app_time_total       = [0] * 6
         app_time_shortlisted = [0] * 6
 
-        # Real: fetch only THIS user's applications, not all users
         apps_date = conn.execute(
             "SELECT applied_at, status FROM applications WHERE user_id=?", (user_id,)
         ).fetchall()
@@ -111,7 +114,6 @@ def candidate_stats(user_id):
             except Exception:
                 pass
 
-        # ── Missing skills: market top skills the user lacks ───
         candidate_skills_lower = [s.lower() for s in skills]
         missing = [s for s, _ in top_skills if s.lower() not in candidate_skills_lower]
 
@@ -120,26 +122,19 @@ def candidate_stats(user_id):
         'skills_count':         len(skills),
         'skills':               skills,
         'missing_skills':       missing[:4],
-        # ↓ 100% REAL — from notifications table
         'profile_views':        profile_views,
         'profile_views_weekly': profile_views_weekly,
-        # ↓ 100% REAL — from applications table (this user only)
         'applications':         apps,
         'shortlisted':          shortlisted,
-        # ↓ 100% REAL — total jobs in the database
         'job_matches':          total_jobs,
         'radar': {
             'labels':   radar_skills,
-            # ↓ REAL — based on actual ATS score, not random
             'levels':   radar_levels,
             'required': radar_required,
         },
         'market_trends': {
-            # ↓ REAL — distribution of all real candidate ATS scores in DB
             'ats_distribution': list(ats_ranges.values()),
-            # ↓ REAL — top skills extracted from all real uploaded resumes
             'top_skills': [{'skill': s, 'count': c} for s, c in top_skills],
-            # ↓ REAL — this user's actual applications per month
             'app_time': {
                 'labels':      app_time_labels,
                 'total':       app_time_total,
@@ -150,29 +145,51 @@ def candidate_stats(user_id):
 
 
 @user_bp.route('/users/<int:user_id>/profile', methods=['GET', 'PUT'])
+@login_required
 def user_profile(user_id):
-    """GET/PUT /api/users/<user_id>/profile"""
+    """GET/PUT /api/users/<user_id>/profile — owner only."""
+    denied = _owns_or_403(user_id)
+    if denied:
+        return denied
+
     if request.method == 'GET':
         with get_db() as conn:
             user = conn.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
-        return jsonify(dict(user)) if user else (jsonify({'error': 'Not found'}), 404)
+        if not user:
+            return jsonify({'error': 'Not found'}), 404
+        u_dict = dict(user)
+        u_dict.pop('password', None)
+        return jsonify(u_dict)
 
-    data = request.get_json(force=True) or {}
+    data = request.get_json(silent=True) or {}
     with get_db() as conn:
         conn.execute(
             '''UPDATE users SET name=?, email=?, phone=?, location=?,
                linkedin=?, github=?, summary=?, education=? WHERE id=?''',
-            (data.get('name'), data.get('email'), data.get('phone'),
-             data.get('location'), data.get('linkedin'), data.get('github'),
-             data.get('summary'), data.get('education'), user_id)
+            (
+                sanitize_text(data.get('name'), 100),
+                sanitize_text(data.get('email'), 254),
+                sanitize_text(data.get('phone'), 20),
+                sanitize_text(data.get('location'), 100),
+                sanitize_text(data.get('linkedin'), 200),
+                sanitize_text(data.get('github'), 200),
+                sanitize_text(data.get('summary'), 2000),
+                sanitize_text(data.get('education'), 1000),
+                user_id
+            )
         )
         conn.commit()
     return jsonify({'success': True})
 
 
 @user_bp.route('/notifications/<int:user_id>', methods=['GET'])
+@login_required
 def get_notifications(user_id):
-    """GET /api/notifications/<user_id>"""
+    """GET /api/notifications/<user_id> — owner only."""
+    denied = _owns_or_403(user_id)
+    if denied:
+        return denied
+
     with get_db() as conn:
         nots = conn.execute(
             "SELECT * FROM notifications WHERE user_id=? ORDER BY id DESC", (user_id,)
@@ -181,8 +198,13 @@ def get_notifications(user_id):
 
 
 @user_bp.route('/notifications/<int:user_id>/read', methods=['POST'])
+@login_required
 def read_notifications(user_id):
-    """POST /api/notifications/<user_id>/read"""
+    """POST /api/notifications/<user_id>/read — owner only."""
+    denied = _owns_or_403(user_id)
+    if denied:
+        return denied
+
     with get_db() as conn:
         conn.execute("UPDATE notifications SET is_read=1 WHERE user_id=?", (user_id,))
         conn.commit()

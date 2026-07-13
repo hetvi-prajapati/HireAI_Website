@@ -11,6 +11,8 @@ import threading
 from flask import Blueprint, jsonify, request
 from app.ml.ml_pipeline import get_pipeline_status, run_full_pipeline
 from app.utils.logger import get_logger
+from app.utils.security import login_required, role_required
+from app import limiter
 
 logger = get_logger(__name__)
 
@@ -49,6 +51,9 @@ def ml_status():
 
 
 @ml_bp.route("/train", methods=["POST"])
+@login_required
+@role_required('hr')
+@limiter.limit("2 per hour")
 def trigger_training():
     """
     POST /api/ml/train
@@ -102,6 +107,8 @@ def trigger_training():
 
 
 @ml_bp.route("/pipeline", methods=["POST"])
+@login_required
+@role_required('hr')
 def run_pipeline():
     """
     POST /api/ml/pipeline

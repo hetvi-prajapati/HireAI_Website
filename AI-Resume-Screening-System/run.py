@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # ============================================================
 #  TalentSync - Application Entry Point
-#  Run this file to start the development server:
+#  Run this file to start the server:
 #    py run.py
 # ============================================================
 
 import sys
 import io
+import os
 
 # Fix Windows console encoding for emojis
 if sys.platform == 'win32':
@@ -24,11 +25,7 @@ if __name__ == '__main__':
     print(f"  Running at:  http://127.0.0.1:{ActiveConfig.PORT}")
     print(f"  Database:   {ActiveConfig.DB_FILE}")
     print(f"  Debug mode: {ActiveConfig.DEBUG}")
-    print("=" * 55)
-    print("  Demo credentials:")
-    print("    Candidate  -->  rahul@demo.com  / demo123")
-    print("    HR Admin   -->  priya@demo.com  / demo123")
-    print("=" * 55)
+
     app.run(
         debug=ActiveConfig.DEBUG,
         port=ActiveConfig.PORT,

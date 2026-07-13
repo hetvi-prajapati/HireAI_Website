@@ -28,11 +28,32 @@ const Router = {
   current: 'landing',
   innerPages: { cand: 'dash', admin: 'dash' },
 
+  // Pages that should be saved to the URL hash (dashboard pages)
+  _hashPages: new Set(['cand', 'admin', 'landing', 'login', 'register', 'about', 'blog', 'careers']),
+
   go(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const el = document.getElementById('page-' + page);
     if (el) { el.classList.add('active'); window.scrollTo(0,0); }
     this.current = page;
+    // Clear login fields when navigating to login page (prevent stale autofill)
+    if (page === 'login') {
+      const emailEl = document.getElementById('login-email');
+      const passEl  = document.getElementById('login-password');
+      if (emailEl) emailEl.value = '';
+      if (passEl)  passEl.value  = '';
+    }
+    // Clear register fields when navigating to register page
+    if (page === 'register') {
+      ['reg-fname','reg-lname','reg-email','reg-pass','reg-cpass'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+    }
+    // Save page to URL hash so refresh restores it
+    if (this._hashPages.has(page)) {
+      history.replaceState(null, '', '#' + page);
+    }
   },
 
   inner(portal, section) {
@@ -40,6 +61,8 @@ const Router = {
     const el = document.getElementById(`${portal}-${section}`);
     if (el) el.classList.remove('hidden');
     this.innerPages[portal] = section;
+    // Also update the hash to include the inner section
+    history.replaceState(null, '', '#' + portal + '-' + section);
   }
 };
 
@@ -232,8 +255,25 @@ const Auth = {
           user.avatar = user.name.slice(0,2).toUpperCase();
           DB.currentUser = user;
           this.setupPortal(user);
-          Router.go(user.role === 'hr' ? 'admin' : 'cand');
-          
+
+          // ── Restore the page from URL hash on refresh ──
+          const hash = window.location.hash.replace('#', ''); // e.g. 'admin', 'cand', 'admin-jobs'
+          const portalPage = user.role === 'hr' ? 'admin' : 'cand';
+
+          if (hash && hash.startsWith(portalPage)) {
+            // e.g. hash = 'admin-jobs' → portal='admin', section='jobs'
+            const parts = hash.split('-');
+            Router.go(portalPage);
+            if (parts.length >= 2) {
+              const section = parts.slice(1).join('-'); // handle 'admin-job-rankings'
+              const sectionEl = document.getElementById(`${portalPage}-${section}`);
+              if (sectionEl) Router.inner(portalPage, section);
+            }
+          } else {
+            // No valid hash — go to default dashboard
+            Router.go(portalPage);
+          }
+
           fetchJobsFromServer();
           fetchNotificationsFromServer(user.id);
           if(user.role === 'hr') {
