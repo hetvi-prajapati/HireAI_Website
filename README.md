@@ -142,8 +142,6 @@ $ python run.py
 [ SYSTEM OFFLINE. END OF FILE. ]
 ```
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:000000,100:051a11&height=80&section=footer"/>
-
 **ARCHITECTED BY [HETVI PRAJAPATI](https://github.com/hetvi-prajapati)**
 
 [![GitHub](https://img.shields.io/badge/EXECUTE_FOLLOW-000000?style=for-the-badge&logo=github&logoColor=00FF88)](https://github.com/hetvi-prajapati)
