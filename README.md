@@ -106,23 +106,35 @@ The perimeter is secured. <strong>Bcrypt</strong> hashing secures the database. 
 
 ---
 
-## 🚀 INITIATE DEPLOYMENT
+## 🚀 HOW TO SETUP LOCALLY (INITIATE DEPLOYMENT)
 
-To spin up the engine on your local cluster, execute the following directives in your terminal:
+Follow these exact steps to spin up the AI engine on your local machine:
 
 ```bash
 # [1] CLONE THE REPOSITORY
 $ git clone https://github.com/hetvi-prajapati/HireAI_Website.git
 $ cd HireAI_Website/AI-Resume-Screening-System
 
-# [2] INSTALL NEURAL DEPENDENCIES
+# [2] CREATE A VIRTUAL ENVIRONMENT (Recommended)
+$ python -m venv venv
+
+# [3] ACTIVATE THE VIRTUAL ENVIRONMENT
+# For Windows:
+$ venv\Scripts\activate
+# For Mac/Linux:
+$ source venv/bin/activate
+
+# [4] INSTALL NEURAL DEPENDENCIES
 $ pip install -r requirements.txt
+
+# [5] DOWNLOAD NLP MODELS (Crucial for AI parsing)
 $ python -m spacy download en_core_web_sm
 
-# [3] IGNITE THE CORE
+# [6] IGNITE THE CORE SERVER
 $ python run.py
 ```
-> **SERVER STATUS:** ONLINE at `http://127.0.0.1:5000`
+
+> **🟢 SERVER STATUS:** The system is now live at `http://127.0.0.1:5000`
 
 ---
 
