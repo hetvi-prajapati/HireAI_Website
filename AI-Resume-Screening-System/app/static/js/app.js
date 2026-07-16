@@ -5,6 +5,222 @@
 
 'use strict';
 
+// ── Company Domain Map → Clearbit Logo API ───────────────────
+const COMPANY_DOMAINS = {
+  // Indian IT Giants
+  'tcs': 'tcs.com', 'tata consultancy services': 'tcs.com',
+  'infosys': 'infosys.com',
+  'wipro': 'wipro.com',
+  'hcl': 'hcltech.com', 'hcl technologies': 'hcltech.com',
+  'tech mahindra': 'techmahindra.com',
+  'mphasis': 'mphasis.com',
+  'hexaware': 'hexaware.com',
+  'mindtree': 'mindtree.com',
+  'ltimindtree': 'ltimindtree.com',
+  'persistent systems': 'persistent.com',
+  'coforge': 'coforge.com',
+  'birlasoft': 'birlasoft.com',
+  // Indian Product / Startup
+  'flipkart': 'flipkart.com',
+  'meesho': 'meesho.com',
+  'zomato': 'zomato.com',
+  'swiggy': 'swiggy.com',
+  'ola': 'olacabs.com',
+  'oyo': 'oyorooms.com',
+  'razorpay': 'razorpay.com',
+  'paytm': 'paytm.com',
+  'phonepe': 'phonepe.com',
+  'cred': 'cred.club',
+  'nykaa': 'nykaa.com',
+  'byju\'s': 'byjus.com', 'byjus': 'byjus.com',
+  'unacademy': 'unacademy.com',
+  'groww': 'groww.in',
+  'zerodha': 'zerodha.com',
+  'freshworks': 'freshworks.com',
+  'zoho': 'zoho.com',
+  'postman': 'postman.com',
+  'browserstack': 'browserstack.com',
+  'naukri.com': 'naukri.com', 'naukri': 'naukri.com',
+  'nazara technologies': 'nazaratechnologies.com', 'nazara': 'nazaratechnologies.com',
+  // Indian Telecom / Conglomerates
+  'jio': 'jio.com', 'reliance jio': 'jio.com',
+  'airtel': 'airtel.in',
+  'bsnl': 'bsnl.co.in',
+  'tata': 'tata.com',
+  // Global Companies (India offices)
+  'google': 'google.com',
+  'microsoft': 'microsoft.com',
+  'amazon': 'amazon.com', 'aws': 'aws.amazon.com',
+  'meta': 'meta.com', 'facebook': 'meta.com',
+  'apple': 'apple.com',
+  'ibm': 'ibm.com',
+  'oracle': 'oracle.com',
+  'sap': 'sap.com', 'sap india': 'sap.com',
+  'salesforce': 'salesforce.com', 'salesforce india': 'salesforce.com',
+  'adobe': 'adobe.com',
+  'accenture': 'accenture.com', 'accenture india': 'accenture.com',
+  'deloitte': 'deloitte.com', 'deloitte india': 'deloitte.com',
+  'pwc': 'pwc.com',
+  'kpmg': 'kpmg.com',
+  'ey': 'ey.com', 'ernst & young': 'ey.com',
+  'mckinsey': 'mckinsey.com',
+  'capgemini': 'capgemini.com',
+  'cognizant': 'cognizant.com',
+  'dxc': 'dxc.com', 'dxc technology': 'dxc.com',
+  'atos': 'atos.net',
+  'nvidia': 'nvidia.com',
+  'intel': 'intel.com',
+  'qualcomm': 'qualcomm.com',
+  'samsung': 'samsung.com',
+  'bosch': 'bosch.com',
+  'siemens': 'siemens.com',
+  'jp morgan': 'jpmorgan.com', 'jpmorgan': 'jpmorgan.com',
+  'goldman sachs': 'goldmansachs.com',
+  'morgan stanley': 'morganstanley.com',
+  'deutsche bank': 'db.com',
+  'hsbc': 'hsbc.com',
+  'barclays': 'barclays.com',
+  'linkedin': 'linkedin.com',
+  'twitter': 'twitter.com', 'x': 'x.com',
+  'uber': 'uber.com',
+  'netflix': 'netflix.com',
+  'spotify': 'spotify.com',
+  'slack': 'slack.com',
+  'atlassian': 'atlassian.com',
+  'jfrog': 'jfrog.com',
+  'gitlab': 'gitlab.com',
+  'github': 'github.com',
+  // ── Aerospace & Defence ──
+  'isro': 'isro.gov.in',
+  'hal': 'hal-india.co.in', 'hindustan aeronautics': 'hal-india.co.in',
+  'drdo': 'drdo.gov.in',
+  'safran': 'safran-group.com', 'safran engineering india': 'safran-group.com',
+  'honeywell': 'honeywell.com', 'honeywell india': 'honeywell.com',
+  // ── Electric Vehicles & CleanTech ──
+  'ola electric': 'olaelectric.com',
+  'tata motors': 'tatamotors.com', 'tata motors ev': 'tatamotors.com',
+  'revolt motors': 'revoltmotors.in',
+  'greaves electric': 'greavescotton.com',
+  'renew power': 'renewpower.in',
+  'ather energy': 'atherenergy.com',
+  // ── Pharma & BioTech ──
+  "dr. reddy's": 'drreddys.com', "dr. reddy's laboratories": 'drreddys.com',
+  'sun pharma': 'sunpharma.com',
+  'cipla': 'cipla.com',
+  'medgenome': 'medgenome.com',
+  // ── Government Tech ──
+  'npci': 'npci.org.in', 'npci (upi)': 'npci.org.in',
+  'uidai': 'uidai.gov.in', 'uidai (aadhaar)': 'uidai.gov.in',
+  'nic': 'nic.in', 'nic (national informatics centre)': 'nic.in',
+  'c-dac': 'cdac.in', 'c-dac india': 'cdac.in',
+  // ── Retail & D2C ──
+  'reliance retail': 'relianceretail.com',
+  'decathlon': 'decathlon.co.in', 'decathlon india': 'decathlon.co.in',
+  'mamaearth': 'mamaearth.in',
+  'boat': 'boat-lifestyle.com', 'boat lifestyle': 'boat-lifestyle.com',
+  // ── HR Tech ──
+  'darwinbox': 'darwinbox.com',
+  'hackerearth': 'hackerearth.com', 'iimjobs.com / hackerearth': 'hackerearth.com',
+  'keka hr': 'keka.com', 'keka': 'keka.com',
+  'spotdraft': 'spotdraft.com',
+  // ── PropTech ──
+  'nobroker': 'nobroker.in',
+  '99acres': '99acres.com', '99acres (info edge)': '99acres.com',
+  'square yards': 'squareyards.com',
+  // ── AgriTech ──
+  'dehaat': 'dehaat.com',
+  'cropin': 'cropin.com', 'cropin technology': 'cropin.com',
+  'agrostar': 'agrostar.in',
+  // ── InsurTech ──
+  'acko': 'acko.com', 'acko insurance': 'acko.com',
+  'digit insurance': 'godigit.com', 'digit': 'godigit.com',
+  'turtlemint': 'turtlemint.com',
+  // ── Space Tech ──
+  'skyroot': 'skyroot.in', 'skyroot aerospace': 'skyroot.in',
+  'agnikul': 'agnikul.in', 'agnikul cosmos': 'agnikul.in',
+  'pixxel': 'pixxel.space', 'pixxel space': 'pixxel.space',
+  // ── Media & Content ──
+  'zee5': 'zee5.com',
+  'times internet': 'timesinternet.in',
+  'dailyhunt': 'dailyhunt.in', 'verse innovation': 'dailyhunt.in',
+  'inmobi': 'inmobi.com',
+  // ── Supply Chain ──
+  'juspay': 'juspay.in',
+  'moglix': 'moglix.com',
+  'ofbusiness': 'ofbusiness.com',
+  // ── Automotive ──
+  'mahindra tech': 'mahindra.com', 'mahindra': 'mahindra.com',
+  'tata elxsi': 'tataelxsi.com',
+  'maruti suzuki': 'marutisuzuki.com', 'maruti suzuki india': 'marutisuzuki.com',
+  // ── International ──
+  'uber': 'uber.com', 'uber india': 'uber.com',
+  'linkedin': 'linkedin.com', 'linkedin india': 'linkedin.com',
+  'adobe': 'adobe.com', 'adobe india': 'adobe.com',
+  'spotify': 'spotify.com', 'spotify india': 'spotify.com',
+  'netflix': 'netflix.com', 'netflix india': 'netflix.com',
+  'zendesk': 'zendesk.com', 'zendesk india': 'zendesk.com',
+  // ── More ──
+  'polygon': 'polygon.technology', 'polygon (matic)': 'polygon.technology',
+  'coindcx': 'coindcx.com',
+  'dream11': 'dream11.com',
+  'games24x7': 'games24x7.com',
+  'mpl': 'mpl.live', 'mobile premier league': 'mpl.live',
+  'hotstar': 'hotstar.com', 'jiostar': 'jiostar.com',
+  'delhivery': 'delhivery.com',
+  'bigbasket': 'bigbasket.com',
+  'rapido': 'rapido.bike',
+  'palo alto networks': 'paloaltonetworks.com',
+  'nutanix': 'nutanix.com',
+  'walmart': 'walmart.com', 'walmart global tech': 'walmart.com',
+  'fractal analytics': 'fractal.ai', 'fractal': 'fractal.ai',
+  'amd': 'amd.com', 'amd india': 'amd.com',
+  'texas instruments': 'ti.com',
+  'crowdstrike': 'crowdstrike.com',
+  'tata communications': 'tatacommunications.com',
+  'upstox': 'upstox.com',
+  'pine labs': 'pinelabs.com',
+  'bajaj finserv': 'bajajfinserv.in',
+  'policybazaar': 'policybazaar.com',
+  'chargebee': 'chargebee.com',
+  'hasura': 'hasura.io',
+  'druva': 'druva.com',
+};
+
+/**
+ * Called when a Clearbit logo fails to load — replaces img with letter avatar.
+ */
+function onLogoError(img, abbr, color, textColor) {
+  const div = document.createElement('div');
+  div.style.cssText = `width:44px;height:44px;border-radius:8px;background:${color};color:${textColor};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;font-family:'Syne',sans-serif;`;
+  div.textContent = abbr;
+  img.parentNode.replaceChild(div, img);
+}
+
+/**
+ * Returns HTML for a company logo — real Clearbit img with letter-avatar fallback.
+ */
+function getCompanyLogoHTML(companyName, color, textColor) {
+  color     = color     || '#e0f2fe';
+  textColor = textColor || '#0369a1';
+  const key  = (companyName || '').toLowerCase().trim();
+  const abbr = (companyName || '??').substring(0, 2).toUpperCase();
+  const domain = COMPANY_DOMAINS[key]
+    || Object.entries(COMPANY_DOMAINS).find(([k]) => key.includes(k))?.[1];
+
+  if (domain) {
+    // Use a named global function in onerror — avoids all escaping issues
+    const c = encodeURIComponent(color);
+    const t = encodeURIComponent(textColor);
+    const a = encodeURIComponent(abbr);
+    return `<img src="https://logo.clearbit.com/${domain}" alt="${abbr}"
+      style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block;"
+      onerror="onLogoError(this,'${abbr}','${color}','${textColor}')">`;
+  }
+  // No domain found — immediate letter avatar
+  return `<div style="width:44px;height:44px;border-radius:8px;background:${color};color:${textColor};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;font-family:'Syne',sans-serif;">${abbr}</div>`;
+}
+
+
 // ── Data Store ──────────────────────────────────────────────
 const DB = {
   currentUser: null,
@@ -212,6 +428,45 @@ const Auth = {
     setVal('cand-profile-sum', user.summary || '');
     setVal('cand-profile-edu', user.education || '');
 
+    // --- ML Insights card (real data from DB) ---
+    const clusterLabel  = user.cluster_label || 'Unclustered';
+    const isOutlier     = user.is_outlier === 1 || user.is_outlier === true;
+    const atsScore      = user.ats_score || 0;
+
+    // Cluster label
+    const clEl = document.getElementById('profile-cluster-label');
+    if (clEl) clEl.textContent = clusterLabel;
+
+    // Cluster badge in header
+    const clBadge = document.getElementById('profile-cluster-badge');
+    if (clBadge) { clBadge.textContent = clusterLabel; clBadge.style.display = ''; }
+
+    // Outlier status
+    const outlierEl   = document.getElementById('profile-outlier-status');
+    const outlierIcon = document.getElementById('profile-outlier-icon');
+    const outlierBadge = document.getElementById('profile-outlier-badge');
+    if (outlierEl) {
+      if (isOutlier) {
+        outlierEl.textContent = '⚠ Suspicious Flag Active';
+        outlierEl.style.color = '#dc2626';
+        if (outlierIcon) { outlierIcon.textContent = '⚠️'; outlierIcon.style.background = 'rgba(220,38,38,.12)'; }
+        if (outlierBadge) outlierBadge.style.display = '';
+      } else {
+        outlierEl.textContent = '✓ Normal Profile';
+        outlierEl.style.color = '#16a34a';
+      }
+    }
+
+    // Profile Strength: based on fields filled in
+    const filledFields = [user.phone, user.location, user.linkedin, user.github, user.summary, user.education, user.skills].filter(Boolean).length;
+    const strengthPct  = Math.round((filledFields / 7) * 100);
+    const strengthEl   = document.getElementById('profile-strength-label');
+    if (strengthEl) {
+      const label = strengthPct >= 80 ? '🟢 Strong' : strengthPct >= 50 ? '🟡 Medium' : '🔴 Needs Work';
+      strengthEl.textContent = `${label} (${strengthPct}%)`;
+      strengthEl.style.color = strengthPct >= 80 ? '#16a34a' : strengthPct >= 50 ? '#d97706' : '#dc2626';
+    }
+
     setVal('admin-profile-name', user.name || '');
     setVal('admin-profile-email', user.email || '');
     setVal('admin-profile-phone', user.phone || '');
@@ -361,14 +616,42 @@ function updateCandidateStatus(id, status) {
 
 // ── UI Renderers ──────────────────────────────────────────────
 const UI = {
-  renderJobCards(containerId, jobs, isCandidateView = true) {
+  renderJobCards(containerId, jobs, isCandidateView = true, page = 0) {
     const c = document.getElementById(containerId);
     if (!c) return;
-    c.innerHTML = jobs.map(j => `
+
+    const PAGE_SIZE = 12;
+    const start   = page * PAGE_SIZE;
+    const slice   = jobs.slice(start, start + PAGE_SIZE);
+    const hasMore = start + PAGE_SIZE < jobs.length;
+
+    if (page === 0) c.innerHTML = '';
+
+    const temp = document.createElement('div');
+    temp.innerHTML = slice.map(j => {
+      const key    = (j.company || '').toLowerCase().trim();
+      const domain = COMPANY_DOMAINS[key]
+        || Object.entries(COMPANY_DOMAINS).find(([k]) => key.includes(k))?.[1];
+      const abbr   = (j.company || '??').substring(0, 2).toUpperCase();
+      const color  = j.color    || '#e0f2fe';
+      const tcolor = j.textColor || '#1e40af';
+
+      // Google Favicon — fast, reliable, no Clearbit delay
+      const logoHTML = domain
+        ? `<img
+            src="https://www.google.com/s2/favicons?domain=${domain}&sz=128"
+            loading="eager"
+            alt="${abbr}"
+            width="40" height="40"
+            style="object-fit:contain;border-radius:6px;display:block;"
+           >`
+        : `<div style="width:44px;height:44px;border-radius:8px;background:${color};color:${tcolor};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;font-family:'Syne',sans-serif;">${abbr}</div>`;
+
+      return `
       <div class="job-card ${j.match >= 85 ? 'featured' : ''}">
         ${j.match >= 85 ? `<div class="job-card-badge"><span class="badge badge-teal">⭐ Top Match</span></div>` : ''}
         <div class="company-row">
-          <div class="company-logo" style="background:${j.color};color:${j.textColor}">${j.logo}</div>
+          <div class="company-logo" style="background:#fff;">${logoHTML}</div>
           <div>
             <div class="job-title">${j.title}</div>
             <div class="company-name">${j.company}</div>
@@ -397,17 +680,37 @@ const UI = {
         <div style="margin-top:10px;font-size:12px;color:var(--text-3)"><i class="fas fa-users"></i> ${j.applicants} applicants · <span class="badge ${j.status==='Active'?'badge-success':'badge-warning'}" style="font-size:11px">${j.status}</span></div>
         `}
       </div>
-    `).join('');
+    `}).join('');
+
+    // Move children as direct grid elements (DocumentFragment preserves CSS grid)
+    const frag = document.createDocumentFragment();
+    while (temp.firstChild) frag.appendChild(temp.firstChild);
+    c.appendChild(frag);
+
+    // Load-More button
+    const oldBtn = document.getElementById(`${containerId}-load-more`);
+    if (oldBtn) oldBtn.remove();
+    if (hasMore) {
+      const btn = document.createElement('button');
+      btn.id = `${containerId}-load-more`;
+      btn.className = 'btn btn-outline';
+      btn.style.cssText = 'width:100%;margin-top:20px;padding:14px;font-size:14px;';
+      btn.innerHTML = `<i class="fas fa-chevron-down"></i> Load More (${jobs.length - start - PAGE_SIZE} remaining)`;
+      btn.onclick = () => { btn.remove(); this.renderJobCards(containerId, jobs, isCandidateView, page + 1); };
+      c.parentNode.insertBefore(btn, c.nextSibling);
+    }
   },
+
 
   renderCandidatesTable(filter='All') {
     const tbody = document.getElementById('candidates-tbody');
     if (!tbody) return;
     let data = DB.candidates;
-    if (filter !== 'All') data = data.filter(c => c.status === filter);
+    if (filter === 'Flagged')  data = data.filter(c => c.outlier_flag);
+    else if (filter !== 'All') data = data.filter(c => c.status === filter);
 
     tbody.innerHTML = data.map((c,i) => `
-      <tr>
+      <tr style="${c.outlier_flag ? 'background:rgba(220,38,38,0.04);border-left:3px solid #dc2626' : ''}">
         <td>${this.rankBadge(i+1)}</td>
         <td>
           <div style="display:flex;align-items:center;gap:10px">
@@ -415,6 +718,8 @@ const UI = {
             <div>
               <div class="fw-600">${c.name}</div>
               <div class="text-xs text-muted">${c.email}</div>
+              ${c.outlier_flag ? `<span title="${c.outlier_reason}" style="display:inline-flex;align-items:center;gap:3px;margin-top:3px;background:#fee2e2;color:#dc2626;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;border:1px solid #fca5a5">⚠️ SUSPICIOUS</span>` : ''}
+              <span style="display:inline-block;margin-top:3px;background:#eff6ff;color:#2563eb;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600">${c.cluster_label}</span>
             </div>
           </div>
         </td>
@@ -449,7 +754,7 @@ const UI = {
     if (!tbody) return;
     const data = [...DB.candidates].sort((a,b) => b.ats - a.ats);
     tbody.innerHTML = data.map((c,i) => `
-      <tr ${i===0?'style="background:#fffef0"':''}>
+      <tr ${i===0?'class="top-rank-row"':''}>
         <td>${this.rankBadge(i+1)}</td>
         <td>
           <div style="display:flex;align-items:center;gap:10px">
@@ -547,25 +852,10 @@ const Charts = {
       },
       options: { responsive:true, plugins:{ legend:{display:false}, tooltip:{enabled:false} } }
     });
-
-    // Profile views weekly timeline (real views spread across 7 days)
-    const views = DB.currentUser ? (DB.currentUser.profile_views || 0) : 0;
-    const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-    const dayData = days.map((_,i) => Math.max(0, Math.round(views/7 + (i%3===0?2:-1))));
-    this.create('cand-timeline', {
-      type:'line',
-      data:{
-        labels: days,
-        datasets:[{
-          label:'Profile Views',
-          data: dayData,
-          borderColor:'#1260cc', backgroundColor:'rgba(18,96,204,.1)',
-          tension:.4, fill:true, pointBackgroundColor:'#1260cc'
-        }]
-      },
-      options:{ responsive:true, plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true,grid:{color:'#f0f4f9'}}, x:{grid:{display:false}} } }
-    });
+    // NOTE: Profile Views timeline chart is now rendered with REAL API data
+    // inside fetchCandidateStats() — do NOT add it here to avoid overwriting real data.
   },
+
 
   initAdminCharts() {
     // Charts are now fully driven by fetchAdminStats() — no hardcoded data
@@ -1137,6 +1427,9 @@ function fetchCandidatesFromServer() {
       ats: c.ats_score || 0, match: c.match_score || 0,
       exp: 'Fresher', sim: (c.match_score||0)/100,
       status: c.status,
+      outlier_flag:   c.outlier_flag   || false,
+      outlier_reason: c.outlier_reason || '',
+      cluster_label:  c.cluster_label  || 'Unclustered',
       skills: c.skills ? c.skills.split(',').map(s=>s.trim()).filter(Boolean) : []
     }));
     UI.renderCandidatesTable();
@@ -1152,6 +1445,10 @@ function fetchCandidatesFromServer() {
     setEl('tab-count-shortlisted', shortlisted);
     setEl('tab-count-reviewing',   reviewing + pending);   // Reviewing + Pending combined
     setEl('tab-count-rejected',    rejected);
+    const outlierCount = DB.candidates.filter(c => c.outlier_flag).length;
+    setEl('tab-count-outliers', outlierCount);
+    // Render cluster view if it exists in DOM
+    renderClusterView();
 
     updateSidebarBadges();
     
@@ -1473,7 +1770,8 @@ function fetchCandidateStats(userId) {
       }
 
     // ── Render skill gaps (real proficiency bars) ──
-    renderSkillGaps(d.skills || [], d.missing_skills || []);
+    renderSkillGaps(d.skills || [], d.missing_skills || [], d.skill_demand_pct || {});
+
     
     // ── Render ATS page hero dynamically ──
     renderATSPage(score, d.skills || [], d.missing_skills || [], d.skills_count || 0);
@@ -1482,38 +1780,93 @@ function fetchCandidateStats(userId) {
     const profileAtsBadge = document.getElementById('profile-ats-badge');
     if (profileAtsBadge) profileAtsBadge.textContent = `ATS Score: ${score}/100`;
     
-    // ── Candidate timeline chart ──
+    // ── Profile Views This Week chart — REAL data from API ──
+    const dayNames   = d.day_names   || ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const viewsDaily = d.views_daily || [0,0,0,0,0,0,0];
+    const appsDaily  = d.apps_daily  || [0,0,0,0,0,0,0];
+
+    Charts.create('cand-timeline', {
+      type: 'line',
+      data: {
+        labels: dayNames,
+        datasets: [
+          {
+            label: 'Profile Views',
+            data: viewsDaily,
+            borderColor: '#1260cc',
+            backgroundColor: 'rgba(18,96,204,.12)',
+            tension: .4, fill: true, pointBackgroundColor: '#1260cc',
+            pointRadius: 4
+          },
+          {
+            label: 'Applications Sent',
+            data: appsDaily,
+            borderColor: '#00c9a7',
+            backgroundColor: 'rgba(0,201,167,.08)',
+            tension: .4, fill: true, pointBackgroundColor: '#00c9a7',
+            pointRadius: 4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top', labels: { font: { family: 'DM Sans', size: 12 }, padding: 14 } },
+          tooltip: { mode: 'index', intersect: false }
+        },
+        scales: {
+          y: { beginAtZero: true, precision: 0, grid: { color: '#f0f4f9' }, ticks: { stepSize: 1 } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // Also update the ATS mini-donut (already done above but keep in sync)
     Charts.initCandidateCharts(score);
-    
+
     updateSidebarBadges();
+
   });
 }
 
 // ── Render dynamic skill gap progress bars ──────────────────
-function renderSkillGaps(skills, missingSkills) {
+function renderSkillGaps(skills, missingSkills, demandPct) {
   const container = document.getElementById('cand-skill-gaps');
   if (!container) return;
-  
-  const allSkills = [...skills.slice(0,3), ...missingSkills.slice(0,2)];
-  if (!allSkills.length) { container.innerHTML = '<p class="text-muted text-sm">Upload resume to see skill gaps.</p>'; return; }
-  
-  const score = DB.currentUser?.ats_score || 0;
-  container.innerHTML = allSkills.map((skill, i) => {
-    const isMissing = missingSkills.includes(skill);
-    // Real proficiency: present skills get score-based level, missing get 0
-    const pct = isMissing ? 0 : Math.min(95, Math.max(45, score - (i * 8) + 5));
-    const color = isMissing ? '#dc2626' : (pct >= 75 ? '#16a34a' : '#d97706');
-    const colorStr = isMissing ? '#dc2626' : (pct >= 75 ? '#16a34a;font-weight:600' : '#d97706;font-weight:600');
+
+  // Combine candidate's own skills + missing skills (top 5 total)
+  const allSkills = [...skills.slice(0, 3), ...missingSkills.slice(0, 2)];
+  if (!allSkills.length) {
+    container.innerHTML = '<p class="text-muted text-sm">Upload resume to see skill gaps.</p>';
+    return;
+  }
+
+  container.innerHTML = allSkills.map(skill => {
+    const isMissing  = missingSkills.includes(skill);
+    // Real % = market demand from DB (how many candidates on platform have this skill)
+    const realPct    = demandPct[skill] || demandPct[skill.toLowerCase()] || 0;
+    const displayPct = isMissing ? 0 : (realPct > 0 ? realPct : 5);
+    const color      = isMissing ? '#dc2626' : (displayPct >= 60 ? '#16a34a' : '#d97706');
+    const label      = isMissing
+      ? '<span style="font-size:10px;color:#dc2626;font-weight:600">⚠ Missing from your resume</span>'
+      : `<span style="font-size:10px;color:#64748b">${displayPct}% market demand</span>`;
+
     return `
-      <div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
-          <span>${skill}</span>
-          <span style="color:${colorStr}">${isMissing ? '0%' : pct+'%'}</span>
+      <div style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:4px">
+          <div>
+            <span style="font-weight:600">${skill}</span>
+            <br>${label}
+          </div>
+          <span style="font-weight:700;color:${color};font-size:14px">${isMissing ? '0%' : displayPct + '%'}</span>
         </div>
-        <div class="progress"><div class="progress-bar" style="width:${isMissing?2:pct}%;background:${color}"></div></div>
+        <div class="progress">
+          <div class="progress-bar" style="width:${isMissing ? 2 : displayPct}%;background:${color};transition:width .8s ease"></div>
+        </div>
       </div>`;
   }).join('');
 }
+
 
 // ── Render ATS page hero + breakdown bars dynamically ───────
 function renderATSPage(score, skills, missingSkills, skillCount) {
@@ -1838,3 +2191,65 @@ window.closeMobileMenuAndScroll = closeMobileMenuAndScroll;
 window.viewMatchedJobs = viewMatchedJobs;
 window.triggerReupload = triggerReupload;
 window.fetchJobs = fetchJobs;
+
+// ── Cluster View Renderer ─────────────────────────────────────────────────
+function renderClusterView() {
+  const container = document.getElementById('cluster-view-container');
+  if (!container || !DB.candidates) return;
+
+  // Group candidates by cluster label
+  const groups = {};
+  DB.candidates.forEach(c => {
+    const label = c.cluster_label || 'Unclustered';
+    if (!groups[label]) groups[label] = [];
+    groups[label].push(c);
+  });
+
+  // Sort each group by ATS score desc
+  Object.values(groups).forEach(g => g.sort((a, b) => b.ats - a.ats));
+
+  const clusterColors = {
+    'Python / Data Science':  '#2563eb',
+    'Frontend / UI Developer':'#7c3aed',
+    'DevOps / Cloud Engineer':'#059669',
+    'Java / Backend Developer':'#b45309',
+    'Database / Data Engineer':'#0891b2',
+    'Mobile Developer':        '#db2777',
+    'General / Mixed Skills':  '#6b7280',
+    'Unclustered':             '#9ca3af'
+  };
+
+  container.innerHTML = Object.entries(groups).map(([label, members]) => {
+    const cleanLabel = label.replace(/[\u{1F000}-\u{1FFFF}]/gu, '').trim();
+    const color = Object.entries(clusterColors).find(([k]) => cleanLabel.includes(k.split('/')[0].trim()))?.[1] || '#6b7280';
+    const flagged = members.filter(c => c.outlier_flag).length;
+
+    return `
+      <div class="card" style="margin-bottom:18px;border-left:4px solid ${color}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:10px;height:10px;border-radius:50%;background:${color}"></div>
+            <span style="font-weight:700;font-size:15px">${label}</span>
+            <span style="background:#f1f5f9;color:#64748b;font-size:12px;padding:2px 10px;border-radius:12px">${members.length} candidates</span>
+            ${flagged > 0 ? `<span style="background:#fee2e2;color:#dc2626;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600">\u26a0\ufe0f ${flagged} flagged</span>` : ''}
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          ${members.map(c => `
+            <div style="display:flex;align-items:center;gap:8px;background:${c.outlier_flag?'#fff5f5':'var(--bg-2)'};border:1px solid ${c.outlier_flag?'#fca5a5':'var(--border)'};border-radius:8px;padding:8px 12px;min-width:200px;flex:1">
+              <div class="avatar avatar-sm" style="background:${UI.avatarColor(c.name)};color:#fff;flex-shrink:0">${c.name.slice(0,2).toUpperCase()}</div>
+              <div style="min-width:0">
+                <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</div>
+                <div style="font-size:11px;color:var(--text-3)">${c.job}</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+                  <span class="badge ${UI.atsBadge(c.ats)}" style="font-size:10px">${c.ats}/100</span>
+                  ${c.outlier_flag ? '<span style="font-size:10px;color:#dc2626;font-weight:700">\u26a0\ufe0f</span>' : ''}
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+  }).join('') || '<div style="text-align:center;padding:40px;color:var(--text-3)">No candidates to cluster yet.</div>';
+}
+window.renderClusterView = renderClusterView;

@@ -1071,6 +1071,8 @@
                 <span class="badge" style="background:rgba(255,255,255,.15);color:#fff">&#10003; Email Verified</span>
                 <span class="badge" style="background:rgba(0,201,167,.2);color:var(--teal)">&#10003; Resume Uploaded</span>
                 <span class="badge" style="background:rgba(0,201,167,.2);color:var(--teal)" id="profile-ats-badge">ATS Score: --/100</span>
+                <span id="profile-cluster-badge" class="badge" style="background:rgba(99,102,241,.25);color:#818cf8;display:none"></span>
+                <span id="profile-outlier-badge" class="badge" style="background:rgba(220,38,38,.2);color:#fca5a5;display:none">&#9888; Suspicious Flag</span>
               </div>
             </div>
             <div style="margin-left:auto">
@@ -1107,11 +1109,11 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">LinkedIn URL</label>
-                    <input id="cand-profile-link" class="form-control" placeholder="linkedin.com/in/rahulsharma">
+                    <input id="cand-profile-link" class="form-control" placeholder="linkedin.com/in/yourname">
                   </div>
                   <div class="form-group">
                     <label class="form-label">GitHub URL</label>
-                    <input id="cand-profile-git" class="form-control" placeholder="github.com/rahulsharma-ds">
+                    <input id="cand-profile-git" class="form-control" placeholder="github.com/yourusername">
                   </div>
                   <div class="form-group">
                     <label class="form-label">Professional Summary</label>
@@ -1128,6 +1130,33 @@
                   <div class="form-group">
                     <label class="form-label">Education (Degree, University, Year)</label>
                     <textarea id="cand-profile-edu" class="form-control" placeholder="E.g. B.Tech Computer Science, VIT Vellore, 2020-2024" style="min-height:80px"></textarea>
+                  </div>
+                </div>
+              </div>
+              <!-- ML Insights Card — powered by real DB data -->
+              <div class="card" id="profile-ml-card">
+                <div class="card-header"><span class="card-title">&#129302; ML Insights</span></div>
+                <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
+                    <div>
+                      <div style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Skill Cluster</div>
+                      <div id="profile-cluster-label" style="font-weight:700;font-size:15px;color:var(--primary)">Analyzing...</div>
+                    </div>
+                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(18,96,204,.12);display:flex;align-items:center;justify-content:center;font-size:18px">&#127760;</div>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
+                    <div>
+                      <div style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Outlier Status</div>
+                      <div id="profile-outlier-status" style="font-weight:700;font-size:15px;color:#16a34a">&#10003; Normal Profile</div>
+                    </div>
+                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(22,163,74,.12);display:flex;align-items:center;justify-content:center;font-size:18px" id="profile-outlier-icon">&#9989;</div>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
+                    <div>
+                      <div style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Profile Strength</div>
+                      <div id="profile-strength-label" style="font-weight:700;font-size:15px;color:#d97706">Loading...</div>
+                    </div>
+                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(217,119,6,.12);display:flex;align-items:center;justify-content:center;font-size:18px">&#9889;</div>
                   </div>
                 </div>
               </div>
@@ -1330,17 +1359,19 @@
         <div id="admin-candidates" data-portal="admin" class="hidden">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:14px">
             <div class="tab-bar">
-              <button class="tab-btn active" data-tabgroup="cand-filter" data-filter="All" onclick="switchTab(this,'cand-filter');UI.renderCandidatesTable('All')">All (<span id="tab-count-all">0</span>)</button>
-              <button class="tab-btn" data-tabgroup="cand-filter" data-filter="Shortlisted" onclick="switchTab(this,'cand-filter');UI.renderCandidatesTable('Shortlisted')">Shortlisted (<span id="tab-count-shortlisted">0</span>)</button>
-              <button class="tab-btn" data-tabgroup="cand-filter" data-filter="Reviewing" onclick="switchTab(this,'cand-filter');UI.renderCandidatesTable('Reviewing')">Reviewing (<span id="tab-count-reviewing">0</span>)</button>
-              <button class="tab-btn" data-tabgroup="cand-filter" data-filter="Rejected" onclick="switchTab(this,'cand-filter');UI.renderCandidatesTable('Rejected')">Rejected (<span id="tab-count-rejected">0</span>)</button>
+              <button class="tab-btn active" data-tabgroup="cand-filter" data-filter="All" onclick="switchTab(this,'cand-filter');document.getElementById('cluster-view-container').style.display='none';document.getElementById('candidates-table-card').style.display='';UI.renderCandidatesTable('All')"><i class="fas fa-users" style="font-size:12px"></i> All (<span id="tab-count-all">0</span>)</button>
+              <button class="tab-btn" data-tabgroup="cand-filter" data-filter="Shortlisted" onclick="switchTab(this,'cand-filter');document.getElementById('cluster-view-container').style.display='none';document.getElementById('candidates-table-card').style.display='';UI.renderCandidatesTable('Shortlisted')"><i class="fas fa-check-circle" style="font-size:12px;color:#16a34a"></i> Shortlisted (<span id="tab-count-shortlisted">0</span>)</button>
+              <button class="tab-btn" data-tabgroup="cand-filter" data-filter="Reviewing" onclick="switchTab(this,'cand-filter');document.getElementById('cluster-view-container').style.display='none';document.getElementById('candidates-table-card').style.display='';UI.renderCandidatesTable('Reviewing')"><i class="fas fa-eye" style="font-size:12px;color:#2563eb"></i> Reviewing (<span id="tab-count-reviewing">0</span>)</button>
+              <button class="tab-btn" data-tabgroup="cand-filter" data-filter="Rejected" onclick="switchTab(this,'cand-filter');document.getElementById('cluster-view-container').style.display='none';document.getElementById('candidates-table-card').style.display='';UI.renderCandidatesTable('Rejected')"><i class="fas fa-times-circle" style="font-size:12px;color:#dc2626"></i> Rejected (<span id="tab-count-rejected">0</span>)</button>
+              <button class="tab-btn" data-tabgroup="cand-filter" data-filter="Flagged" onclick="switchTab(this,'cand-filter');document.getElementById('cluster-view-container').style.display='none';document.getElementById('candidates-table-card').style.display='';UI.renderCandidatesTable('Flagged')" style="color:#dc2626"><i class="fas fa-shield-alt" style="font-size:12px"></i> Flagged (<span id="tab-count-outliers">0</span>)</button>
+              <button class="tab-btn" data-tabgroup="cand-filter" data-filter="Cluster" onclick="switchTab(this,'cand-filter');document.getElementById('cluster-view-container').style.display='block';document.getElementById('candidates-table-card').style.display='none';renderClusterView()" style="color:#7c3aed"><i class="fas fa-project-diagram" style="font-size:12px"></i> View by Cluster</button>
             </div>
             <div style="display:flex;gap:10px">
               <button class="btn btn-outline btn-sm" onclick="exportCSV()"><i class="fas fa-download"></i> Export CSV</button>
               <button class="btn btn-primary btn-sm" onclick="Modal.open('post-job-modal')"><i class="fas fa-plus"></i> Post Job</button>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="candidates-table-card">
             <div class="table-wrap">
               <table class="table">
                 <thead><tr><th>Rank</th><th>Candidate</th><th>Degree</th><th>Job Applied</th><th>Skills</th><th>ATS Score</th><th>Match %</th><th>Status</th><th>Actions</th></tr></thead>
@@ -1348,6 +1379,8 @@
               </table>
             </div>
           </div>
+          <!-- Cluster View (shown when 'View by Cluster' tab is active) -->
+          <div id="cluster-view-container" style="display:none;margin-top:4px"></div>
         </div>
 
         <!-- ── ADMIN: Rankings ── -->

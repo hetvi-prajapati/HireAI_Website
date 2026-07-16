@@ -63,21 +63,223 @@
 
 /* ── Dark Mode Variables ── */
 body.dark-mode {
-  --bg:          #12181b;
-  --bg-2:        #1b2428;
-  --card:        #1e272c;
-  --white:       #1e272c;
-  --text:        #e4e4e7;
-  --text-2:      #a1a1aa;
-  --text-3:      #71717a;
-  --border:      #334155;
-  --border-2:    #475569;
-  --shadow-sm:   0 1px 4px rgba(0,0,0,.3);
-  --shadow:      0 4px 16px rgba(0,0,0,.4);
-  --shadow-md:   0 8px 32px rgba(0,0,0,.5);
-  --shadow-lg:   0 16px 48px rgba(0,0,0,.6);
-  --strip-4:     #12181b;
+  --bg:          #0f1419;
+  --bg-2:        #1a2332;
+  --card:        #1e2a38;
+  --white:       #1e2a38;
+  --text:        #f0f4f8;
+  --text-2:      #b8c9d9;
+  --text-3:      #7a90a4;
+  --border:      #2d3f52;
+  --border-2:    #3d5268;
+  --primary:     #5eb8a3;
+  --primary-l:   #70ccb6;
+  --teal:        #4fa88a;
+  --teal-l:      #1e3a30;
+  --strip-4:     #0f1419;
+  --shadow-sm:   0 1px 4px rgba(0,0,0,.5);
+  --shadow:      0 4px 16px rgba(0,0,0,.6);
+  --shadow-md:   0 8px 32px rgba(0,0,0,.7);
+  --shadow-lg:   0 16px 48px rgba(0,0,0,.8);
 }
+
+/* ── Dark Mode: Global Elements ── */
+body.dark-mode { background: var(--bg); color: var(--text); }
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3,
+body.dark-mode h4, body.dark-mode h5, body.dark-mode h6 { color: var(--text); }
+body.dark-mode p, body.dark-mode span, body.dark-mode div { color: inherit; }
+body.dark-mode a { color: var(--primary); }
+
+/* ── Dark Mode: Cards ── */
+body.dark-mode .card { background: var(--card); border-color: var(--border); color: var(--text); }
+body.dark-mode .card-header { border-bottom-color: var(--border); background: transparent; }
+body.dark-mode .card-title { color: var(--text); }
+body.dark-mode .card-body { color: var(--text); }
+
+/* ── Dark Mode: Sidebar ── */
+body.dark-mode .sidebar { background: #0d1b2a; border-right: 1px solid var(--border); }
+body.dark-mode .sidebar-logo { color: var(--text); }
+body.dark-mode .sidebar-logo span { color: var(--primary); }
+body.dark-mode .nav-section { color: var(--text-3); }
+body.dark-mode .nav-item { color: var(--text-2); }
+body.dark-mode .nav-item:hover { background: rgba(94,184,163,.1); color: var(--text); }
+body.dark-mode .nav-item.active { background: rgba(94,184,163,.18); color: var(--primary); }
+body.dark-mode .nav-item i { color: inherit; }
+body.dark-mode .user-card { background: rgba(255,255,255,.05); border-top: 1px solid var(--border); }
+body.dark-mode .user-name { color: var(--text); }
+body.dark-mode .user-role { color: var(--text-3); }
+
+/* ── Dark Mode: Topbar / Header ── */
+body.dark-mode .topbar { background: var(--card); border-bottom: 1px solid var(--border); }
+body.dark-mode .topbar-title { color: var(--text); }
+body.dark-mode .breadcrumb { color: var(--text-3); }
+body.dark-mode .topbar-actions .btn-icon { background: var(--bg-2); color: var(--text-2); }
+body.dark-mode .topbar-actions .btn-icon:hover { color: var(--primary); }
+body.dark-mode .search-bar input { background: var(--bg-2); border-color: var(--border); color: var(--text); }
+body.dark-mode .search-bar input::placeholder { color: var(--text-3); }
+body.dark-mode .search-bar i { color: var(--text-3); }
+
+/* ── Dark Mode: Tables ── */
+body.dark-mode .table { color: var(--text); border-color: var(--border); }
+body.dark-mode .table thead th {
+  background: #162130;
+  color: var(--text-2);
+  border-bottom: 2px solid var(--border);
+  font-size: 11px;
+  letter-spacing: .06em;
+}
+body.dark-mode .table tbody tr { border-bottom: 1px solid var(--border); }
+body.dark-mode .table tbody tr:hover { background: rgba(94,184,163,.06); }
+body.dark-mode .table tbody td { color: var(--text); }
+body.dark-mode .table-wrap { border: 1px solid var(--border); }
+
+/* ── Dark Mode: Forms ── */
+body.dark-mode .form-control {
+  background: var(--bg-2);
+  border-color: var(--border);
+  color: var(--text);
+}
+body.dark-mode .form-control:focus {
+  border-color: var(--primary);
+  background: #1e2e3e;
+  color: var(--text);
+  box-shadow: 0 0 0 3px rgba(94,184,163,.15);
+}
+body.dark-mode .form-control::placeholder { color: var(--text-3); }
+body.dark-mode .form-label { color: var(--text-2); }
+body.dark-mode select.form-control { background: var(--bg-2); color: var(--text); }
+body.dark-mode textarea.form-control { background: var(--bg-2); color: var(--text); }
+
+/* ── Dark Mode: Buttons ── */
+body.dark-mode .btn-outline {
+  border-color: var(--border-2);
+  color: var(--text-2);
+  background: transparent;
+}
+body.dark-mode .btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(94,184,163,.1);
+}
+body.dark-mode .btn-ghost { color: var(--text-2); }
+body.dark-mode .btn-ghost:hover { background: var(--bg-2); color: var(--text); }
+body.dark-mode .btn-teal { color: #fff; }
+
+/* ── Dark Mode: Badges ── */
+body.dark-mode .badge { opacity: .92; }
+body.dark-mode .badge-primary { background: rgba(94,184,163,.2); color: #70ccb6; border: 1px solid rgba(94,184,163,.3); }
+body.dark-mode .badge-success { background: rgba(22,163,74,.2); color: #4ade80; border: 1px solid rgba(22,163,74,.3); }
+body.dark-mode .badge-warning { background: rgba(217,119,6,.2); color: #fbbf24; border: 1px solid rgba(217,119,6,.3); }
+body.dark-mode .badge-danger  { background: rgba(220,38,38,.2); color: #f87171; border: 1px solid rgba(220,38,38,.3); }
+body.dark-mode .badge-info    { background: rgba(8,145,178,.2); color: #67e8f9; border: 1px solid rgba(8,145,178,.3); }
+body.dark-mode .badge-gray    { background: rgba(148,163,184,.15); color: #94a3b8; }
+
+/* ── Dark Mode: Stat Cards ── */
+body.dark-mode .stat-card { background: var(--card); border-color: var(--border); }
+body.dark-mode .stat-label { color: var(--text-3); }
+body.dark-mode .stat-value { color: var(--text); }
+body.dark-mode .stat-change { color: var(--text-3); }
+body.dark-mode .stat-change.up { color: #4ade80; }
+body.dark-mode .stat-change.down { color: #f87171; }
+body.dark-mode .stat-icon { opacity: .85; }
+
+/* ── Dark Mode: Tab Bar ── */
+body.dark-mode .tab-bar { border-bottom-color: var(--border); }
+body.dark-mode .tab-btn { color: var(--text-3); background: transparent; }
+body.dark-mode .tab-btn:hover { color: var(--text-2); background: rgba(255,255,255,.04); }
+body.dark-mode .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+/* ── Dark Mode: Progress Bars ── */
+body.dark-mode .progress { background: var(--bg-2); border: 1px solid var(--border); }
+body.dark-mode .progress-bar { opacity: .9; }
+
+/* ── Dark Mode: Skill Tags ── */
+body.dark-mode .skill-tag { background: var(--bg-2); border-color: var(--border); color: var(--text-2); }
+body.dark-mode .skill-tag.skill-match { background: rgba(22,163,74,.15); color: #4ade80; border-color: rgba(22,163,74,.3); }
+body.dark-mode .skill-tag.skill-missing { background: rgba(220,38,38,.15); color: #f87171; border-color: rgba(220,38,38,.3); }
+body.dark-mode .skills-cloud .badge { background: rgba(94,184,163,.15); color: var(--text-2); }
+
+/* ── Dark Mode: Alerts & Highlight Rows ── */
+body.dark-mode .alert-info { background: rgba(59,130,246,.15) !important; color: #93c5fd !important; border-color: rgba(59,130,246,.3) !important; }
+body.dark-mode .alert-success { background: rgba(22,163,74,.15) !important; color: #86efac !important; border-color: rgba(22,163,74,.3) !important; }
+body.dark-mode .alert-warning { background: rgba(217,119,6,.15) !important; color: #fcd34d !important; border-color: rgba(217,119,6,.3) !important; }
+body.dark-mode .alert-danger { background: rgba(220,38,38,.15) !important; color: #fca5a5 !important; border-color: rgba(220,38,38,.3) !important; }
+body.dark-mode .top-rank-row { background: rgba(250,204,21,.1) !important; }
+
+/* ── Light Mode: Top Rank Row ── */
+.top-rank-row { background: #fffef0; }
+
+/* ── Dark Mode: Modal / Overlay ── */
+body.dark-mode .modal-box { background: var(--card); border-color: var(--border); }
+body.dark-mode .modal-box h3 { color: var(--text); }
+body.dark-mode .modal-box p { color: var(--text-2); }
+body.dark-mode .modal-header { border-bottom-color: var(--border); }
+
+
+/* ── Dark Mode: Notifications ── */
+body.dark-mode .notif-item { border-bottom-color: var(--border); }
+body.dark-mode .notif-item:hover { background: rgba(94,184,163,.05); }
+body.dark-mode .notif-title { color: var(--text); }
+body.dark-mode .notif-body  { color: var(--text-2); }
+body.dark-mode .notif-time  { color: var(--text-3); }
+body.dark-mode .notif-dot   { background: var(--primary); }
+
+/* ── Dark Mode: Avatar ── */
+body.dark-mode .avatar { border: 2px solid var(--border); }
+
+/* ── Dark Mode: Cluster View Cards ── */
+body.dark-mode #cluster-view-container .card { background: var(--card); border-color: var(--border); }
+body.dark-mode #cluster-view-container span  { color: var(--text); }
+
+/* ── Dark Mode: Text Utilities ── */
+body.dark-mode .text-muted  { color: var(--text-3) !important; }
+body.dark-mode .fw-600      { color: var(--text); }
+body.dark-mode .text-xs     { color: var(--text-3); }
+body.dark-mode .text-sm     { color: var(--text-2); }
+
+/* ── Dark Mode: Settings Panel ── */
+body.dark-mode .settings-nav { border-right-color: var(--border); }
+body.dark-mode .settings-nav-item { color: var(--text-2); }
+body.dark-mode .settings-nav-item:hover { background: rgba(94,184,163,.08); color: var(--text); }
+body.dark-mode .settings-nav-item.active { background: rgba(94,184,163,.15); color: var(--primary); }
+body.dark-mode .settings-section h4 { color: var(--text); border-bottom-color: var(--border); }
+body.dark-mode .toggle-label { color: var(--text-2); }
+
+/* ── Dark Mode: Chart area ── */
+body.dark-mode canvas { filter: brightness(.95); }
+
+/* ── Dark Mode: Hero / Landing sections ── */
+body.dark-mode .hero-section { background: #0d1b2a; }
+body.dark-mode .section-alt { background: #131e2a; }
+
+/* ── Dark Mode: ML Insights Card specifics ── */
+body.dark-mode #profile-ml-card .card-body > div {
+  background: var(--bg-2) !important;
+  border-color: var(--border) !important;
+}
+body.dark-mode #profile-ml-card .card-body > div div { color: var(--text) !important; }
+
+/* ── Dark Mode: Table empty state ── */
+body.dark-mode td[colspan] { color: var(--text-3) !important; }
+
+/* ── Dark Mode: Scrollbar ── */
+body.dark-mode ::-webkit-scrollbar-track { background: var(--bg); }
+body.dark-mode ::-webkit-scrollbar-thumb { background: var(--border-2); }
+
+/* ── Dark Mode: Inline hardcoded colors — override for readability ── */
+body.dark-mode [style*="color:#1c3d34"]  { color: var(--text) !important; }
+body.dark-mode [style*="color:#3a6b5f"]  { color: var(--text-2) !important; }
+body.dark-mode [style*="color:#6ba090"]  { color: var(--text-3) !important; }
+body.dark-mode [style*="color:#64748b"]  { color: var(--text-3) !important; }
+body.dark-mode [style*="color:#94a3b8"]  { color: var(--text-3) !important; }
+body.dark-mode [style*="background:#f1f5f9"] { background: var(--bg-2) !important; color: var(--text-2) !important; }
+body.dark-mode [style*="background:#eff6ff"] { background: rgba(94,184,163,.15) !important; color: var(--primary) !important; }
+body.dark-mode [style*="background:#f0fdf4"] { background: rgba(22,163,74,.1) !important; }
+body.dark-mode [style*="background:#fff5f5"] { background: rgba(220,38,38,.08) !important; }
+body.dark-mode [style*="background:var(--bg-2)"] { background: var(--bg-2) !important; }
+body.dark-mode [style*="color:var(--text-3)"]    { color: var(--text-3) !important; }
+body.dark-mode [style*="color:var(--text-2)"]    { color: var(--text-2) !important; }
+
 
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1260,7 +1462,8 @@ select.form-control { cursor: pointer; }
 .job-card.featured { border-top: 3px solid var(--teal); }
 .job-card-badge { position: absolute; top: 16px; right: 16px; }
 .company-row { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-.company-logo { width: 46px; height: 46px; border-radius: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px; font-family: 'Syne', sans-serif; flex-shrink: 0; }
+.company-logo { width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px; font-family: 'Syne', sans-serif; flex-shrink: 0; overflow: hidden; background: #f8fafc; border: 1px solid var(--border); }
+.company-logo img { width: 44px; height: 44px; object-fit: contain; border-radius: 6px; display: block; }
 .job-title { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
 .company-name { font-size: 13px; color: var(--text-2); }
 .job-metas { display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0; }

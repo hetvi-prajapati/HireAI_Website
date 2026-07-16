@@ -133,7 +133,10 @@ def admin_stats():
 @login_required
 @role_required('hr')
 def get_candidates():
-    """GET /api/admin/candidates — All applicants with match scores. HR only."""
+    """GET /api/admin/candidates — All applicants with outlier flags and cluster labels. HR only."""
+    from app.ml.outlier.outlier_detector import detect_outliers
+    from app.ml.clustering.candidate_clusterer import cluster_candidates
+
     with get_db() as conn:
         rows = conn.execute('''
             SELECT a.id as app_id, u.name, u.email, u.skills, u.ats_score,
@@ -143,7 +146,71 @@ def get_candidates():
             JOIN jobs j  ON a.job_id  = j.id
             ORDER BY a.match_score DESC
         ''').fetchall()
-    return jsonify([dict(r) for r in rows])
+
+    candidates = [dict(r) for r in rows]
+
+    # ── Run Outlier Detection ───────────────────────────────
+    candidates = detect_outliers(candidates)
+
+    # ── Run Clustering Analysis ─────────────────────────────
+    candidates = cluster_candidates(candidates, n_clusters=5)
+
+    return jsonify(candidates)
+
+
+@admin_bp.route('/clusters')
+@login_required
+@role_required('hr')
+def get_clusters():
+    """GET /api/admin/clusters — Candidates grouped by skill cluster. HR only."""
+    from app.ml.outlier.outlier_detector import detect_outliers
+    from app.ml.clustering.candidate_clusterer import cluster_candidates, get_cluster_groups
+
+    with get_db() as conn:
+        rows = conn.execute('''
+            SELECT a.id as app_id, u.name, u.email, u.skills, u.ats_score,
+                   j.title as job, a.match_score, a.status, a.applied_at
+            FROM applications a
+            JOIN users u ON a.user_id = u.id
+            JOIN jobs j  ON a.job_id  = j.id
+            ORDER BY a.match_score DESC
+        ''').fetchall()
+
+    candidates = [dict(r) for r in rows]
+    candidates = detect_outliers(candidates)
+    candidates = cluster_candidates(candidates, n_clusters=5)
+    groups     = get_cluster_groups(candidates)
+
+    return jsonify({
+        'groups': [
+            {'label': label, 'count': len(members), 'candidates': members}
+            for label, members in groups.items()
+        ]
+    })
+
+
+@admin_bp.route('/outliers')
+@login_required
+@role_required('hr')
+def get_outliers():
+    """GET /api/admin/outliers — Only flagged/suspicious candidates. HR only."""
+    from app.ml.outlier.outlier_detector import detect_outliers
+
+    with get_db() as conn:
+        rows = conn.execute('''
+            SELECT a.id as app_id, u.name, u.email, u.skills, u.ats_score,
+                   j.title as job, a.match_score, a.status, a.applied_at
+            FROM applications a
+            JOIN users u ON a.user_id = u.id
+            JOIN jobs j  ON a.job_id  = j.id
+            ORDER BY u.ats_score ASC
+        ''').fetchall()
+
+    candidates = [dict(r) for r in rows]
+    candidates = detect_outliers(candidates)
+    flagged    = [c for c in candidates if c.get('outlier_flag')]
+
+    return jsonify({'count': len(flagged), 'flagged': flagged})
 
 
 @admin_bp.route('/update_status', methods=['POST'])

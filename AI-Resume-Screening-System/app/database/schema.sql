@@ -10,15 +10,17 @@ CREATE TABLE IF NOT EXISTS users (
     email       TEXT    UNIQUE NOT NULL,
     password    TEXT    NOT NULL,
     role        TEXT    NOT NULL DEFAULT 'candidate',  -- 'candidate' | 'hr'
-    skills      TEXT    DEFAULT '',
-    ats_score   INTEGER DEFAULT 0,
-    phone       TEXT    DEFAULT '',
-    location    TEXT    DEFAULT '',
-    linkedin    TEXT    DEFAULT '',
-    github      TEXT    DEFAULT '',
-    summary     TEXT    DEFAULT '',
-    education   TEXT    DEFAULT '',
-    created_at  TEXT    DEFAULT (datetime('now'))
+    skills         TEXT    DEFAULT '',
+    ats_score      INTEGER DEFAULT 0,
+    phone          TEXT    DEFAULT '',
+    location       TEXT    DEFAULT '',
+    linkedin       TEXT    DEFAULT '',
+    github         TEXT    DEFAULT '',
+    summary        TEXT    DEFAULT '',
+    education      TEXT    DEFAULT '',
+    is_outlier     INTEGER DEFAULT 0,           -- 0 = normal, 1 = flagged suspicious
+    cluster_label  TEXT    DEFAULT 'Unclustered', -- e.g. 'Python / Data Science'
+    created_at     TEXT    DEFAULT (datetime('now'))
 );
 
 CREATE TABLE IF NOT EXISTS jobs (

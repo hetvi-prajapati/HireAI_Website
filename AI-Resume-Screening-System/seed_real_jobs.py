@@ -150,6 +150,97 @@ REAL_JOBS = [
     ("Network Administrator", "Wipro", "Hyderabad", "Full-time", "5-10 LPA", "Cisco,Networking,Linux,AWS,Firewall,Monitoring,Python,Ansible", "Manage enterprise network infrastructure for global clients. Implement SD-WAN and cloud networking solutions."),
     ("Technical Support Engineer", "Zendesk India", "Bangalore", "Full-time", "6-12 LPA", "Python,SQL,REST APIs,Troubleshooting,Linux,Networking,JIRA,Communication", "Provide technical support for Zendesk's customer service platform. Debug API integrations and help enterprise clients."),
     ("Solutions Architect", "AWS India", "Mumbai", "Full-time", "22-40 LPA", "AWS,Python,Terraform,Kubernetes,Serverless,System Design,CloudFormation,Docker", "Help enterprises migrate to AWS cloud. Design scalable, fault-tolerant architectures for mission-critical workloads."),
+
+    # ── Aerospace & Defence Tech ──────────────────────────────
+    ("Software Engineer", "ISRO", "Bangalore", "Full-time", "8-16 LPA", "C,C++,Python,Linux,Embedded Systems,RTOS,Simulation,MATLAB", "Develop mission-critical software for India's space launch vehicles and satellite systems. Work on telemetry, guidance, and navigation systems."),
+    ("Systems Engineer", "HAL (Hindustan Aeronautics)", "Bangalore", "Full-time", "7-14 LPA", "C,C++,MATLAB,Simulink,Embedded,Avionics,RTOS,DO-178C", "Design avionics software for fighter jets, helicopters, and UAVs. Ensure airworthiness compliance and real-time system safety."),
+    ("Aerospace Software Engineer", "DRDO", "Hyderabad", "Full-time", "7-15 LPA", "C,C++,Python,Embedded Systems,Signal Processing,MATLAB,Linux", "Build defence electronics and missile guidance software. Contribute to India's strategic technology programs."),
+    ("Software Developer", "Safran Engineering India", "Bangalore", "Full-time", "10-20 LPA", "C,C++,Python,Embedded,Avionics,DO-178,ARINC,MIL-STD", "Develop embedded avionics software for commercial aircraft landing gear and nacelle systems."),
+    ("Embedded Engineer", "Honeywell India", "Hyderabad", "Full-time", "9-18 LPA", "C,C++,Python,Embedded,RTOS,Industrial IoT,Linux,Networking", "Build industrial automation and building management software for Honeywell's global product lines."),
+
+    # ── Electric Vehicles & CleanTech ─────────────────────────
+    ("Embedded Software Engineer", "Ola Electric", "Bangalore", "Full-time", "12-24 LPA", "C,C++,Python,RTOS,CAN,LIN,BMS,Embedded Linux", "Develop embedded software for Ola's electric scooters — battery management, motor control, and OTA update systems."),
+    ("Battery Engineer", "Tata Motors EV", "Pune", "Full-time", "10-20 LPA", "Python,MATLAB,Simulink,BMS,CAN,Battery Chemistry,C,C++", "Design and test battery management systems for Nexon EV and upcoming EV platforms."),
+    ("Software Engineer", "Revolt Motors", "Gurgaon", "Full-time", "8-16 LPA", "Python,IoT,AWS,React,Node.js,CAN,Embedded,Mobile", "Build connected vehicle platform and mobile app features for Revolt's electric motorcycle ecosystem."),
+    ("Power Electronics Engineer", "Greaves Electric", "Pune", "Full-time", "8-16 LPA", "C,C++,Python,Power Electronics,MATLAB,Motor Control,CAN,Embedded", "Develop motor controllers and charging systems for Ampere electric scooters."),
+    ("Data Engineer", "ReNew Power", "Gurgaon", "Full-time", "10-20 LPA", "Python,Spark,SQL,AWS,Airflow,IoT,Kafka,Tableau", "Build data platforms for India's largest renewable energy company. Monitor 10+ GW of wind and solar assets in real time."),
+
+    # ── Pharmaceutical & BioTech ──────────────────────────────
+    ("Bioinformatics Engineer", "Dr. Reddy's Laboratories", "Hyderabad", "Full-time", "8-16 LPA", "Python,R,Bioinformatics,Machine Learning,SQL,Genomics,Biopython", "Analyze genomic and proteomic data for drug discovery. Build computational pipelines for clinical trial data processing."),
+    ("Data Scientist", "Sun Pharma", "Mumbai", "Full-time", "8-18 LPA", "Python,R,Machine Learning,SQL,Statistics,SAS,Clinical Data,Tableau", "Build predictive models for drug demand forecasting, clinical outcome analysis, and pharmacovigilance."),
+    ("Software Engineer", "Cipla", "Mumbai", "Full-time", "7-15 LPA", "Python,Java,SQL,AWS,SAP,ERP,REST APIs,Data Analytics", "Develop pharmaceutical manufacturing execution systems and quality management software."),
+    ("ML Engineer", "Sehat Sathi / MedGenome", "Bangalore", "Full-time", "12-22 LPA", "Python,Machine Learning,Genomics,Deep Learning,NLP,R,AWS,Docker", "Build AI models for rare disease diagnosis and genomic variant interpretation."),
+
+    # ── Government Tech & Public Sector ──────────────────────
+    ("Software Engineer", "NIC (National Informatics Centre)", "Delhi", "Full-time", "8-14 LPA", "Java,Python,Spring Boot,PostgreSQL,Linux,REST APIs,Docker", "Build e-governance portals and digital public services for central government ministries."),
+    ("Backend Developer", "NPCI (UPI)", "Mumbai", "Full-time", "10-20 LPA", "Java,Spring Boot,MySQL,Redis,Kafka,AWS,Security,Microservices", "Build payment systems for UPI, IMPS, and RuPay handling billions of transactions for 1.4 billion Indians."),
+    ("Data Engineer", "UIDAI (Aadhaar)", "Bangalore", "Full-time", "8-16 LPA", "Python,Hadoop,Spark,SQL,Biometrics,Security,AWS,ETL", "Build identity authentication infrastructure serving 1.3B Aadhaar holders for biometric and OTP verification."),
+    ("Cloud Engineer", "C-DAC India", "Pune", "Full-time", "6-12 LPA", "Python,Linux,HPC,Kubernetes,AWS,Supercomputing,CUDA,MPI", "Build national high-performance computing infrastructure. Develop Param supercomputer applications and cloud services."),
+
+    # ── Retail & D2C Tech ─────────────────────────────────────
+    ("Backend Engineer", "Reliance Retail", "Mumbai", "Full-time", "12-22 LPA", "Java,Python,Microservices,Kafka,Redis,MySQL,AWS,Docker", "Build omnichannel retail platform integrating JioMart, Reliance Digital, and Smart Bazaar for India's largest retailer."),
+    ("Full Stack Developer", "Decathlon India", "Bangalore", "Full-time", "8-16 LPA", "React,Node.js,Python,PostgreSQL,AWS,Docker,TypeScript,REST APIs", "Build e-commerce and store management systems for Decathlon India's retail and online sports channels."),
+    ("Data Scientist", "Mamaearth", "Gurgaon", "Full-time", "10-20 LPA", "Python,Machine Learning,SQL,Tableau,A/B Testing,Pandas,Statistics", "Build customer lifetime value, churn prediction, and demand forecasting models for India's leading D2C beauty brand."),
+    ("Software Engineer", "boAt Lifestyle", "Delhi", "Full-time", "8-16 LPA", "React,Node.js,Python,MongoDB,AWS,Shopify,REST APIs,Docker", "Build D2C e-commerce platform and IoT product connectivity for India's #1 hearables brand."),
+
+    # ── HR Tech & Recruitment ─────────────────────────────────
+    ("Backend Engineer", "Darwinbox", "Hyderabad", "Full-time", "12-22 LPA", "Python,Django,PostgreSQL,Redis,Celery,AWS,Docker,REST APIs", "Build next-generation HR software for 700+ enterprises. Develop payroll, performance management, and workforce analytics."),
+    ("ML Engineer", "iimjobs.com / HackerEarth", "Bangalore", "Full-time", "10-20 LPA", "Python,Machine Learning,NLP,SQL,AWS,Docker,Recommendation Systems", "Build AI-powered job matching and technical assessment platforms used by 7000+ companies globally."),
+    ("Product Engineer", "Keka HR", "Hyderabad", "Full-time", "8-16 LPA", "React,Node.js,Python,PostgreSQL,AWS,TypeScript,REST APIs,Docker", "Build modern HRMS and payroll solutions for SMBs. Develop attendance, leave management, and compliance features."),
+    ("Full Stack Developer", "SpotDraft", "Delhi", "Full-time", "12-24 LPA", "React,Node.js,Python,PostgreSQL,AWS,NLP,TypeScript,Docker", "Build AI-powered contract lifecycle management platform. Develop document parsing and legal workflow automation."),
+
+    # ── PropTech & Real Estate ────────────────────────────────
+    ("Software Engineer", "NoBroker", "Bangalore", "Full-time", "10-20 LPA", "Python,Django,React,PostgreSQL,Redis,AWS,Elasticsearch,Docker", "Build India's largest proptech platform eliminating broker commissions. Develop property listing, rental agreements, and home services."),
+    ("Backend Developer", "99acres (Info Edge)", "Noida", "Full-time", "8-16 LPA", "Java,Spring Boot,MySQL,Elasticsearch,Redis,AWS,Kafka,Microservices", "Build real estate marketplace features for property search, listing management, and lead generation."),
+    ("Data Scientist", "Square Yards", "Gurgaon", "Full-time", "8-16 LPA", "Python,Machine Learning,SQL,Statistics,Tableau,Real Estate Analytics", "Build property price prediction and investment recommendation models using location intelligence and market data."),
+
+    # ── AgriTech ──────────────────────────────────────────────
+    ("Backend Engineer", "DeHaat", "Patna", "Full-time", "8-16 LPA", "Python,Django,PostgreSQL,Redis,AWS,Docker,REST APIs,Mobile", "Build agri-commerce platform connecting 900K+ farmers with inputs, advisory, and market linkages across 12 Indian states."),
+    ("ML Engineer", "Cropin Technology", "Bangalore", "Full-time", "10-20 LPA", "Python,Machine Learning,Computer Vision,Satellite Imagery,GIS,Deep Learning,AWS", "Build AI models for crop disease detection, yield prediction, and farm advisory using satellite and drone imagery."),
+    ("Full Stack Developer", "AgroStar", "Ahmedabad", "Full-time", "8-16 LPA", "React,Node.js,Python,MongoDB,AWS,TypeScript,REST APIs,Mobile", "Build agri-input e-commerce and advisory platform serving 6M+ farmers across India."),
+
+    # ── InsurTech ─────────────────────────────────────────────
+    ("Data Scientist", "Acko Insurance", "Bangalore", "Full-time", "14-26 LPA", "Python,Machine Learning,SQL,Statistics,R,Deep Learning,Actuarial Science", "Build underwriting, pricing, and fraud detection models for India's digital-first insurance company."),
+    ("Backend Engineer", "Digit Insurance", "Bangalore", "Full-time", "12-22 LPA", "Java,Spring Boot,PostgreSQL,Redis,Kafka,AWS,Microservices,Docker", "Build insurance policy management and claims processing systems for India's fastest-growing general insurer."),
+    ("ML Engineer", "Turtlemint", "Mumbai", "Full-time", "10-20 LPA", "Python,Machine Learning,NLP,SQL,AWS,Docker,Recommendation Systems", "Build AI-powered insurance advisory and comparison engines. Develop natural language document processing for claims."),
+
+    # ── Space Tech ────────────────────────────────────────────
+    ("Software Engineer", "Skyroot Aerospace", "Hyderabad", "Full-time", "10-20 LPA", "C,C++,Python,Embedded,RTOS,GNC,Simulation,Linux", "Build flight software for Vikram rockets — India's first private orbital launch vehicles. Develop guidance navigation and control systems."),
+    ("Systems Engineer", "Agnikul Cosmos", "Chennai", "Full-time", "8-18 LPA", "Python,MATLAB,C++,Embedded,GNC,Simulation,Systems Engineering", "Design and develop launch vehicle avionics for Agnibaan — the world's first single-piece 3D-printed rocket engine."),
+    ("Data Engineer", "Pixxel Space", "Bangalore", "Full-time", "10-18 LPA", "Python,AWS,Satellite Imagery,GIS,Spark,PostgreSQL,Computer Vision,Rasterio", "Build satellite data processing pipelines for Pixxel's hyperspectral imaging constellation."),
+
+    # ── Media, Entertainment & Content ────────────────────────
+    ("Backend Engineer", "Zee5", "Mumbai", "Full-time", "12-22 LPA", "Java,Python,AWS,Kafka,Redis,Microservices,CDN,Elasticsearch", "Build OTT streaming infrastructure for Zee5 serving 100M+ viewers. Develop content delivery, DRM, and recommendation systems."),
+    ("Software Engineer", "Times Internet", "Noida", "Full-time", "10-20 LPA", "Java,Python,React,AWS,Kafka,Redis,Microservices,Elasticsearch", "Build digital news and entertainment platforms for Times of India, Economic Times, and Cricbuzz."),
+    ("ML Engineer", "Dailyhunt (VerSe Innovation)", "Bangalore", "Full-time", "14-26 LPA", "Python,NLP,Deep Learning,Recommendation Systems,SQL,AWS,Multilingual AI", "Build personalized news recommendation and regional language NLP models for 350M+ Indian users."),
+    ("Data Scientist", "InMobi", "Bangalore", "Full-time", "14-26 LPA", "Python,Machine Learning,SQL,Spark,Ad Tech,Deep Learning,A/B Testing,AWS", "Build programmatic advertising models for InMobi's mobile ad platform reaching 2B+ devices globally."),
+
+    # ── Supply Chain & Manufacturing Tech ─────────────────────
+    ("Software Engineer", "Juspay", "Bangalore", "Full-time", "12-22 LPA", "Haskell,PureScript,Java,Python,PostgreSQL,Redis,AWS,Payments", "Build payment orchestration infrastructure processing 50M+ transactions daily for Amazon, Flipkart, and Jio."),
+    ("Data Engineer", "Moglix", "Noida", "Full-time", "10-18 LPA", "Python,Spark,SQL,AWS,Airflow,Kafka,Tableau,ETL", "Build B2B manufacturing commerce data platform serving 500+ large manufacturers and 5000+ suppliers."),
+    ("Backend Developer", "OfBusiness", "Gurgaon", "Full-time", "12-22 LPA", "Java,Python,Spring Boot,MySQL,Redis,Kafka,AWS,Microservices", "Build B2B industrial commodity marketplace handling ₹5000+ crore GMV monthly."),
+
+    # ── Consulting & IT Services (More) ───────────────────────
+    ("Software Engineer", "Persistent Systems", "Pune", "Full-time", "8-16 LPA", "Java,Python,React,AWS,Docker,Spring Boot,Microservices,SQL", "Build enterprise software solutions for healthcare, life sciences, and BFSI clients across North America and Europe."),
+    ("Data Analyst", "Coforge (Niit Tech)", "Noida", "Full-time", "6-12 LPA", "Python,SQL,Power BI,Tableau,Excel,ETL,Statistics,Azure", "Deliver data analytics and BI solutions for travel, BFS, and insurance clients globally."),
+    ("Cloud Consultant", "Hexaware Technologies", "Mumbai", "Full-time", "8-16 LPA", "AWS,Azure,Python,Terraform,Docker,Kubernetes,DevOps,Jenkins", "Lead cloud migration and modernization programs for Fortune 500 clients."),
+    ("DevOps Engineer", "Birlasoft", "Noida", "Full-time", "7-14 LPA", "AWS,Azure,Kubernetes,Docker,Jenkins,Terraform,Python,Ansible", "Build DevOps pipelines and cloud infrastructure for manufacturing and BFSI sector clients."),
+
+    # ── Social Impact & NGO Tech ──────────────────────────────
+    ("Full Stack Developer", "iSPIRT Foundation", "Bangalore", "Full-time", "8-16 LPA", "Python,React,Node.js,PostgreSQL,AWS,Docker,REST APIs,Open Source", "Build India's digital public infrastructure including Account Aggregator, ONDC, and Beckn Protocol."),
+    ("Software Engineer", "EkStep Foundation", "Bangalore", "Full-time", "8-16 LPA", "Java,Python,Node.js,React,AWS,Kubernetes,Open Source,EdTech", "Develop Diksha — India's national digital education platform used by 200M+ students and 3M+ teachers."),
+
+    # ── Automotive Tech ───────────────────────────────────────
+    ("Software Engineer", "Mahindra Tech", "Pune", "Full-time", "8-16 LPA", "C,C++,Python,Automotive,AUTOSAR,CAN,Embedded,MISRA C", "Build advanced driver assistance systems and connected vehicle software for Mahindra electric vehicles."),
+    ("ADAS Engineer", "Tata Elxsi", "Bangalore", "Full-time", "10-20 LPA", "Python,C++,Computer Vision,Deep Learning,ROS,Sensor Fusion,Autonomous Driving", "Design perception and planning algorithms for autonomous driving platforms. Develop LIDAR, camera, and radar fusion systems."),
+    ("Embedded Developer", "Maruti Suzuki India", "Gurgaon", "Full-time", "7-14 LPA", "C,C++,AUTOSAR,CAN,Python,Embedded Linux,QNX,Diagnostics", "Develop infotainment, telematics, and OBD diagnostic software for Maruti's next-generation connected vehicles."),
+
+    # ── International Companies with Large India Teams ─────────
+    ("Software Engineer", "Uber India", "Hyderabad", "Full-time", "22-40 LPA", "Go,Python,Java,Kafka,MySQL,Kubernetes,AWS,Distributed Systems", "Build global ride-sharing and Uber Eats systems. Work on routing, pricing, and marketplace platforms at massive scale."),
+    ("Backend Engineer", "LinkedIn India", "Bangalore", "Full-time", "24-45 LPA", "Java,Scala,Python,Kafka,Espresso,Hadoop,Spark,Kubernetes", "Build professional networking features used by 950M+ members. Work on feed, search, and recruiter intelligence."),
+    ("Software Engineer", "Adobe India", "Noida", "Full-time", "20-38 LPA", "C++,Java,Python,React,AWS,Machine Learning,Computer Vision,Creative AI", "Build generative AI features for Adobe Firefly, Photoshop, and Premiere Pro. Work on Sensei AI platform."),
+    ("Data Scientist", "Spotify India", "Mumbai", "Full-time", "20-35 LPA", "Python,Machine Learning,Spark,SQL,A/B Testing,Recommendation Systems,Scala", "Build personalized music recommendation models for 600M+ users. Develop Discover Weekly and Wrapped features."),
+    ("SDE II", "Netflix India", "Mumbai", "Full-time", "25-45 LPA", "Java,Python,AWS,Kafka,Microservices,React,System Design,Chaos Engineering", "Build streaming infrastructure handling 250M+ subscribers. Develop content delivery, A/B testing, and recommendation systems."),
 ]
 
 def seed_jobs():

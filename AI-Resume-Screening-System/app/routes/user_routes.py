@@ -57,6 +57,26 @@ def candidate_stats(user_id):
             (user_id, week_ago)
         ).fetchone()[0]
 
+        # Daily profile views for last 7 days (for the chart)
+        day_names   = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        views_daily = []
+        for i in range(6, -1, -1):  # 6 days ago → today
+            day = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime('%Y-%m-%d')
+            cnt = conn.execute(
+                "SELECT COUNT(*) FROM notifications WHERE user_id=? AND type='profile_view' AND created_at LIKE ?",
+                (user_id, day + '%')
+            ).fetchone()[0]
+            views_daily.append(cnt)
+        # Also collect daily application counts for the same 7 days
+        apps_daily = []
+        for i in range(6, -1, -1):
+            day = (datetime.datetime.now() - datetime.timedelta(days=i)).strftime('%Y-%m-%d')
+            cnt = conn.execute(
+                "SELECT COUNT(*) FROM applications WHERE user_id=? AND applied_at LIKE ?",
+                (user_id, day + '%')
+            ).fetchone()[0]
+            apps_daily.append(cnt)
+
         skills = [s.strip() for s in (u.get('skills') or '').split(',') if s.strip()]
         base_score = u.get('ats_score') or 0
 
@@ -91,6 +111,16 @@ def candidate_stats(user_id):
                     skill_counts[s_val] = skill_counts.get(s_val, 0) + 1
         top_skills = sorted(skill_counts.items(), key=lambda x: x[1], reverse=True)[:8]
 
+        # Total candidates with any skills (for % calculation)
+        total_candidates_with_skills = len(skills_raw) or 1
+
+        # Real market demand % per skill: what % of candidates on platform have this skill
+        # Capped between 5–98 to avoid 0% or 100% extremes
+        skill_demand_pct = {
+            s: min(98, max(5, round((c / total_candidates_with_skills) * 100)))
+            for s, c in skill_counts.items()
+        }
+
         now    = datetime.datetime.now()
         months = [(now.month - i - 1) % 12 + 1 for i in range(5, -1, -1)]
         month_names    = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -122,8 +152,12 @@ def candidate_stats(user_id):
         'skills_count':         len(skills),
         'skills':               skills,
         'missing_skills':       missing[:4],
+        'skill_demand_pct':     skill_demand_pct,
         'profile_views':        profile_views,
         'profile_views_weekly': profile_views_weekly,
+        'views_daily':          views_daily,
+        'apps_daily':           apps_daily,
+        'day_names':            day_names,
         'applications':         apps,
         'shortlisted':          shortlisted,
         'job_matches':          total_jobs,
