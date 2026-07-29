@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="static/css/style.css">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='10' fill='%231260cc'/><text x='20' y='27' text-anchor='middle' font-size='20'>🤖</text></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231260cc'/%3E%3Cstop offset='100%25' stop-color='%237c3aed'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='url(%23g)'/%3E%3Ctext x='20' y='28' text-anchor='middle' fill='white' font-family='Arial Black,Arial' font-size='18' font-weight='900'%3ETS%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 
@@ -293,17 +293,40 @@
   <div class="auth-left">
     <div class="auth-quote">
       <h2>Find the perfect candidate in seconds.</h2>
-      <p>Our AI-powered screening system analyzes thousands of resumes to find your ideal match, saving you hours of manual work.</p>
+      <p>Our AI-powered screening system analyzes thousands of resumes, scores them with ATS, and ranks the best fit for every role — automatically.</p>
+      <div class="auth-trust-badges">
+        <div class="auth-trust-badge">
+          <div class="auth-trust-badge-icon"><i class="fa-solid fa-shield-halved" style="color:#4e9d8c"></i></div>
+          <div class="auth-trust-badge-text">
+            <strong>Enterprise-Grade Security</strong>
+            <span>End-to-end encrypted, OTP-verified logins</span>
+          </div>
+        </div>
+        <div class="auth-trust-badge">
+          <div class="auth-trust-badge-icon"><i class="fa-solid fa-brain" style="color:#a78bfa"></i></div>
+          <div class="auth-trust-badge-text">
+            <strong>AI-Powered Screening</strong>
+            <span>NLP resume parsing + ATS scoring in seconds</span>
+          </div>
+        </div>
+        <div class="auth-trust-badge">
+          <div class="auth-trust-badge-icon"><i class="fa-solid fa-rocket" style="color:#f59e0b"></i></div>
+          <div class="auth-trust-badge-text">
+            <strong>10x Faster Hiring</strong>
+            <span>Screen hundreds of resumes automatically</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="auth-right">
     <div class="auth-card">
       <div class="auth-logo">
-        <div class="logo-mark">🤖</div>
+        <div class="logo-mark">TS</div>
         <div class="logo-name">Talent<span>Sync</span></div>
       </div>
       <div class="auth-title">Welcome Back</div>
-      <div class="auth-sub">Sign in to your TalentSync account.</div>
+      <div class="auth-sub">Sign in to your TalentSync account</div>
 
       <div class="role-picker">
         <div class="role-option active" onclick="Auth.setRole('login','candidate',this)">
@@ -315,42 +338,55 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">REGISTERED EMAIL</label>
+        <label class="form-label">Email Address</label>
         <div class="input-icon-wrap">
           <i class="input-icon fas fa-envelope"></i>
-          <input id="login-email" class="form-control" type="email" placeholder="Enter your email" autocomplete="email" value="">
+          <input id="login-email" class="form-control" type="email" placeholder="you@example.com" autocomplete="email" onkeydown="if(event.key==='Enter') Auth.login()">
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">SECURE PASSWORD</label>
+        <label class="form-label">Password</label>
         <div class="input-icon-wrap">
           <i class="input-icon fas fa-lock"></i>
-          <input id="login-password" class="form-control" type="password" placeholder="Enter your password" autocomplete="current-password" value="">
+          <input id="login-password" class="form-control" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') Auth.login()">
         </div>
       </div>
-      
-      <div style="display: flex; justify-content: space-between; align-items: center; margin:-10px 0 18px">
-        <label style="font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 8px; cursor: pointer;">
-          <input type="checkbox" style="accent-color: var(--primary);"> Remember me
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:-8px 0 20px">
+        <label for="remember-me-chk" style="font-size:13px;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none">
+          <span style="position:relative;width:36px;height:20px;display:inline-block;flex-shrink:0">
+            <input type="checkbox" id="remember-me-chk"
+              onchange="
+                var s=document.getElementById('rm-track');
+                var k=document.getElementById('rm-knob');
+                s.style.background=this.checked?'var(--primary)':'rgba(255,255,255,0.15)';
+                k.style.transform=this.checked?'translateX(16px)':'translateX(0)';
+              "
+              style="opacity:0;width:0;height:0;position:absolute">
+            <span id="rm-track" style="position:absolute;inset:0;background:rgba(255,255,255,0.15);border-radius:20px;transition:background 0.25s;border:1px solid rgba(255,255,255,0.2);pointer-events:none">
+              <span id="rm-knob" style="position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform 0.25s;box-shadow:0 1px 4px rgba(0,0,0,0.3)"></span>
+            </span>
+          </span>
+          Remember me
         </label>
-        <a style="font-size:13px;color:var(--text-1);cursor:pointer;font-weight:600" onclick="Router.go('forgot')">Forgot Password?</a>
+        <a style="font-size:13px;cursor:pointer;color:rgba(255,255,255,0.5)" onclick="Router.go('forgot')">Forgot Password?</a>
       </div>
 
-      <button class="btn btn-primary btn-full btn-lg" onclick="Auth.login()">
-        Secure Login <i class="fas fa-lock" style="margin-left:6px;"></i>
+      <button class="btn btn-primary btn-full btn-lg" style="width:100%;justify-content:center;" onclick="Auth.login()">
+        <i class="fas fa-lock" style="margin-right:8px;"></i> Sign In Securely
       </button>
 
-      <div class="auth-divider"><span>OR SIGN IN WITH</span></div>
+      <div class="auth-divider"><span>OR CONTINUE WITH</span></div>
 
-      <button class="btn btn-outline btn-full" style="background: white; color: #333; border-color: #ddd;">
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" style="margin-right: 8px;"> Continue with Google
+      <button class="btn btn-outline btn-full" style="width:100%;justify-content:center;">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" style="margin-right:8px;"> Continue with Google
       </button>
 
-      <div class="auth-footer" style="margin-top:24px">
-        New to TalentSync? <a onclick="Router.go('register')">Create an account</a>
+      <div class="auth-footer">
+        New to TalentSync? <a onclick="Router.go('register')">Create a free account</a>
       </div>
-      <div class="auth-back" style="margin-top: 12px; text-align: center; cursor: pointer; color: var(--text-2); font-size: 13px; font-weight: 500;" onclick="Router.go('landing')">
-        <i class="fas fa-arrow-left"></i> BACK TO HOME
+      <div class="auth-back" onclick="Router.go('landing')">
+        <i class="fas fa-arrow-left"></i> Back to Home
       </div>
     </div>
   </div>
@@ -363,93 +399,164 @@
   <div class="auth-left">
     <div class="auth-quote">
       <h2>Join the future of recruitment.</h2>
-      <p>Whether you're a candidate looking for the perfect role, or an HR professional streamlining your hiring process, TalentSync is here for you.</p>
+      <p>Whether you're a candidate or an HR professional, TalentSync's AI gives you an unfair advantage in today's competitive job market.</p>
+      <div class="auth-trust-badges">
+        <div class="auth-trust-badge">
+          <div class="auth-trust-badge-icon"><i class="fa-solid fa-envelope-circle-check" style="color:#10b981"></i></div>
+          <div class="auth-trust-badge-text">
+            <strong>Email Verified Accounts Only</strong>
+            <span>OTP verification keeps the platform secure</span>
+          </div>
+        </div>
+        <div class="auth-trust-badge">
+          <div class="auth-trust-badge-icon"><i class="fa-solid fa-chart-line" style="color:#3b82f6"></i></div>
+          <div class="auth-trust-badge-text">
+            <strong>Instant ATS Score</strong>
+            <span>Get your resume scored in under 30 seconds</span>
+          </div>
+        </div>
+        <div class="auth-trust-badge">
+          <div class="auth-trust-badge-icon"><i class="fa-solid fa-crosshairs" style="color:#f97316"></i></div>
+          <div class="auth-trust-badge-text">
+            <strong>Smart Job Matching</strong>
+            <span>AI matches you to roles that fit your profile</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="auth-right">
     <div class="auth-card auth-card-wide">
       <div class="auth-logo">
-        <div class="logo-mark">🤖</div>
+        <div class="logo-mark">TS</div>
         <div class="logo-name">Talent<span>Sync</span></div>
       </div>
-      <div class="auth-title">Create Your Account</div>
-      <div class="auth-sub">Join TalentSync — free forever for candidates</div>
 
-      <div class="role-picker">
-        <div class="role-option active" onclick="Auth.setRole('register','candidate',this)">
-          <i class="fas fa-user"></i>I'm a Candidate
-        </div>
-        <div class="role-option" onclick="Auth.setRole('register','hr',this)">
-          <i class="fas fa-building"></i>I'm an HR Admin
-        </div>
-      </div>
+      <!-- ── STEP 1: Fill Details ── -->
+      <div id="reg-step-1">
+        <div class="auth-title">Create Your Account</div>
+        <div class="auth-sub">Join TalentSync — free forever for candidates</div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">FIRST NAME</label>
-          <input id="reg-fname" class="form-control" placeholder="First Name" autocomplete="given-name">
+        <div class="role-picker">
+          <div class="role-option active" onclick="Auth.setRole('register','candidate',this)">
+            <i class="fas fa-user"></i>I'm a Candidate
+          </div>
+          <div class="role-option" onclick="Auth.setRole('register','hr',this)">
+            <i class="fas fa-building"></i>I'm an HR Admin
+          </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">LAST NAME</label>
-          <input id="reg-lname" class="form-control" placeholder="Last Name" autocomplete="family-name">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">REGISTERED EMAIL</label>
-        <div class="input-icon-wrap">
-          <i class="input-icon fas fa-envelope"></i>
-          <input id="reg-email" class="form-control" type="email" placeholder="you@example.com">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">SECURE PASSWORD</label>
-          <div class="input-icon-wrap">
-            <i class="input-icon fas fa-lock"></i>
-            <input id="reg-pass" class="form-control" type="password" placeholder="Enter password" autocomplete="new-password">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">FIRST NAME</label>
+            <input id="reg-fname" class="form-control" placeholder="First Name" autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">LAST NAME</label>
+            <input id="reg-lname" class="form-control" placeholder="Last Name" autocomplete="family-name">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">CONFIRM PASSWORD</label>
+          <label class="form-label">EMAIL ADDRESS</label>
           <div class="input-icon-wrap">
-            <i class="input-icon fas fa-lock"></i>
-            <input id="reg-cpass" class="form-control" type="password" placeholder="Confirm password" autocomplete="new-password">
+            <i class="input-icon fas fa-envelope"></i>
+            <input id="reg-email" class="form-control" type="email" placeholder="you@example.com">
           </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">SECURE PASSWORD</label>
+            <div class="input-icon-wrap">
+              <i class="input-icon fas fa-lock"></i>
+              <input id="reg-pass" class="form-control" type="password" placeholder="Enter password" autocomplete="new-password">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">CONFIRM PASSWORD</label>
+            <div class="input-icon-wrap">
+              <i class="input-icon fas fa-lock"></i>
+              <input id="reg-cpass" class="form-control" type="password" placeholder="Confirm password" autocomplete="new-password">
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:12px;color:#64748b;margin-bottom:18px;text-align:center;">
+          By creating an account you agree to our <a>Terms of Service</a>.
+        </div>
+
+        <div id="reg-step1-error" class="alert hidden" style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:16px">
+          <i class="fas fa-exclamation-circle" style="margin-right:8px;"></i>
+          <span id="reg-step1-error-msg"></span>
+        </div>
+
+        <button id="reg-send-otp-btn" class="btn btn-primary btn-full btn-lg" style="width:100%;justify-content:center;" onclick="Auth.sendRegisterOtp()">
+          <i class="fas fa-envelope" style="margin-right:8px;"></i> Verify Email & Continue
+        </button>
+
+        <div class="auth-footer" style="margin-top:16px">
+          Already have an account? <a onclick="Router.go('login')">Sign in</a>
+        </div>
+        <div class="auth-back" onclick="Router.go('landing')">
+          <i class="fas fa-arrow-left"></i> BACK TO HOME
         </div>
       </div>
 
-      <div style="font-size:12px;color:#64748b;margin-bottom:18px;text-align:center;">
-        By creating an account you agree to our <a>Terms of Service</a>.
+      <!-- ── STEP 2: OTP Verify ── -->
+      <div id="reg-step-2" class="hidden">
+        <div class="auth-title" style="font-size:22px;">Verify Your Email</div>
+        <div class="auth-sub" id="reg-otp-hint">A 6-digit code was sent to your email.</div>
+
+        <!-- Email verified badge -->
+        <div style="display:flex;align-items:center;gap:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 16px;margin:16px 0;">
+          <i class="fas fa-envelope-circle-check" style="color:#16a34a;font-size:20px;"></i>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#15803d">Email Verification</div>
+            <div id="reg-otp-email-display" style="font-size:12px;color:#16a34a"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">6-DIGIT OTP</label>
+          <div class="input-icon-wrap">
+            <i class="input-icon fas fa-key"></i>
+            <input id="reg-otp" class="form-control" type="text" inputmode="numeric"
+                   maxlength="6" placeholder="• • • • • •"
+                   style="letter-spacing:8px;font-size:22px;font-weight:700;text-align:center;"
+                   onkeydown="if(event.key==='Enter') Auth.verifyRegisterOtp()">
+          </div>
+        </div>
+
+        <div id="reg-otp-error" class="alert hidden" style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:16px">
+          <i class="fas fa-exclamation-circle" style="margin-right:8px;"></i>
+          <span id="reg-otp-error-msg">Invalid or expired OTP.</span>
+        </div>
+
+        <button id="reg-verify-btn" class="btn btn-primary btn-full btn-lg" style="width:100%;justify-content:center;" onclick="Auth.verifyRegisterOtp()">
+          <i class="fas fa-check-circle" style="margin-right:8px;"></i> Verify & Create Account
+        </button>
+
+        <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--text-3)">
+          Didn't receive it?
+          <a onclick="Auth.sendRegisterOtp(true)" style="cursor:pointer;color:var(--primary);font-weight:600">Resend OTP</a>
+        </div>
+        <div class="auth-back" onclick="document.getElementById('reg-step-1').classList.remove('hidden');document.getElementById('reg-step-2').classList.add('hidden')">
+          <i class="fas fa-arrow-left"></i> GO BACK
+        </div>
       </div>
 
-      <button class="btn btn-primary btn-full btn-lg" style="width: 100%; justify-content: center;" onclick="Auth.register()">
-        Secure Register <i class="fas fa-rocket" style="margin-left:6px;"></i>
-      </button>
-
-      <div class="auth-divider"><span>OR REGISTER WITH</span></div>
-
-      <button class="btn btn-outline btn-full" style="width: 100%; justify-content: center;">
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" style="margin-right: 8px;"> Continue with Google
-      </button>
-
-      <div class="auth-footer">
-        Already have an account? <a onclick="Router.go('login')">Sign in</a>
-      </div>
-      <div class="auth-back" onclick="Router.go('landing')">
-        <i class="fas fa-arrow-left"></i> BACK TO HOME
-      </div>
     </div>
   </div>
 </div>
 
+
 <!-- ═══════════════════════════════════════════════════════════
-     PAGE 4 — FORGOT PASSWORD
+     PAGE 4 — FORGOT PASSWORD  (3-step OTP flow)
 ═══════════════════════════════════════════════════════════ -->
 <div id="page-forgot" class="page auth-page">
   <div class="auth-left">
     <div class="auth-quote">
       <h2>Don't worry, it happens to everyone.</h2>
-      <p>Enter your registered email address and we'll send you a secure link to reset your password and get back in.</p>
+      <p>Enter your registered email, get a 6-digit OTP, then set a brand new password — all in under a minute.</p>
     </div>
   </div>
   <div class="auth-right">
@@ -458,37 +565,103 @@
         <div class="logo-mark"><i class="fas fa-robot"></i></div>
         <div class="logo-name">Talent<span>Sync</span></div>
       </div>
-      <div class="auth-title">Reset Password</div>
-      <div class="auth-sub">Enter your email and we'll send you a secure reset link.</div>
 
-      <div class="form-group" style="margin-top:8px">
-        <label class="form-label">REGISTERED EMAIL</label>
-        <div class="input-icon-wrap">
-          <i class="input-icon fas fa-envelope"></i>
-          <input id="forgot-email" class="form-control" type="email" placeholder="you@example.com">
+      <!-- ── STEP 1: Email ── -->
+      <div id="forgot-step-1">
+        <div class="auth-title">Reset Password</div>
+        <div class="auth-sub">We'll send a 6-digit OTP to your registered email.</div>
+
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label">REGISTERED EMAIL</label>
+          <div class="input-icon-wrap">
+            <i class="input-icon fas fa-envelope"></i>
+            <input id="forgot-email" class="form-control" type="email" placeholder="you@example.com"
+                   onkeydown="if(event.key==='Enter') Auth.forgotPwd()">
+          </div>
+        </div>
+
+        <div id="forgot-error" class="alert hidden" style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:16px">
+          <i class="fas fa-exclamation-circle" style="margin-right:8px;"></i>
+          <span id="forgot-error-msg">Email not found in our system.</span>
+        </div>
+
+        <button id="forgot-send-btn" class="btn btn-primary btn-full btn-lg" style="width:100%;justify-content:center;" onclick="Auth.forgotPwd()">
+          <i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send OTP
+        </button>
+        <div class="auth-footer" style="margin-top:16px">
+          Remember your password? <a onclick="Router.go('login')">Sign in</a>
+        </div>
+        <div class="auth-back" onclick="Router.go('login')">
+          <i class="fas fa-arrow-left"></i> BACK TO SIGN IN
         </div>
       </div>
 
-      <div id="forgot-success" class="alert alert-info hidden" style="margin-bottom:16px">
-        <i class="fas fa-check-circle" style="color:#10b981;margin-right:8px;"></i>
-        Password reset link sent! Check your email inbox.
+      <!-- ── STEP 2: OTP Verify ── -->
+      <div id="forgot-step-2" class="hidden">
+        <div class="auth-title" style="font-size:22px;">Enter OTP</div>
+        <div class="auth-sub" id="forgot-otp-hint">A 6-digit OTP was sent to your email.</div>
+
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label">6-DIGIT OTP</label>
+          <div class="input-icon-wrap">
+            <i class="input-icon fas fa-key"></i>
+            <input id="forgot-otp" class="form-control" type="text" inputmode="numeric"
+                   maxlength="6" placeholder="• • • • • •"
+                   style="letter-spacing:8px;font-size:22px;font-weight:700;text-align:center;"
+                   onkeydown="if(event.key==='Enter') Auth.verifyOtp()">
+          </div>
+        </div>
+
+        <div id="forgot-otp-error" class="alert hidden" style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:16px">
+          <i class="fas fa-exclamation-circle" style="margin-right:8px;"></i>
+          <span id="forgot-otp-error-msg">Invalid or expired OTP.</span>
+        </div>
+
+        <button id="forgot-verify-btn" class="btn btn-primary btn-full btn-lg" style="width:100%;justify-content:center;" onclick="Auth.verifyOtp()">
+          <i class="fas fa-check-circle" style="margin-right:8px;"></i> Verify OTP
+        </button>
+
+        <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--text-3)">
+          Didn't receive it?
+          <a id="forgot-resend-link" onclick="Auth.forgotPwd(true)" style="cursor:pointer;color:var(--primary);font-weight:600">Resend OTP</a>
+        </div>
+        <div class="auth-back" onclick="document.getElementById('forgot-step-1').classList.remove('hidden');document.getElementById('forgot-step-2').classList.add('hidden')">
+          <i class="fas fa-arrow-left"></i> CHANGE EMAIL
+        </div>
       </div>
 
-      <div id="forgot-error" class="alert hidden" style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:16px">
-        <i class="fas fa-exclamation-circle" style="margin-right:8px;"></i>
-        <span id="forgot-error-msg">Email not found in our system.</span>
+      <!-- ── STEP 3: New Password ── -->
+      <div id="forgot-step-3" class="hidden">
+        <div class="auth-title" style="font-size:22px;">New Password</div>
+        <div class="auth-sub">Choose a strong password for your account.</div>
+
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label">NEW PASSWORD</label>
+          <div class="input-icon-wrap">
+            <i class="input-icon fas fa-lock"></i>
+            <input id="forgot-new-pass" class="form-control" type="password" placeholder="Min 8 characters"
+                   onkeydown="if(event.key==='Enter') Auth.resetPassword()">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">CONFIRM PASSWORD</label>
+          <div class="input-icon-wrap">
+            <i class="input-icon fas fa-lock"></i>
+            <input id="forgot-conf-pass" class="form-control" type="password" placeholder="Repeat password"
+                   onkeydown="if(event.key==='Enter') Auth.resetPassword()">
+          </div>
+        </div>
+
+        <div id="forgot-reset-error" class="alert hidden" style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:16px">
+          <i class="fas fa-exclamation-circle" style="margin-right:8px;"></i>
+          <span id="forgot-reset-error-msg">Passwords do not match.</span>
+        </div>
+
+        <button id="forgot-reset-btn" class="btn btn-primary btn-full btn-lg" style="width:100%;justify-content:center;" onclick="Auth.resetPassword()">
+          <i class="fas fa-shield-halved" style="margin-right:8px;"></i> Reset Password
+        </button>
       </div>
 
-      <button class="btn btn-primary btn-full btn-lg" style="width:100%;justify-content:center;" onclick="Auth.forgotPwd()">
-        <i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send Reset Link
-      </button>
-
-      <div class="auth-footer">
-        Remember your password? <a onclick="Router.go('login')">Sign in</a>
-      </div>
-      <div class="auth-back" onclick="Router.go('login')">
-        <i class="fas fa-arrow-left"></i> BACK TO SIGN IN
-      </div>
     </div>
   </div>
 </div>
@@ -750,6 +923,21 @@
 
         <!-- ── CAND: Analysis ── -->
         <div id="cand-analysis" data-portal="cand" class="hidden">
+
+          <!-- Empty state: shown before any resume is uploaded -->
+          <div id="analysis-empty-state" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:20px;text-align:center;padding:40px">
+            <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#e0f2fe,#ddd6fe);display:flex;align-items:center;justify-content:center;font-size:36px;">📄</div>
+            <div>
+              <div style="font-size:22px;font-weight:700;color:var(--text-1);margin-bottom:8px">No Resume Analyzed Yet</div>
+              <div style="font-size:15px;color:var(--text-3);max-width:400px;line-height:1.6">Upload your resume first and our AI will extract your skills, projects, education and more.</div>
+            </div>
+            <button class="btn btn-primary" onclick="Router.inner('cand','upload')" style="padding:12px 28px;font-size:15px">
+              <i class="fas fa-upload" style="margin-right:8px"></i> Upload Resume Now
+            </button>
+          </div>
+
+          <!-- Actual analysis content: shown after resume is uploaded -->
+          <div id="analysis-content" class="hidden">
           <div class="dash-grid">
             <div class="card">
               <div class="card-header"><span class="card-title">Extracted Information</span><span class="badge badge-teal"><i class="fas fa-robot"></i> AI Parsed</span></div>
@@ -786,14 +974,21 @@
               </div>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="projects-card">
             <div class="card-header"><span class="card-title">Projects Extracted</span><span class="badge badge-primary">Dynamic</span></div>
             <div class="card-body">
               <div id="profile-projects-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
-                <!-- Dynamically populated if supported, otherwise empty for now -->
+                <!-- Populated after resume upload -->
+              </div>
+              <!-- Empty state shown when no projects extracted -->
+              <div id="projects-empty-state" style="text-align:center;padding:32px 20px;color:var(--text-3)">
+                <i class="fas fa-folder-open" style="font-size:36px;opacity:0.3;margin-bottom:12px;display:block"></i>
+                <div style="font-size:14px;font-weight:600;margin-bottom:6px">No Projects Detected Yet</div>
+                <div style="font-size:13px">Upload your resume and AI will automatically extract your project details here.</div>
               </div>
             </div>
           </div>
+          </div><!-- /analysis-content -->
         </div>
 
         <!-- ── CAND: ATS Score ── -->
@@ -1076,8 +1271,12 @@
               </div>
             </div>
             <div style="margin-left:auto">
-              <label class="btn btn-teal" style="cursor:pointer" for="profile-pic-upload"><i class="fas fa-camera"></i> Change Photo</label>
-              <input type="file" id="profile-pic-upload" style="display:none" accept="image/*" onchange="Toast.show('Profile photo updated!','success')">
+              <button class="btn btn-teal" style="cursor:pointer" onclick="document.getElementById('profile-pic-upload').click()">
+                <i class="fas fa-camera"></i> Change Photo
+              </button>
+              <input type="file" id="profile-pic-upload" accept="image/*"
+                style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px"
+                onchange="changeProfilePhoto(this,'cand')">
             </div>
           </div>
           <div class="dash-grid">
@@ -1135,49 +1334,32 @@
               </div>
               <!-- ML Insights Card — powered by real DB data -->
               <div class="card" id="profile-ml-card">
-                <div class="card-header"><span class="card-title">&#129302; ML Insights</span></div>
+                <div class="card-header"><span class="card-title"><i class="fa-solid fa-wand-magic-sparkles" style="color: #8b5cf6; margin-right: 8px;"></i> ML Insights</span></div>
                 <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
                   <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
                     <div>
                       <div style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Skill Cluster</div>
                       <div id="profile-cluster-label" style="font-weight:700;font-size:15px;color:var(--primary)">Analyzing...</div>
                     </div>
-                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(18,96,204,.12);display:flex;align-items:center;justify-content:center;font-size:18px">&#127760;</div>
+                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(18,96,204,.12);display:flex;align-items:center;justify-content:center;font-size:18px"><i class="fa-solid fa-diagram-project" style="color: var(--primary);"></i></div>
                   </div>
                   <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
                     <div>
                       <div style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Outlier Status</div>
-                      <div id="profile-outlier-status" style="font-weight:700;font-size:15px;color:#16a34a">&#10003; Normal Profile</div>
+                      <div id="profile-outlier-status" style="font-weight:700;font-size:15px;color:#16a34a"><i class="fa-solid fa-check"></i> Normal Profile</div>
                     </div>
-                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(22,163,74,.12);display:flex;align-items:center;justify-content:center;font-size:18px" id="profile-outlier-icon">&#9989;</div>
+                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(22,163,74,.12);display:flex;align-items:center;justify-content:center;font-size:18px" id="profile-outlier-icon"><i class="fa-solid fa-shield-halved" style="color: #16a34a;"></i></div>
                   </div>
                   <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
                     <div>
                       <div style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Profile Strength</div>
                       <div id="profile-strength-label" style="font-weight:700;font-size:15px;color:#d97706">Loading...</div>
                     </div>
-                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(217,119,6,.12);display:flex;align-items:center;justify-content:center;font-size:18px">&#9889;</div>
+                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(217,119,6,.12);display:flex;align-items:center;justify-content:center;font-size:18px"><i class="fa-solid fa-bolt" style="color: #d97706;"></i></div>
                   </div>
                 </div>
               </div>
-              <div class="card">
-                <div class="card-header"><span class="card-title">Change Password</span></div>
-                <div class="card-body">
-                  <div class="form-group">
-                    <label class="form-label">Current Password</label>
-                    <input id="cand-cur-pwd" class="form-control" type="password" placeholder="••••••••">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">New Password</label>
-                    <input id="cand-new-pwd" class="form-control" type="password" placeholder="Min 6 characters">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Confirm New Password</label>
-                    <input id="cand-conf-pwd" class="form-control" type="password" placeholder="Repeat new password">
-                  </div>
-                  <button class="btn btn-navy" onclick="changePwd('cand')"><i class="fas fa-key"></i> Change Password</button>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -1195,42 +1377,89 @@
         <div id="cand-settings" data-portal="cand" class="hidden">
           <div style="font-size:20px;font-weight:800;font-family:'Syne',sans-serif;margin-bottom:22px">Settings</div>
           <div class="settings-layout">
-            <div class="card" style="padding:16px">
+            <div class="card" style="padding:16px; align-self: start;">
               <div class="settings-nav">
-                <div class="settings-nav-item active" onclick="document.querySelectorAll('.settings-nav-item').forEach(i=>i.classList.remove('active'));this.classList.add('active')"><i class="fas fa-bell"></i>Notifications</div>
-                <div class="settings-nav-item" onclick="document.querySelectorAll('.settings-nav-item').forEach(i=>i.classList.remove('active'));this.classList.add('active')"><i class="fas fa-shield-alt"></i>Privacy</div>
-                <div class="settings-nav-item" onclick="document.querySelectorAll('.settings-nav-item').forEach(i=>i.classList.remove('active'));this.classList.add('active')"><i class="fas fa-eye"></i>Appearance</div>
-                <div class="settings-nav-item" onclick="document.querySelectorAll('.settings-nav-item').forEach(i=>i.classList.remove('active'));this.classList.add('active')"><i class="fas fa-language"></i>Language</div>
+                <div class="settings-nav-item active" onclick="switchSettingTab('cand-notif', this)"><i class="fas fa-bell"></i>Notifications</div>
+                <div class="settings-nav-item" onclick="switchSettingTab('cand-privacy', this)"><i class="fas fa-shield-alt"></i>Privacy</div>
+                <div class="settings-nav-item" onclick="switchSettingTab('cand-appearance', this)"><i class="fas fa-eye"></i>Appearance</div>
+                <div class="settings-nav-item" onclick="switchSettingTab('cand-language', this)"><i class="fas fa-language"></i>Language</div>
               </div>
             </div>
             <div class="card">
-              <div class="card-header"><span class="card-title">Notification Preferences</span></div>
-              <div class="card-body">
-                <div style="display:flex;flex-direction:column;gap:20px">
-                  <div style="display:flex;justify-content:space-between;align-items:center">
-                    <div><div style="font-size:14px;font-weight:600">Email Notifications</div><div style="font-size:13px;color:var(--text-3)">Get job matches and updates via email</div></div>
-                    <label class="toggle-switch"><input id="toggle-email" type="checkbox" checked onchange="saveSettings()"><span class="toggle-slider"></span></label>
+              <!-- Settings Tab: Notifications -->
+              <div id="set-tab-cand-notif" class="set-tab-pane">
+                <div class="card-header"><span class="card-title">Notification Preferences</span></div>
+                <div class="card-body">
+                  <div style="display:flex;flex-direction:column;gap:20px">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                      <div><div style="font-size:14px;font-weight:600">Email Notifications</div><div style="font-size:13px;color:var(--text-3)">Get job matches and updates via email</div></div>
+                      <label class="toggle-switch"><input id="toggle-email" type="checkbox" checked onchange="saveSettings()"><span class="toggle-slider"></span></label>
+                    </div>
+                    <hr class="divider" style="margin:0">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                      <div><div style="font-size:14px;font-weight:600">SMS Alerts</div><div style="font-size:13px;color:var(--text-3)">Get important alerts via SMS</div></div>
+                      <label class="toggle-switch"><input id="toggle-sms" type="checkbox" onchange="saveSettings()"><span class="toggle-slider"></span></label>
+                    </div>
+                    <hr class="divider" style="margin:0">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                      <div><div style="font-size:14px;font-weight:600">Job Match Alerts</div><div style="font-size:13px;color:var(--text-3)">Notify me when new jobs match my profile</div></div>
+                      <label class="toggle-switch"><input id="toggle-jobs" type="checkbox" checked onchange="saveSettings()"><span class="toggle-slider"></span></label>
+                    </div>
                   </div>
-                  <hr class="divider" style="margin:0">
-                  <div style="display:flex;justify-content:space-between;align-items:center">
-                    <div><div style="font-size:14px;font-weight:600">SMS Alerts</div><div style="font-size:13px;color:var(--text-3)">Get important alerts via SMS</div></div>
-                    <label class="toggle-switch"><input id="toggle-sms" type="checkbox" onchange="saveSettings()"><span class="toggle-slider"></span></label>
+                  <div style="margin-top:24px">
+                    <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save All Settings</button>
                   </div>
-                  <hr class="divider" style="margin:0">
-                  <div style="display:flex;justify-content:space-between;align-items:center">
-                    <div><div style="font-size:14px;font-weight:600">Job Match Alerts</div><div style="font-size:13px;color:var(--text-3)">Notify me when new jobs match my profile</div></div>
-                    <label class="toggle-switch"><input id="toggle-jobs" type="checkbox" checked onchange="saveSettings()"><span class="toggle-slider"></span></label>
-                  </div>
-                  <hr class="divider" style="margin:0">
-                  <div style="display:flex;justify-content:space-between;align-items:center">
-                    <div><div style="font-size:14px;font-weight:600">Profile Visibility</div><div style="font-size:13px;color:var(--text-3)">Allow HR teams to find and view my profile</div></div>
-                    <label class="toggle-switch"><input id="toggle-profile" type="checkbox" checked onchange="saveSettings()"><span class="toggle-slider"></span></label>
-                  </div>
-                </div>
-                <div style="margin-top:24px">
-                  <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save All Settings</button>
                 </div>
               </div>
+
+              <!-- Settings Tab: Privacy -->
+              <div id="set-tab-cand-privacy" class="set-tab-pane hidden">
+                <div class="card-header"><span class="card-title">Privacy & Visibility</span></div>
+                <div class="card-body">
+                  <div style="display:flex;flex-direction:column;gap:20px; max-width: 400px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                      <div><div style="font-size:14px;font-weight:600">Profile Visibility</div><div style="font-size:13px;color:var(--text-3)">Allow HR teams to find and view my profile</div></div>
+                      <label class="toggle-switch"><input id="toggle-profile" type="checkbox" checked onchange="saveSettings()"><span class="toggle-slider"></span></label>
+                    </div>
+                    <hr class="divider" style="margin:0">
+                    <div style="font-size:14px;font-weight:600;margin-top:10px;">Change Password</div>
+                    <div class="form-group"><label class="form-label">Current Password</label><input id="cand-cur-pwd" class="form-control" type="password" placeholder="••••••••"></div>
+                    <div class="form-group"><label class="form-label">New Password</label><input id="cand-new-pwd" class="form-control" type="password" placeholder="Min 8 characters"></div>
+                    <div class="form-group"><label class="form-label">Confirm New Password</label><input id="cand-conf-pwd" class="form-control" type="password" placeholder="Repeat"></div>
+                    <div><button class="btn btn-navy" onclick="changePwd('cand')"><i class="fas fa-key"></i> Update Password</button></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Settings Tab: Appearance -->
+              <div id="set-tab-cand-appearance" class="set-tab-pane hidden">
+                <div class="card-header"><span class="card-title">Appearance</span></div>
+                <div class="card-body">
+                  <div style="display:flex;flex-direction:column;gap:20px">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                      <div><div style="font-size:14px;font-weight:600">Dark Mode</div><div style="font-size:13px;color:var(--text-3)">Toggle night mode interface</div></div>
+                      <label class="toggle-switch"><input type="checkbox" id="set-dark-mode-cand" onchange="toggleDarkMode(this.checked)"><span class="toggle-slider"></span></label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Settings Tab: Language -->
+              <div id="set-tab-cand-language" class="set-tab-pane hidden">
+                <div class="card-header"><span class="card-title">Language</span></div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label class="form-label">Platform Language</label>
+                    <select class="form-control" style="max-width:300px" onchange="Toast.show('Language updated.', 'success')">
+                      <option>English (US)</option>
+                      <option>Spanish (ES)</option>
+                      <option>French (FR)</option>
+                      <option>German (DE)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -1459,6 +1688,14 @@
                 <span class="badge" style="background:rgba(0,201,167,.2);color:var(--teal)">Admin Access</span>
               </div>
             </div>
+            <div style="margin-left:auto">
+              <button class="btn btn-teal" style="cursor:pointer" onclick="document.getElementById('admin-pic-upload').click()">
+                <i class="fas fa-camera"></i> Change Photo
+              </button>
+              <input type="file" id="admin-pic-upload" accept="image/*"
+                style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px"
+                onchange="changeProfilePhoto(this,'admin')">
+            </div>
           </div>
           <div class="dash-grid-equal">
             <div class="card">
@@ -1477,7 +1714,7 @@
               <div class="card-header"><span class="card-title">Change Password</span></div>
               <div class="card-body">
                 <div class="form-group"><label class="form-label">Current Password</label><input id="admin-cur-pwd" class="form-control" type="password" placeholder="••••••••"></div>
-                <div class="form-group"><label class="form-label">New Password</label><input id="admin-new-pwd" class="form-control" type="password" placeholder="Min 6 characters"></div>
+                <div class="form-group"><label class="form-label">New Password</label><input id="admin-new-pwd" class="form-control" type="password" placeholder="Min 8 characters"></div>
                 <div class="form-group"><label class="form-label">Confirm New Password</label><input id="admin-conf-pwd" class="form-control" type="password" placeholder="Repeat"></div>
                 <button class="btn btn-navy" onclick="changePwd('admin')"><i class="fas fa-key"></i> Change Password</button>
               </div>
@@ -1564,9 +1801,9 @@
                     </div>
                     <hr class="divider" style="margin:0">
                     <div style="font-size:14px;font-weight:600;margin-top:10px;">Change Password</div>
-                    <div class="form-group"><label class="form-label">Current Password</label><input id="settings-cur-pwd" class="form-control" type="password" placeholder="••••••••"></div>
-                    <div class="form-group"><label class="form-label">New Password</label><input id="settings-new-pwd" class="form-control" type="password" placeholder="Min 6 characters"></div>
-                    <div class="form-group"><label class="form-label">Confirm New Password</label><input id="settings-conf-pwd" class="form-control" type="password" placeholder="Repeat"></div>
+                    <div class="form-group"><label class="form-label">Current Password</label><input id="admin-cur-pwd" class="form-control" type="password" placeholder="••••••••"></div>
+                    <div class="form-group"><label class="form-label">New Password</label><input id="admin-new-pwd" class="form-control" type="password" placeholder="Min 8 characters"></div>
+                    <div class="form-group"><label class="form-label">Confirm New Password</label><input id="admin-conf-pwd" class="form-control" type="password" placeholder="Repeat"></div>
                     <div><button class="btn btn-navy" onclick="changePwd('admin')"><i class="fas fa-key"></i> Update Password</button></div>
                   </div>
                 </div>

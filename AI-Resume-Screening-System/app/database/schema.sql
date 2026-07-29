@@ -58,3 +58,12 @@ CREATE TABLE IF NOT EXISTS notifications (
     created_at  TEXT    DEFAULT (datetime('now')),
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- OTP table for password reset (expires in 10 minutes)
+CREATE TABLE IF NOT EXISTS password_reset_otps (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    email      TEXT    NOT NULL,
+    otp        TEXT    NOT NULL,
+    expires_at TEXT    NOT NULL,  -- ISO datetime string
+    used       INTEGER DEFAULT 0  -- 0=unused, 1=consumed
+);

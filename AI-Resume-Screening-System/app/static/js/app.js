@@ -245,7 +245,14 @@ const Router = {
   innerPages: { cand: 'dash', admin: 'dash' },
 
   // Pages that should be saved to the URL hash (dashboard pages)
-  _hashPages: new Set(['cand', 'admin', 'landing', 'login', 'register', 'about', 'blog', 'careers']),
+  // ALL pages & sections that should persist in the URL hash on refresh
+  _hashPages: new Set([
+    // Top-level guest pages
+    'landing', 'login', 'register', 'forgot',
+    'about', 'blog', 'careers', 'press', 'contact', 'legal', 'product',
+    // Portal root pages
+    'cand', 'admin',
+  ]),
 
   go(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -279,6 +286,15 @@ const Router = {
     this.innerPages[portal] = section;
     // Also update the hash to include the inner section
     history.replaceState(null, '', '#' + portal + '-' + section);
+  },
+
+  // Like inner() but does NOT touch the URL hash — used during portal init
+  // so the original page hash is preserved for refresh restoration.
+  _silentInner(portal, section) {
+    document.querySelectorAll(`[data-portal="${portal}"]`).forEach(s => s.classList.add('hidden'));
+    const el = document.getElementById(`${portal}-${section}`);
+    if (el) el.classList.remove('hidden');
+    this.innerPages[portal] = section;
   }
 };
 
@@ -317,84 +333,267 @@ const Auth = {
     }).catch(e => Toast.show('Server error', 'error'));
   },
 
-  register() {
+  // ── Step 1: Validate form → Send OTP to email ─────────────
+  sendRegisterOtp(isResend = false) {
     const fname = document.getElementById('reg-fname').value.trim();
     const lname = document.getElementById('reg-lname').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const pass  = document.getElementById('reg-pass').value;
     const cpass = document.getElementById('reg-cpass').value;
-    const role  = this.selectedRole.register;
 
-    if (!fname||!lname||!email||!pass||!cpass) { Toast.show('Please fill in all required fields.','warning'); return; }
-    if (pass !== cpass) { Toast.show('Passwords do not match!','error'); return; }
-    if (pass.length < 6) { Toast.show('Password must be at least 6 characters.','warning'); return; }
+    const errorEl  = document.getElementById('reg-step1-error');
+    const errorMsg = document.getElementById('reg-step1-error-msg');
+    errorEl.classList.add('hidden');
 
-    // Show loading state
-    const btn = document.querySelector('#page-register .btn-primary');
-    if(btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...'; }
+    if (!fname || !lname) { errorMsg.textContent = 'Please enter your first and last name.'; errorEl.classList.remove('hidden'); return; }
+    if (!email) { errorMsg.textContent = 'Please enter a valid email address.'; errorEl.classList.remove('hidden'); return; }
+    if (!pass)  { errorMsg.textContent = 'Please enter a password.'; errorEl.classList.remove('hidden'); return; }
+    if (pass.length < 6) { errorMsg.textContent = 'Password must be at least 6 characters.'; errorEl.classList.remove('hidden'); return; }
+    if (pass !== cpass) { errorMsg.textContent = 'Passwords do not match.'; errorEl.classList.remove('hidden'); return; }
 
-    fetch('/api/auth/register', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name: `${fname} ${lname}`, email, password: pass, role})
-    }).then(r=>r.json()).then(data => {
-        if(btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-rocket"></i> Create Account'; }
-        if(!data.success) { Toast.show(data.message, 'error'); return; }
-        const user = data.user;
-        user.avatar = user.name.slice(0,2).toUpperCase();
-        DB.currentUser = user;
-        this.setupPortal(user);
-        Router.go(user.role === 'hr' ? 'admin' : 'cand');
-        Toast.show(`Account created! Welcome, ${fname}! <i class="fa-solid fa-wand-magic-sparkles"></i>`, 'success');
+    const btn = document.getElementById('reg-send-otp-btn');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...'; }
 
-        fetchJobsFromServer();
-        fetchNotificationsFromServer(user.id);
-        if(user.role === 'hr') {
-            fetchCandidatesFromServer();
-            fetchAdminStats();
+    fetch('/api/auth/send_register_otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name: `${fname} ${lname}` })
+    }).then(r => r.json()).then(data => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-envelope" style="margin-right:8px;"></i> Verify Email & Continue'; }
+      if (data.success) {
+        // Switch to Step 2
+        document.getElementById('reg-step-1').classList.add('hidden');
+        document.getElementById('reg-step-2').classList.remove('hidden');
+        document.getElementById('reg-otp').value = '';
+        document.getElementById('reg-otp-error').classList.add('hidden');
+
+        const hint = document.getElementById('reg-otp-hint');
+        if (hint) hint.textContent = `OTP sent to ${email}. Check your inbox (and spam folder).`;
+        const display = document.getElementById('reg-otp-email-display');
+        if (display) display.textContent = `OTP sent to ${email}`;
+
+        if (data.dev_otp) {
+          document.getElementById('reg-otp').value = data.dev_otp;
+          Toast.show(`Dev mode: OTP auto-filled → ${data.dev_otp}`, 'warning', 8000);
         } else {
-            fetchCandidateStats(user.id);
-            fetchCandidateProfile(user.id);
+          Toast.show(isResend ? 'New OTP sent! Check your inbox.' : `Verification OTP sent to ${email}!`, 'success');
         }
-    }).catch(e => {
-        if(btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-rocket"></i> Create Account'; }
-        Toast.show('Server error — is the server running?', 'error');
+        setTimeout(() => document.getElementById('reg-otp').focus(), 100);
+      } else {
+        errorMsg.textContent = data.message || 'Failed to send OTP.';
+        errorEl.classList.remove('hidden');
+        Toast.show(data.message || 'Error sending OTP.', 'error');
+      }
+    }).catch(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-envelope" style="margin-right:8px;"></i> Verify Email & Continue'; }
+      Toast.show('Server error — please try again.', 'error');
     });
   },
 
-  forgotPwd() {
+  // ── Step 2: Verify OTP → Create Account ───────────────────
+  verifyRegisterOtp() {
+    const otp    = document.getElementById('reg-otp').value.trim();
+    const email  = document.getElementById('reg-email').value.trim();
+    const fname  = document.getElementById('reg-fname').value.trim();
+    const lname  = document.getElementById('reg-lname').value.trim();
+    const pass   = document.getElementById('reg-pass').value;
+    const role   = this.selectedRole.register;
+
+    const btn      = document.getElementById('reg-verify-btn');
+    const errorEl  = document.getElementById('reg-otp-error');
+    const errorMsg = document.getElementById('reg-otp-error-msg');
+
+    errorEl.classList.add('hidden');
+
+    if (!otp || otp.length !== 6) { Toast.show('Please enter the 6-digit OTP.', 'warning'); return; }
+
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying & Creating Account...'; }
+
+    fetch('/api/auth/verify_register_otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp, name: `${fname} ${lname}`, password: pass, role })
+    }).then(r => r.json()).then(data => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i> Verify & Create Account'; }
+      if (!data.success) {
+        errorMsg.textContent = data.message || 'Invalid or expired OTP.';
+        errorEl.classList.remove('hidden');
+        Toast.show(data.message || 'OTP verification failed.', 'error');
+        return;
+      }
+      // Account created!
+      const user = data.user;
+      user.avatar = user.name.slice(0, 2).toUpperCase();
+      DB.currentUser = user;
+      this.setupPortal(user);
+      Router.go(user.role === 'hr' ? 'admin' : 'cand');
+      Toast.show(`Account created! Welcome, ${fname}! <i class="fa-solid fa-wand-magic-sparkles"></i>`, 'success');
+
+      // Reset register form for next use
+      ['reg-fname','reg-lname','reg-email','reg-pass','reg-cpass','reg-otp'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+      });
+      document.getElementById('reg-step-2').classList.add('hidden');
+      document.getElementById('reg-step-1').classList.remove('hidden');
+
+      fetchJobsFromServer();
+      fetchNotificationsFromServer(user.id);
+      if (user.role === 'hr') {
+        fetchCandidatesFromServer();
+        fetchAdminStats();
+      } else {
+        fetchCandidateStats(user.id);
+        fetchCandidateProfile(user.id);
+      }
+    }).catch(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i> Verify & Create Account'; }
+      Toast.show('Server error — please try again.', 'error');
+    });
+  },
+
+  // Legacy register() kept as alias in case called elsewhere
+  register() { this.sendRegisterOtp(); },
+
+
+  // ── Step 1: Send OTP ───────────────────────────────────────
+  forgotPwd(isResend = false) {
     const email = document.getElementById('forgot-email').value.trim();
     if (!email) { Toast.show('Please enter your email address.', 'warning'); return; }
 
-    const btn = document.querySelector('#page-forgot .btn-primary');
-    const successEl = document.getElementById('forgot-success');
-    const errorEl   = document.getElementById('forgot-error');
-    const errorMsg  = document.getElementById('forgot-error-msg');
+    const btn      = document.getElementById('forgot-send-btn');
+    const errorEl  = document.getElementById('forgot-error');
+    const errorMsg = document.getElementById('forgot-error-msg');
 
-    // Reset state
-    successEl.classList.add('hidden');
     errorEl.classList.add('hidden');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...'; }
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...'; }
 
     fetch('/api/auth/forgot_password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
     }).then(r => r.json()).then(data => {
-      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send Reset Link'; }
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send OTP'; }
       if (data.success) {
-        successEl.classList.remove('hidden');
-        Toast.show('Reset link sent to ' + email, 'success');
-        document.getElementById('forgot-email').value = '';
+        // Switch to Step 2
+        document.getElementById('forgot-step-1').classList.add('hidden');
+        document.getElementById('forgot-step-2').classList.remove('hidden');
+        document.getElementById('forgot-otp').value = '';
+        document.getElementById('forgot-otp-error').classList.add('hidden');
+
+        const hint = document.getElementById('forgot-otp-hint');
+        if (hint) hint.textContent = `OTP sent to ${email}. Check your inbox (and spam folder).`;
+
+        // Dev mode: auto-fill OTP if server returned it (email not configured)
+        if (data.dev_otp) {
+          document.getElementById('forgot-otp').value = data.dev_otp;
+          Toast.show(`Dev mode: OTP auto-filled → ${data.dev_otp}`, 'warning', 8000);
+        } else {
+          Toast.show(isResend ? 'New OTP sent! Check your inbox.' : `OTP sent to ${email}!`, 'success');
+        }
+        setTimeout(() => document.getElementById('forgot-otp').focus(), 100);
       } else {
         if (errorMsg) errorMsg.textContent = data.message || 'Email not found in our system.';
         errorEl.classList.remove('hidden');
         Toast.show(data.message || 'Email not found.', 'error');
       }
     }).catch(() => {
-      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send Reset Link'; }
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i> Send OTP'; }
       Toast.show('Server error — please try again.', 'error');
     });
   },
+
+  // ── Step 2: Verify OTP ─────────────────────────────────────
+  verifyOtp() {
+    const email    = document.getElementById('forgot-email').value.trim();
+    const otp      = document.getElementById('forgot-otp').value.trim();
+    const btn      = document.getElementById('forgot-verify-btn');
+    const errorEl  = document.getElementById('forgot-otp-error');
+    const errorMsg = document.getElementById('forgot-otp-error-msg');
+
+    if (!otp || otp.length !== 6) {
+      Toast.show('Please enter the 6-digit OTP.', 'warning'); return;
+    }
+
+    errorEl.classList.add('hidden');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...'; }
+
+    fetch('/api/auth/verify_otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp })
+    }).then(r => r.json()).then(data => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i> Verify OTP'; }
+      if (data.success) {
+        // Switch to Step 3
+        document.getElementById('forgot-step-2').classList.add('hidden');
+        document.getElementById('forgot-step-3').classList.remove('hidden');
+        document.getElementById('forgot-new-pass').value = '';
+        document.getElementById('forgot-conf-pass').value = '';
+        document.getElementById('forgot-reset-error').classList.add('hidden');
+        Toast.show('OTP verified! Set your new password.', 'success');
+        setTimeout(() => document.getElementById('forgot-new-pass').focus(), 100);
+      } else {
+        if (errorMsg) errorMsg.textContent = data.message || 'Invalid or expired OTP.';
+        errorEl.classList.remove('hidden');
+        Toast.show(data.message || 'Invalid OTP.', 'error');
+      }
+    }).catch(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i> Verify OTP'; }
+      Toast.show('Server error — please try again.', 'error');
+    });
+  },
+
+  // ── Step 3: Reset Password ─────────────────────────────────
+  resetPassword() {
+    const newPw   = document.getElementById('forgot-new-pass').value;
+    const confPw  = document.getElementById('forgot-conf-pass').value;
+    const btn     = document.getElementById('forgot-reset-btn');
+    const errorEl = document.getElementById('forgot-reset-error');
+    const errMsg  = document.getElementById('forgot-reset-error-msg');
+
+    errorEl.classList.add('hidden');
+
+    if (!newPw) { Toast.show('Please enter a new password.', 'warning'); return; }
+    if (newPw.length < 8) {
+      errMsg.textContent = 'Password must be at least 8 characters.';
+      errorEl.classList.remove('hidden'); return;
+    }
+    if (newPw !== confPw) {
+      errMsg.textContent = 'Passwords do not match.';
+      errorEl.classList.remove('hidden'); return;
+    }
+
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Resetting...'; }
+
+    fetch('/api/auth/reset_password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ new_password: newPw })
+    }).then(r => r.json()).then(data => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-shield-halved" style="margin-right:8px;"></i> Reset Password'; }
+      if (data.success) {
+        Toast.show('Password reset! Please log in with your new password.', 'success', 5000);
+        // Reset all steps & navigate to login
+        setTimeout(() => {
+          document.getElementById('forgot-step-3').classList.add('hidden');
+          document.getElementById('forgot-step-1').classList.remove('hidden');
+          document.getElementById('forgot-email').value = '';
+          document.getElementById('forgot-otp').value = '';
+          document.getElementById('forgot-new-pass').value = '';
+          document.getElementById('forgot-conf-pass').value = '';
+          Router.go('login');
+        }, 1500);
+      } else {
+        errMsg.textContent = data.message || 'Failed to reset password. Please start over.';
+        errorEl.classList.remove('hidden');
+        Toast.show(data.message || 'Reset failed.', 'error');
+      }
+    }).catch(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-shield-halved" style="margin-right:8px;"></i> Reset Password'; }
+      Toast.show('Server error — please try again.', 'error');
+    });
+  },
+
 
   logout() {
     fetch('/api/auth/logout', { method: 'POST' }).then(() => {
@@ -411,10 +610,38 @@ const Auth = {
 
     // --- Sidebar + topbar names/avatars ---
     document.querySelectorAll('.cand-name').forEach(el => el.textContent = user.name);
-    document.querySelectorAll('.cand-avatar').forEach(el => el.textContent = avatar);
     document.querySelectorAll('.cand-role').forEach(el => el.textContent = isHR ? 'HR Admin' : 'Candidate');
     document.querySelectorAll('.admin-name').forEach(el => el.textContent = user.name);
-    document.querySelectorAll('.admin-avatar').forEach(el => el.textContent = avatar);
+
+    // Apply avatar — use saved photo if available, else initials
+    const candPhoto  = localStorage.getItem('hireai_cand_photo');
+    const adminPhoto = localStorage.getItem('hireai_admin_photo');
+    document.querySelectorAll('.cand-avatar').forEach(el => {
+      if (candPhoto) {
+        el.textContent = '';
+        el.style.backgroundImage    = `url('${candPhoto}')`;
+        el.style.backgroundSize     = 'cover';
+        el.style.backgroundPosition = 'center';
+        el.style.color              = 'transparent';
+      } else {
+        el.textContent = avatar;
+        el.style.backgroundImage = '';
+        el.style.color = '';
+      }
+    });
+    document.querySelectorAll('.admin-avatar').forEach(el => {
+      if (adminPhoto) {
+        el.textContent = '';
+        el.style.backgroundImage    = `url('${adminPhoto}')`;
+        el.style.backgroundSize     = 'cover';
+        el.style.backgroundPosition = 'center';
+        el.style.color              = 'transparent';
+      } else {
+        el.textContent = avatar;
+        el.style.backgroundImage = '';
+        el.style.color = '';
+      }
+    });
 
     // --- Populate candidate profile form with REAL user data ---
     const setVal = (id, v) => { const el = document.getElementById(id); if(el) el.value = v || ''; };
@@ -447,13 +674,14 @@ const Auth = {
     const outlierBadge = document.getElementById('profile-outlier-badge');
     if (outlierEl) {
       if (isOutlier) {
-        outlierEl.textContent = '⚠ Suspicious Flag Active';
+        outlierEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Suspicious Flag Active';
         outlierEl.style.color = '#dc2626';
-        if (outlierIcon) { outlierIcon.textContent = '⚠️'; outlierIcon.style.background = 'rgba(220,38,38,.12)'; }
+        if (outlierIcon) { outlierIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color: #dc2626;"></i>'; outlierIcon.style.background = 'rgba(220,38,38,.12)'; }
         if (outlierBadge) outlierBadge.style.display = '';
       } else {
-        outlierEl.textContent = '✓ Normal Profile';
+        outlierEl.innerHTML = '<i class="fa-solid fa-check"></i> Normal Profile';
         outlierEl.style.color = '#16a34a';
+        if (outlierIcon) { outlierIcon.innerHTML = '<i class="fa-solid fa-shield-halved" style="color: #16a34a;"></i>'; outlierIcon.style.background = 'rgba(22,163,74,.12)'; }
       }
     }
 
@@ -483,25 +711,21 @@ const Auth = {
     if(newUserBanner) newUserBanner.classList.toggle('hidden', hasResume);
     if(resumePrompt)  resumePrompt.classList.toggle('hidden', hasResume);
 
-    // --- Init inner pages ---
-    Router.inner('cand', 'dash');
-    Router.inner('admin', 'dash');
+    // --- Init inner pages (use _silentInner to avoid overwriting the URL hash) ---
+    Router._silentInner('cand', 'dash');
+    Router._silentInner('admin', 'dash');
   },
 
   setRole(portal, role, el) {
     this.selectedRole[portal] = role;
     el.closest('.role-picker').querySelectorAll('.role-option').forEach(o => o.classList.remove('active'));
     el.classList.add('active');
-    
-    if (portal === 'login') {
-      const emailInput = document.getElementById('login-email');
-      if (emailInput) {
-        emailInput.value = role === 'hr' ? 'priya@demo.com' : 'hetsony143@gmail.com';
-      }
-    }
   },
 
   checkSession() {
+    // ── CRITICAL: capture the hash NOW, before anything can overwrite it ──
+    const savedHash = window.location.hash.replace('#', '');
+
     fetch('/api/auth/me')
       .then(r => r.json())
       .then(data => {
@@ -509,35 +733,54 @@ const Auth = {
           const user = data.user;
           user.avatar = user.name.slice(0,2).toUpperCase();
           DB.currentUser = user;
+          // setupPortal uses _silentInner internally so it won't touch the hash
           this.setupPortal(user);
 
-          // ── Restore the page from URL hash on refresh ──
-          const hash = window.location.hash.replace('#', ''); // e.g. 'admin', 'cand', 'admin-jobs'
+          // ── Restore the page from the hash captured at startup ──
           const portalPage = user.role === 'hr' ? 'admin' : 'cand';
 
-          if (hash && hash.startsWith(portalPage)) {
-            // e.g. hash = 'admin-jobs' → portal='admin', section='jobs'
-            const parts = hash.split('-');
+          if (savedHash && savedHash.startsWith(portalPage)) {
+            // e.g. savedHash = 'admin-jobs' → go to portal, then switch inner section
+            const parts = savedHash.split('-');
             Router.go(portalPage);
             if (parts.length >= 2) {
-              const section = parts.slice(1).join('-'); // handle 'admin-job-rankings'
+              const section = parts.slice(1).join('-'); // handle multi-word like 'job-rankings'
               const sectionEl = document.getElementById(`${portalPage}-${section}`);
-              if (sectionEl) Router.inner(portalPage, section);
+              if (sectionEl) {
+                Router.inner(portalPage, section);
+              } else {
+                // section element not found, stay on default dash
+                Router.inner(portalPage, 'dash');
+              }
+            } else {
+              // hash was just 'admin' or 'cand' with no section
+              Router.inner(portalPage, 'dash');
             }
           } else {
-            // No valid hash — go to default dashboard
+            // No valid portal hash — go to default dashboard
             Router.go(portalPage);
+            Router.inner(portalPage, 'dash');
           }
 
           fetchJobsFromServer();
           fetchNotificationsFromServer(user.id);
-          if(user.role === 'hr') {
+          if (user.role === 'hr') {
               fetchCandidatesFromServer();
               fetchAdminStats();
           } else {
               fetchCandidateStats(user.id);
               fetchCandidateProfile(user.id);
           }
+        } else {
+          // ── Not logged in: restore guest page from hash if present ──
+          const GUEST_PAGES = new Set([
+            'landing', 'login', 'register', 'forgot',
+            'about', 'blog', 'careers', 'press', 'contact', 'legal', 'product',
+          ]);
+          if (savedHash && GUEST_PAGES.has(savedHash)) {
+            Router.go(savedHash);
+          }
+          // If no valid hash, page stays as default (landing) which is already shown by CSS
         }
       })
       .catch(e => console.error('Session check failed', e));
@@ -546,6 +789,17 @@ const Auth = {
 
 // Check session on page load
 document.addEventListener('DOMContentLoaded', () => {
+  // ── Restore guest-accessible pages from URL hash BEFORE session check ──
+  // Pages that don't require authentication can be restored immediately.
+  const GUEST_PAGES = new Set([
+    'landing', 'login', 'register', 'forgot',
+    'about', 'blog', 'careers', 'press', 'contact', 'legal', 'product',
+  ]);
+  const hashOnLoad = window.location.hash.replace('#', '');
+  if (hashOnLoad && GUEST_PAGES.has(hashOnLoad)) {
+    Router.go(hashOnLoad);
+  }
+  // Session check will override with the correct portal page if user is logged in
   Auth.checkSession();
 });
 
@@ -1121,7 +1375,7 @@ function changePwd(portal) {
   const conf = document.getElementById(`${portal}-conf-pwd`).value;
   if (!cur||!nw||!conf) { Toast.show('Please fill in all password fields.','warning'); return; }
   if (nw !== conf) { Toast.show('New passwords do not match!','error'); return; }
-  if (nw.length < 6) { Toast.show('Password must be at least 6 characters.','warning'); return; }
+  if (nw.length < 8) { Toast.show('Password must be at least 8 characters.','warning'); return; }
   
   fetch('/api/auth/change_password', {
     method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -1152,9 +1406,18 @@ function saveSettings() {
 }
 
 function switchSettingTab(tab, el) {
-  document.querySelectorAll('#admin-settings .settings-nav-item').forEach(i => i.classList.remove('active'));
-  if (el) el.classList.add('active');
-  document.querySelectorAll('.set-tab-pane').forEach(p => p.classList.add('hidden'));
+  if (el && el.closest('.settings-nav')) {
+    el.closest('.settings-nav').querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+  
+  const portal = el ? el.closest('[data-portal]') : document;
+  if (portal) {
+    portal.querySelectorAll('.set-tab-pane').forEach(p => p.classList.add('hidden'));
+  } else {
+    document.querySelectorAll('.set-tab-pane').forEach(p => p.classList.add('hidden'));
+  }
+  
   const target = document.getElementById('set-tab-' + tab);
   if (target) target.classList.remove('hidden');
 }
@@ -2014,6 +2277,16 @@ function loadMLPipelineStatus() {
 
 function fetchCandidateProfile(userId) {
   fetch(`/api/users/${userId}/profile`).then(r=>r.json()).then(d=>{
+
+    // ── Toggle analysis empty state vs actual content ──
+    const hasResume    = d.ats_score && d.ats_score > 0;
+    const emptyState   = document.getElementById('analysis-empty-state');
+    const contentBlock = document.getElementById('analysis-content');
+    if (emptyState)   emptyState.style.display = hasResume ? 'none' : 'flex';
+    if (contentBlock) contentBlock.classList.toggle('hidden', !hasResume);
+
+    if (!hasResume) return; // Don't populate fields if no resume yet
+
     setEl('profile-name', d.name || '-');
     setEl('profile-email', d.email || '-');
     setEl('profile-phone', d.phone || '-');
@@ -2028,8 +2301,15 @@ function fetchCandidateProfile(userId) {
       const skillsArray = d.skills.split(',').filter(s => s.trim() !== '');
       skillsTech.innerHTML = skillsArray.map(s => `<span class="skill-tag skill-neutral">${s.trim()}</span>`).join('');
     }
+
+    // ── Projects: show empty state if none extracted ──
+    const projectsList  = document.getElementById('profile-projects-list');
+    const projectsEmpty = document.getElementById('projects-empty-state');
+    const hasProjects   = projectsList && projectsList.children.length > 0;
+    if (projectsEmpty) projectsEmpty.style.display = hasProjects ? 'none' : 'block';
   });
 }
+
 
 function setEl(id, val) {
   const el = document.getElementById(id);
@@ -2253,3 +2533,32 @@ function renderClusterView() {
   }).join('') || '<div style="text-align:center;padding:40px;color:var(--text-3)">No candidates to cluster yet.</div>';
 }
 window.renderClusterView = renderClusterView;
+// ── Change Profile Photo ──────────────────────────────────────────────────────
+function applyAvatarPhoto(portal, dataUrl) {
+  const sel = portal === 'cand' ? '.cand-avatar' : '.admin-avatar';
+  document.querySelectorAll(sel).forEach(el => {
+    el.textContent              = '';
+    el.style.backgroundImage    = `url('${dataUrl}')`;
+    el.style.backgroundSize     = 'cover';
+    el.style.backgroundPosition = 'center';
+    el.style.color              = 'transparent';
+  });
+}
+
+function changeProfilePhoto(input, portal) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!file.type.startsWith('image/')) {
+    Toast.show('Please select a valid image file.', 'error');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    applyAvatarPhoto(portal, dataUrl);
+    try { localStorage.setItem(`hireai_${portal}_photo`, dataUrl); } catch(err) {}
+    Toast.show('Profile photo updated! ✓', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+window.changeProfilePhoto = changeProfilePhoto;
